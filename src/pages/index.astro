@@ -3,6 +3,8 @@ import Base from '../layouts/Base.astro';
 import { useCases, TYPES } from '../data/usecases.mjs';
 import { SITE, NAME, TAGLINE } from '../site.mjs';
 import { short } from '../components.mjs';
+import Card from '../components/Card.astro';
+import { ICONS } from '../site.mjs';
 const counts = Object.fromEntries(Object.keys(TYPES).map(k => [k, useCases.filter(u => u.type === k).length]));
 const jsonld = { '@context': 'https://schema.org', '@graph': [
   { '@type': 'WebSite', name: NAME, url: SITE + '/', description: TAGLINE },
@@ -10,22 +12,28 @@ const jsonld = { '@context': 'https://schema.org', '@graph': [
     itemListElement: useCases.map((u, i) => ({ '@type': 'ListItem', position: i + 1, url: `${SITE}/use-cases/${u.slug}/`, name: u.title })) } ] };
 ---
 <Base title={`${NAME}: ${useCases.length} real ways small business owners use AI agents`} description={`${useCases.length} real, sourced examples of restaurants, shops, landlords, trades and service businesses using AI agents, with how to start in plain English.`} jsonld={jsonld}>
-<h1>Real ways small business owners use AI agents</h1>
-<p class="lead">No hype, no jargon. {useCases.length} real examples from restaurants, shops, landlords, trades and service businesses, each with what the AI does, the tools used, how to start, and a link to the public source.</p>
+<section class="hero hero-split">
+<div>
+<span class="eyebrow">Free · Sourced · Plain English</span>
+<h1>Real ways small business owners <em>put AI to work</em></h1>
+<p class="lead">{useCases.length} real examples from restaurants, shops, landlords, trades and service businesses. See what the AI actually does, the tools used, and how to start this week. Every example links to its public source.</p>
+<div class="cta"><a class="btn btn-primary" href="#browse">Browse the {useCases.length} use cases ↓</a><a class="btn btn-ghost" href="/about/">How we pick them</a></div>
+<div class="trust"><span>Real businesses only</span><span>Source linked on every page</span><span>No jargon</span></div>
+</div>
+<div class="hero-card" aria-hidden="true">
+<p class="hc-title">On every use case page</p>
+<ul><li><span>🧰</span>The job the AI does</li><li><span>🛠️</span>Tools the owner used</li><li><span>💵</span>Cost, when the source says</li><li><span>🪜</span>How to start, step by step</li><li><span>🔗</span>A link to the real source</li></ul>
+</div>
+</section>
+<h2 class="section-title">Find your kind of business</h2>
+<div class="types">{Object.entries(TYPES).map(([k, v]) => <a class="type-tile" href={`/type/${k}/`}><span class="ic" aria-hidden="true">{ICONS[k]}</span><span>{v}</span><small>{`${counts[k]} use case${counts[k]===1?'':'s'}`}</small></a>)}</div>
+<h2 class="section-title" id="browse" style="margin-top:40px">All use cases</h2>
 <div class="filters" role="group" aria-label="Filter by business type">
-  <button data-f="all" aria-pressed="true">All ({useCases.length})</button>
-  {Object.entries(TYPES).map(([k, v]) => <button data-f={k} aria-pressed="false">{v} ({counts[k]})</button>)}
+  <button class="chip" data-f="all" aria-pressed="true">All <span class="n">{useCases.length}</span></button>
+  {Object.entries(TYPES).map(([k, v]) => <button class="chip" data-f={k} aria-pressed="false"><span aria-hidden="true">{ICONS[k]}</span><span>{v}</span><span class="n">{counts[k]}</span></button>)}
 </div>
-<div class="grid" id="list">
-{useCases.map(u => (
-  <a class="card" href={`/use-cases/${u.slug}/`} data-type={u.type}>
-    <span class="pill">{TYPES[u.type]}</span>
-    <h3>{u.title}</h3>
-    <p>{short(u.job, 140)}</p>
-  </a>
-))}
-</div>
-<p>Browse by type: {Object.entries(TYPES).map(([k, v], i) => <>{i ? ' · ' : ''}<a href={`/type/${k}/`}>{v}</a></>)}</p>
+<div class="grid" id="list">{useCases.map(u => <Card u={u} />)}</div>
+<section class="panel signup"><h2>One real use case a week, free</h2><p style="margin:0 0 12px">The newsletter is coming soon. No spam, no hype.</p><a class="btn btn-primary" href="/newsletter/">Learn more</a></section>
 <script is:inline>
 const btns=document.querySelectorAll('.filters button'),cards=document.querySelectorAll('#list .card');
 function apply(f){btns.forEach(b=>b.setAttribute('aria-pressed',b.dataset.f===f));cards.forEach(c=>c.style.display=(f==='all'||c.dataset.type===f)?'':'none');}

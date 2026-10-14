@@ -3,6 +3,8 @@ import Base from '../../layouts/Base.astro';
 import { useCases, TYPES } from '../../data/usecases.mjs';
 import { SITE, NAME } from '../../site.mjs';
 import { short } from '../../components.mjs';
+import Card from '../../components/Card.astro';
+import { ICONS } from '../../site.mjs';
 export function getStaticPaths(){ return useCases.map(u => ({ params: { slug: u.slug }, props: { u } })); }
 const { u } = Astro.props;
 const path = `/use-cases/${u.slug}/`, url = SITE + path;
@@ -19,21 +21,30 @@ const jsonld = { '@context':'https://schema.org','@graph':[
 const shareText = encodeURIComponent(u.title);
 ---
 <Base title={u.title} description={short(`${u.business}: ${u.job}`)} path={path} jsonld={jsonld} ogType="article">
-<p><a href="/">← All use cases</a> · <a href={`/type/${u.type}/`}>{TYPES[u.type]}</a></p>
-<span class="pill">{TYPES[u.type]}</span>
-<h1>{u.title}</h1>
-<p class="lead"><strong>Business:</strong> {u.business}</p>
+<p class="crumbs"><a href="/">Use cases</a> / <a href={`/type/${u.type}/`}>{TYPES[u.type]}</a></p>
+<header class="entry-head"><span class="badge"><span class="ic" aria-hidden="true">{ICONS[u.type]}</span>{TYPES[u.type]}</span>
+<h1>{u.title}</h1><p class="biz">{u.business}</p></header>
+<div class="entry">
+<article class="prose">
 <h2>The job the AI does</h2><p>{u.job}</p>
 <h2>The story</h2><p>{u.story}</p>
-{u.results.length > 0 && (<><h2>What the source reports</h2><ul>{u.results.map(r => <li>{r}</li>)}</ul></>)}
-<h2>Tools used</h2><ul>{u.tools.map(t => <li>{t}</li>)}</ul>
-<h2>Rough cost</h2><p>{u.cost ?? 'Not stated in the source. Ask the vendor for current pricing.'}</p>
-<div class="box"><h2 style="margin-top:0">How to start (plain English)</h2><ol>{u.start.map(s => <li>{s}</li>)}</ol></div>
-<div class="box src"><strong>Source:</strong> <a href={u.sourceUrl} rel="noopener">{u.sourceName}</a><br/><small>Details above are summarized from this source. Vendor case studies are written by the vendor; results are theirs, not ours.</small></div>
-<p class="share"><strong>Share:</strong>
+{u.results.length > 0 && (<div class="results"><h2>What the source reports</h2><ul>{u.results.map(r => <li>{r}</li>)}</ul></div>)}
+<h2>How to start (plain English)</h2><ol class="steps">{u.start.map(s => <li>{s}</li>)}</ol>
+</article>
+<aside class="side">
+<div class="panel"><dl class="facts">
+<dt>Business</dt><dd>{u.business}</dd>
+<dt>Type</dt><dd>{TYPES[u.type]}</dd>
+<dt>Tools used</dt><dd><ul class="tools">{u.tools.map(t => <li>{t}</li>)}</ul></dd>
+<dt>Rough cost</dt><dd>{u.cost ?? 'Not stated in the source. Ask the vendor for current pricing.'}</dd>
+</dl></div>
+<div class="panel source"><h2>Source</h2><a href={u.sourceUrl} rel="noopener">{u.sourceName} ↗</a><small>Details on this page are summarized from this source. Vendor case studies are written by the vendor; results are theirs, not ours.</small></div>
+<div class="panel"><h2>Share this</h2><div class="share">
 <a href={`https://x.com/intent/post?text=${shareText}&url=${encodeURIComponent(url)}`} rel="noopener">X</a>
 <a href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`} rel="noopener">Facebook</a>
 <a href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(url)}`} rel="noopener">LinkedIn</a>
-<a href={`mailto:?subject=${shareText}&body=${encodeURIComponent(url)}`}>Email</a></p>
-{related.length > 0 && (<><h2>More for {TYPES[u.type]}</h2><div class="grid">{related.map(r => <a class="card" href={`/use-cases/${r.slug}/`}><h3>{r.title}</h3></a>)}</div></>)}
+<a href={`mailto:?subject=${shareText}&body=${encodeURIComponent(url)}`}>Email</a></div></div>
+</aside>
+</div>
+{related.length > 0 && (<section style="margin-top:48px"><h2 class="section-title">More for {TYPES[u.type].toLowerCase()}</h2><div class="grid">{related.map(r => <Card u={r} />)}</div></section>)}
 </Base>

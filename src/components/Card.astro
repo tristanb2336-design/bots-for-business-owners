@@ -1,0 +1,13 @@
+---
+import { TYPES } from '../data/usecases.mjs';
+import { ICONS } from '../site.mjs';
+import { short } from '../components.mjs';
+const { u } = Astro.props;
+---
+<a class="card" href={`/use-cases/${u.slug}/`} data-type={u.type}>
+  <span class="badge"><span class="ic" aria-hidden="true">{ICONS[u.type]}</span>{TYPES[u.type]}</span>
+  <h3>{u.title}</h3>
+  <span class="biz">{u.business}</span>
+  <p>{short(u.job, 130)}</p>
+  <span class="more" aria-hidden="true">Read the use case →</span>
+</a>

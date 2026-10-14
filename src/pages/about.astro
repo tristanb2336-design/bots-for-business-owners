@@ -3,8 +3,9 @@ import Base from '../layouts/Base.astro';
 import { NAME, SITE } from '../site.mjs';
 ---
 <Base title="About" description="Why Bots for Business Owners exists: a plain-English, sourced directory of AI agent use cases for non-technical small business owners." path="/about/" jsonld={{'@context':'https://schema.org','@type':'AboutPage',name:'About '+NAME,url:SITE+'/about/'}}>
-<h1>About {NAME}</h1>
-<p class="lead">Most AI talk is written for software people. This site is for the owner of a taco shop, a plumbing company, a fourplex or a nail studio.</p>
+<section class="hero" style="padding-bottom:8px"><h1>About {NAME}</h1>
+<p class="lead">Most AI talk is written for software people. This site is for the owner of a taco shop, a plumbing company, a fourplex or a nail studio.</p></section>
+<div class="panel prose">
 <h2>What's here</h2>
 <p>Every entry is a real business using AI in a real way, taken from a public source: news articles, interviews, owners' own posts, and vendor customer stories. Each page links to that source. We don't invent businesses, quotes or numbers. If the source doesn't give a figure, we leave it out.</p>
 <h2>Read vendor stories with care</h2>
@@ -15,4 +16,5 @@ import { NAME, SITE } from '../site.mjs';
 <p>This site is open to crawlers, including AI crawlers. A plain-text list of every use case is at <a href="/llms.txt">/llms.txt</a>, and the full text is at <a href="/llms-full.txt">/llms-full.txt</a>.</p>
 <h2>Suggest a use case</h2>
 <p>Know a real, public example? Use the <a href="https://github.com/tristanb2336-design/bots-for-business-owners/issues/new?title=Use%20case%20suggestion">suggestion form on GitHub</a> (free account required). Include the source link.</p>
+</div>
 </Base>
