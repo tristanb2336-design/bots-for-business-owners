@@ -1,0 +1,35 @@
+---
+import Base from '../layouts/Base.astro';
+import { useCases, TYPES } from '../data/usecases.mjs';
+import { SITE, NAME, TAGLINE } from '../site.mjs';
+import { short } from '../components.mjs';
+const counts = Object.fromEntries(Object.keys(TYPES).map(k => [k, useCases.filter(u => u.type === k).length]));
+const jsonld = { '@context': 'https://schema.org', '@graph': [
+  { '@type': 'WebSite', name: NAME, url: SITE + '/', description: TAGLINE },
+  { '@type': 'ItemList', name: 'AI agent use cases for small business owners', numberOfItems: useCases.length,
+    itemListElement: useCases.map((u, i) => ({ '@type': 'ListItem', position: i + 1, url: `${SITE}/use-cases/${u.slug}/`, name: u.title })) } ] };
+---
+<Base title={`${NAME}: ${useCases.length} real ways small business owners use AI agents`} description={`${useCases.length} real, sourced examples of restaurants, shops, landlords, trades and service businesses using AI agents, with how to start in plain English.`} jsonld={jsonld}>
+<h1>Real ways small business owners use AI agents</h1>
+<p class="lead">No hype, no jargon. {useCases.length} real examples from restaurants, shops, landlords, trades and service businesses, each with what the AI does, the tools used, how to start, and a link to the public source.</p>
+<div class="filters" role="group" aria-label="Filter by business type">
+  <button data-f="all" aria-pressed="true">All ({useCases.length})</button>
+  {Object.entries(TYPES).map(([k, v]) => <button data-f={k} aria-pressed="false">{v} ({counts[k]})</button>)}
+</div>
+<div class="grid" id="list">
+{useCases.map(u => (
+  <a class="card" href={`/use-cases/${u.slug}/`} data-type={u.type}>
+    <span class="pill">{TYPES[u.type]}</span>
+    <h3>{u.title}</h3>
+    <p>{short(u.job, 140)}</p>
+  </a>
+))}
+</div>
+<p>Browse by type: {Object.entries(TYPES).map(([k, v], i) => <>{i ? ' · ' : ''}<a href={`/type/${k}/`}>{v}</a></>)}</p>
+<script is:inline>
+const btns=document.querySelectorAll('.filters button'),cards=document.querySelectorAll('#list .card');
+function apply(f){btns.forEach(b=>b.setAttribute('aria-pressed',b.dataset.f===f));cards.forEach(c=>c.style.display=(f==='all'||c.dataset.type===f)?'':'none');}
+btns.forEach(b=>b.onclick=()=>{apply(b.dataset.f);history.replaceState(null,'',b.dataset.f==='all'?location.pathname:'#'+b.dataset.f)});
+if(location.hash)apply(location.hash.slice(1));
+</script>
+</Base>
