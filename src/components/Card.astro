@@ -4,10 +4,10 @@ import { ICONS } from '../site.mjs';
 import { short } from '../components.mjs';
 const { u } = Astro.props;
 ---
-<a class="card" href={`/use-cases/${u.slug}/`} data-type={u.type}>
+<a class="card" href={`/use-cases/${u.slug}/`} data-type={u.type} aria-labelledby={`t-${u.slug}`}>
   <span class="badge"><span class="ic" aria-hidden="true">{ICONS[u.type]}</span>{TYPES[u.type]}</span>
-  <h3>{u.title}</h3>
-  <span class="biz">{u.business}</span>
-  <p>{short(u.job, 130)}</p>
+  <h3 id={`t-${u.slug}`}>{u.title}</h3>
+  {u.results[0] ? <p class="win">📈 {short(u.results[0], 90)}</p> : <p>{short(u.job, 110)}</p>}
+  <span class="meta">{u.business} · {u.tools[0]}</span>
   <span class="more" aria-hidden="true">Read the use case →</span>
 </a>

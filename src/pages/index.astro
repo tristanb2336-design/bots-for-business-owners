@@ -4,6 +4,7 @@ import { useCases, TYPES } from '../data/usecases.mjs';
 import { SITE, NAME, TAGLINE } from '../site.mjs';
 import { short } from '../components.mjs';
 import Card from '../components/Card.astro';
+import Signup from '../components/Signup.astro';
 import { ICONS } from '../site.mjs';
 const counts = Object.fromEntries(Object.keys(TYPES).map(k => [k, useCases.filter(u => u.type === k).length]));
 const jsonld = { '@context': 'https://schema.org', '@graph': [
@@ -15,9 +16,9 @@ const jsonld = { '@context': 'https://schema.org', '@graph': [
 <section class="hero hero-split">
 <div>
 <span class="eyebrow">Free · Sourced · Plain English</span>
-<h1>Real ways small business owners <em>put AI to work</em></h1>
-<p class="lead">{useCases.length} real examples from restaurants, shops, landlords, trades and service businesses. See what the AI actually does, the tools used, and how to start this week. Every example links to its public source.</p>
-<div class="cta"><a class="btn btn-primary" href="#browse">Browse the {useCases.length} use cases ↓</a><a class="btn btn-ghost" href="/about/">How we pick them</a></div>
+<h1>See how owners like you <em>put AI to work</em>, and how to start</h1>
+<p class="lead">{useCases.length} real businesses: pizzerias, plumbers, landlords, shops. What the AI does, the tools they used, and the first steps. No tech skills needed.</p>
+<div class="cta"><a class="btn btn-primary" href="#browse">Browse the {useCases.length} use cases ↓</a><a class="link-quiet" href="/about/">How we pick them</a></div>
 <div class="trust"><span>Real businesses only</span><span>Source linked on every page</span><span>No jargon</span></div>
 </div>
 <div class="hero-card" aria-hidden="true">
@@ -26,18 +27,10 @@ const jsonld = { '@context': 'https://schema.org', '@graph': [
 </div>
 </section>
 <h2 class="section-title">Find your kind of business</h2>
-<div class="types">{Object.entries(TYPES).map(([k, v]) => <a class="type-tile" href={`/type/${k}/`}><span class="ic" aria-hidden="true">{ICONS[k]}</span><span>{v}</span><small>{`${counts[k]} use case${counts[k]===1?'':'s'}`}</small></a>)}</div>
-<h2 class="section-title" id="browse" style="margin-top:40px">All use cases</h2>
-<div class="filters" role="group" aria-label="Filter by business type">
-  <button class="chip" data-f="all" aria-pressed="true">All <span class="n">{useCases.length}</span></button>
-  {Object.entries(TYPES).map(([k, v]) => <button class="chip" data-f={k} aria-pressed="false"><span aria-hidden="true">{ICONS[k]}</span><span>{v}</span><span class="n">{counts[k]}</span></button>)}
-</div>
-<div class="grid" id="list">{useCases.map(u => <Card u={u} />)}</div>
-<section class="panel signup"><h2>One real use case a week, free</h2><p style="margin:0 0 12px">The newsletter is coming soon. No spam, no hype.</p><a class="btn btn-primary" href="/newsletter/">Learn more</a></section>
-<script is:inline>
-const btns=document.querySelectorAll('.filters button'),cards=document.querySelectorAll('#list .card');
-function apply(f){btns.forEach(b=>b.setAttribute('aria-pressed',b.dataset.f===f));cards.forEach(c=>c.style.display=(f==='all'||c.dataset.type===f)?'':'none');}
-btns.forEach(b=>b.onclick=()=>{apply(b.dataset.f);history.replaceState(null,'',b.dataset.f==='all'?location.pathname:'#'+b.dataset.f)});
-if(location.hash)apply(location.hash.slice(1));
-</script>
+<nav aria-label="Business types"><div class="types">{Object.entries(TYPES).map(([k, v]) => <a class="type-tile" href={`/type/${k}/`}><span class="ic" aria-hidden="true">{ICONS[k]}</span><span>{v}</span><small>{`${counts[k]} use case${counts[k]===1?'':'s'}`}</small></a>)}</div></nav>
+<h2 class="section-title" id="browse" style="margin-top:32px">All {useCases.length} use cases</h2>
+<div class="grid" id="list">{useCases.slice(0, 6).map(u => <Card u={u} />)}</div>
+<Signup id="wl-mid" compact title="Want one of these in your inbox each week?" />
+<div class="grid">{useCases.slice(6).map(u => <Card u={u} />)}</div>
+<Signup id="wl-end" />
 </Base>

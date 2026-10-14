@@ -44,6 +44,7 @@ export const useCases = [
   results: ["Orders are placed, paid and routed in about one minute (per the case study).", "Staff can focus on in-person guests."],
   tools: ["VoiceBit Phone AI", "POS integration", "English and Spanish support"],
   cost: null,
+  setup: "Set up and live in 24 to 48 hours (as stated in the vendor case study).",
   start: ["List the questions callers ask most (hours, specials, delivery area).", "Choose a phone AI that can take payment up front, so pickup is just 'name and go'.", "Turn on Spanish (or another language) if your callers need it."],
   sourceName: "VoiceBit case study",
   sourceUrl: "https://voicebit.ai/resources/case-studies/fournos-pizzeria",
