@@ -5,5 +5,7 @@ import Signup from '../components/Signup.astro';
 <Base title="Hands Free: the weekly Bots for Business Owners newsletter" description="Hands Free is the free weekly Bots for Business Owners newsletter: one real, sourced AI use case for small business owners each week, in plain English. Join the waitlist." path="/newsletter/">
 <section class="hero" style="padding-bottom:8px"><span class="eyebrow">Newsletter · Free</span><h1>Hands Free</h1>
 <p class="lead">The weekly Bots for Business Owners newsletter. One real, sourced example of a small business using AI, in plain English, with how to start. No hype, no spam. Join the waitlist and you'll get the first issue.</p></section>
+<p class="panel" id="nl-status" role="status" hidden></p>
 <Signup id="wl-page" title="Join the Hands Free waitlist" />
+<script is:inline>const st=new URLSearchParams(location.search).get("status");if(st){const e=document.getElementById("nl-status");e.hidden=false;e.textContent=st==="joined"?"You're on the Hands Free waitlist. Thanks!":"Sorry, we couldn't add you. Please check your email address and try again.";}</script>
 </Base>

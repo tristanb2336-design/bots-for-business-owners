@@ -4,7 +4,8 @@ const WINDOW = 10 * 60 * 1000, MAX = 5;
 const EMAIL = /^[^\s@<>()"',;:]{1,64}@[A-Za-z0-9.-]{1,253}\.[A-Za-z]{2,24}$/;
 const ALLOWED = /^https:\/\/bots-for-business-owners(-[a-z0-9-]+)?\.vercel\.app$/;
 
-const send = (res, code, body) => { res.statusCode = code; res.setHeader('Content-Type', 'application/json'); res.setHeader('Cache-Control', 'no-store'); res.end(JSON.stringify(body)); };
+let REQ = null;
+const send = (res, code, body) => { if (REQ && REQ.method === 'POST' && !(REQ.headers['content-type'] || '').includes('application/json')) { res.statusCode = 303; res.setHeader('Location', `/newsletter/?status=${body.ok ? 'joined' : 'error'}`); return res.end(); } res.statusCode = code; res.setHeader('Content-Type', 'application/json'); res.setHeader('Cache-Control', 'no-store'); res.end(JSON.stringify(body)); };
 
 async function readBody(req) {
   if (req.body && typeof req.body === 'object') return req.body;
@@ -15,6 +16,7 @@ async function readBody(req) {
 }
 
 export default async function handler(req, res) {
+  REQ = req;
   if (req.method !== 'POST') { res.setHeader('Allow', 'POST'); return send(res, 405, { ok: false, error: 'Use POST.' }); }
   const origin = req.headers.origin;
   if (origin && !ALLOWED.test(origin)) return send(res, 403, { ok: false, error: 'Not allowed.' });

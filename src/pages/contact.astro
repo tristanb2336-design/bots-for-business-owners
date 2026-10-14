@@ -1,0 +1,31 @@
+---
+import Base from '../layouts/Base.astro';
+---
+<Base title="Contact" description="Contact Bots for Business Owners about sponsorship, featured listings, use case suggestions or anything else." path="/contact/">
+<section class="hero" style="padding-bottom:8px"><h1>Contact us</h1>
+<p class="lead">Questions about sponsorship or featured listings, a real use case to suggest, or anything else. We reply by email.</p></section>
+<div class="panel">
+<p class="done" id="c-status" role="status" aria-live="polite" hidden></p>
+<form class="signup-form contact-form" id="contact" action="/api/contact/" method="post">
+  <div aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden"><label>Company <input name="company" tabindex="-1" autocomplete="off" /></label></div>
+  <label for="c-name">Your name</label><input id="c-name" name="name" required maxlength="100" autocomplete="name" />
+  <label for="c-email">Your email</label><input id="c-email" name="email" type="email" required autocomplete="email" placeholder="you@yourbusiness.com" />
+  <label for="c-topic">Topic</label>
+  <select id="c-topic" name="topic"><option value="sponsorship">Sponsorship</option><option value="featured">Featured listing</option><option value="suggest">Suggest a use case</option><option value="other" selected>Other</option></select>
+  <label for="c-msg">Message</label><textarea id="c-msg" name="message" required minlength="10" maxlength="5000" rows="7"></textarea>
+  <div class="row"><button class="btn btn-primary" type="submit">Send message</button></div>
+  <noscript><small>JavaScript is off: the form will still send, then bring you back to this page. For the best experience, please enable JavaScript.</small></noscript>
+</form>
+</div>
+<script is:inline>
+(function(){const f=document.getElementById('contact'),out=document.getElementById('c-status'),p=new URLSearchParams(location.search);
+const t=p.get('topic');if(t){const o=f.querySelector(`option[value="${t}"]`);if(o)o.selected=true;}
+const s=p.get('status');if(s){out.hidden=false;out.textContent=s==='sent'?"Thanks! Your message was sent.":"Sorry, your message couldn't be sent. Please try again later.";if(s!=='sent')out.style.color='var(--brand-ink)';}
+f.addEventListener('submit',async e=>{e.preventDefault();if(!f.checkValidity()){f.reportValidity();return;}
+const btn=f.querySelector('button');btn.disabled=true;out.hidden=false;out.style.color='';out.textContent='Sending…';
+try{const r=await fetch('/api/contact/',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(Object.fromEntries(new FormData(f)))});
+const j=await r.json().catch(()=>({}));if(r.ok&&j.ok){out.textContent=j.message;f.reset();}else{out.style.color='var(--brand-ink)';out.textContent=j.error||'Something went wrong. Please try again later.';}}
+catch{out.style.color='var(--brand-ink)';out.textContent='Network error. Please try again.';}
+btn.disabled=false;out.scrollIntoView({block:'nearest'});});})();
+</script>
+</Base>

@@ -4,8 +4,6 @@ import Base from '../layouts/Base.astro';
 //   Featured listing (founding rate): $TBD / month
 //   Hands Free sponsor slot (founding rate): $TBD / issue
 // The page shows "Founding rates: email us" until real prices are set. No Stripe yet.
-const to = 'hello@example.com';
-const mail = `mailto:${to}?subject=${encodeURIComponent('Bots for Business Owners sponsorship')}`;
 ---
 <Base title="Advertise / Get featured" description="Feature your AI tool or service for small business owners on Bots for Business Owners, or sponsor the Hands Free newsletter. Founding sponsor rates available." path="/advertise/">
 <section class="hero" style="padding-bottom:8px"><span class="eyebrow">Founding sponsors</span><h1>Advertise / Get featured</h1>
@@ -20,7 +18,7 @@ const mail = `mailto:${to}?subject=${encodeURIComponent('Bots for Business Owner
 </div>
 <section class="panel signup"><h2>Founding rates: pricing coming soon, email to reserve</h2>
 <p style="margin:0 0 14px">Tell us what you offer and which business types it serves. Reserve a founding spot now and we'll follow up with pricing.</p>
-<a class="btn btn-primary" href={mail}>Email {to}</a></section>
+<a class="btn btn-primary" href="/contact/?topic=sponsorship">Contact us about sponsorship</a></section>
 <div class="panel prose"><h2>Disclosure policy</h2>
 <p>Paid placements are always labeled and never change the editorial use cases. Use cases are chosen only because they're real and sourced. Sponsors can't buy, edit or remove them. We only accept sponsors whose products are relevant to small business owners.</p></div>
 </Base>
