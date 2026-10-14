@@ -2,7 +2,7 @@
 import { SITE, NAME } from '../site.mjs';
 const { title, description, path = '/', jsonld = null, ogType = 'website' } = Astro.props;
 const url = SITE + path;
-const full = path === '/' ? title : `${title} | ${NAME}`;
+const full = (path === '/' || title.includes(NAME)) ? title : `${title} | ${NAME}`;
 ---
 <!doctype html>
 <html lang="en">

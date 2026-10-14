@@ -7,13 +7,20 @@ const to = 'hello@example.com';
 <p style="margin:0 0 12px"><strong>Hands Free</strong> is the weekly Bots for Business Owners newsletter, launching soon. Join the waitlist and you'll get the first issue: one sourced example, in plain English.</p>
 <form class="signup-form" action={`mailto:${to}?subject=Hands%20Free%20waitlist`} method="post" enctype="text/plain" data-to={to}>
   <label for={`${id}-em`}>Your email</label>
+  <div aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden"><label>Company <input name="company" tabindex="-1" autocomplete="off" /></label></div>
   <div class="row"><input id={`${id}-em`} name="email" type="email" autocomplete="email" required placeholder="you@yourbusiness.com" />
   <button class="btn btn-primary" type="submit">Join the Hands Free waitlist</button></div>
-  <small>This opens your email app with a ready-to-send note to <a href={`mailto:${to}?subject=Hands%20Free%20waitlist`}>{to}</a>. Just hit send. We only use it for Hands Free, and never sell it.</small>
-  <p class="done" role="status" hidden>Your email app should be open now. Hit send and you're on the list.</p>
+  <small>No JS? The form opens your email app instead, or write to <a href={`mailto:${to}?subject=Hands%20Free%20waitlist`}>{to}</a> directly. We only use it for Hands Free, and never sell it.</small>
+  <p class="done" role="status" aria-live="polite" hidden></p>
 </form>
 </section>
 <script is:inline>
-document.querySelectorAll('.signup-form').forEach(f=>{if(f.dataset.b)return;f.dataset.b=1;f.addEventListener('submit',e=>{e.preventDefault();const em=f.querySelector('input').value.trim();if(!f.checkValidity())return;
-location.href='mailto:'+f.dataset.to+'?subject='+encodeURIComponent('Hands Free waitlist')+'&body='+encodeURIComponent('Please add me to the Hands Free newsletter waitlist.\n\nEmail: '+em);f.querySelector('.done').hidden=false;});});
+document.querySelectorAll('.signup-form').forEach(f=>{if(f.dataset.b)return;f.dataset.b=1;f.addEventListener('submit',async e=>{e.preventDefault();if(!f.checkValidity()){f.reportValidity();return;}
+const out=f.querySelector('.done'),btn=f.querySelector('button'),em=f.querySelector('input[name=email]').value.trim();
+btn.disabled=true;out.hidden=false;out.style.color='';out.textContent='Saving…';
+try{const r=await fetch('/api/subscribe',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email:em,company:f.querySelector('input[name=company]').value})});
+const j=await r.json().catch(()=>({}));if(r.ok&&j.ok){out.textContent=j.message||"You're on the list!";f.querySelector('input[name=email]').value='';}
+else{out.style.color='var(--brand-ink)';out.textContent=(j.error||'Something went wrong.')+' You can also email '+f.dataset.to+'.';}}
+catch{out.style.color='var(--brand-ink)';out.textContent='Network error. Please try again, or email '+f.dataset.to+'.';}
+btn.disabled=false;});});
 </script>
