@@ -1,0 +1,15 @@
+---
+import { featured } from '../data/featured.mjs';
+const { type = null } = Astro.props;
+const items = featured.filter(f => type ? (f.types || []).some(t => t === type || t === 'all') : f.home);
+---
+{items.length > 0 && (
+<section class="featured" aria-label="Featured (paid placement)">
+{items.map(f => (
+<a class="card feat" href={f.url} rel="sponsored noopener" target="_blank">
+  <span class="badge feat-badge">Featured · Paid placement</span>
+  <h3>{f.name}</h3><p>{f.blurb}</p>
+  <span class="more" aria-hidden="true">Visit site ↗</span>
+</a>))}
+<p class="feat-note">Paid placements are always labeled and never change the editorial use cases. <a href="/advertise/">Get featured</a></p>
+</section>)}

@@ -5,6 +5,7 @@ import { SITE, NAME, TAGLINE } from '../site.mjs';
 import { short } from '../components.mjs';
 import Card from '../components/Card.astro';
 import Signup from '../components/Signup.astro';
+import Featured from '../components/Featured.astro';
 import { ICONS } from '../site.mjs';
 const counts = Object.fromEntries(Object.keys(TYPES).map(k => [k, useCases.filter(u => u.type === k).length]));
 const jsonld = { '@context': 'https://schema.org', '@graph': [
@@ -29,6 +30,7 @@ const jsonld = { '@context': 'https://schema.org', '@graph': [
 <h2 class="section-title">Find your kind of business</h2>
 <nav aria-label="Business types"><div class="types">{Object.entries(TYPES).map(([k, v]) => <a class="type-tile" href={`/type/${k}/`}><span class="ic" aria-hidden="true">{ICONS[k]}</span><span>{v}</span><small>{`${counts[k]} use case${counts[k]===1?'':'s'}`}</small></a>)}</div></nav>
 <h2 class="section-title" id="browse" style="margin-top:32px">All {useCases.length} use cases</h2>
+<Featured />
 <div class="grid" id="list">{useCases.slice(0, 6).map(u => <Card u={u} />)}</div>
 <Signup id="wl-mid" compact title="Want one of these in your inbox each week?" />
 <div class="grid">{useCases.slice(6).map(u => <Card u={u} />)}</div>

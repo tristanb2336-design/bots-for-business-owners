@@ -1,0 +1,26 @@
+---
+import Base from '../layouts/Base.astro';
+// PRICING (internal placeholders, TBD, NOT shown on the page):
+//   Featured listing (founding rate): $TBD / month
+//   Hands Free sponsor slot (founding rate): $TBD / issue
+// The page shows "Founding rates: email us" until real prices are set. No Stripe yet.
+const to = 'hello@example.com';
+const mail = `mailto:${to}?subject=${encodeURIComponent('Bots for Business Owners sponsorship')}`;
+---
+<Base title="Advertise / Get featured" description="Feature your AI tool or service for small business owners on Bots for Business Owners, or sponsor the Hands Free newsletter. Founding sponsor rates available." path="/advertise/">
+<section class="hero" style="padding-bottom:8px"><span class="eyebrow">Founding sponsors</span><h1>Advertise / Get featured</h1>
+<p class="lead">Do you make an AI tool or service that helps small business owners? Get it in front of owners who are actively looking for practical ways to use AI. The site is new, so early sponsors get founding rates.</p></section>
+<div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(280px,1fr))">
+<div class="panel" style="margin:0"><span class="badge">Option A</span><h2>Featured listing</h2>
+<p>Your AI tool or service is pinned at the top of the relevant business-type page (for example Food &amp; Restaurants or Trades &amp; Home Services) and on the homepage.</p>
+<ul><li>Clearly marked with a "Featured" label that says it's paid</li><li>Shown separately from the editorial use cases</li><li>Short description and a link to your site</li></ul></div>
+<div class="panel" style="margin:0"><span class="badge">Option B</span><h2>Hands Free sponsor</h2>
+<p>Sponsor an issue of <a href="/newsletter/">Hands Free</a>, the weekly Bots for Business Owners newsletter. There's only one sponsor slot per issue, so your message isn't crowded out.</p>
+<ul><li>One sponsor per issue</li><li>Labeled as a sponsor message</li><li>A short blurb and a link</li></ul></div>
+</div>
+<section class="panel signup"><h2>Founding rates: pricing coming soon, email to reserve</h2>
+<p style="margin:0 0 14px">Tell us what you offer and which business types it serves. Reserve a founding spot now and we'll follow up with pricing.</p>
+<a class="btn btn-primary" href={mail}>Email {to}</a></section>
+<div class="panel prose"><h2>Disclosure policy</h2>
+<p>Paid placements are always labeled and never change the editorial use cases. Use cases are chosen only because they're real and sourced. Sponsors can't buy, edit or remove them. We only accept sponsors whose products are relevant to small business owners.</p></div>
+</Base>

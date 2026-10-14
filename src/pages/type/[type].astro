@@ -2,6 +2,7 @@
 import Base from '../../layouts/Base.astro';
 import { useCases, TYPES } from '../../data/usecases.mjs';
 import { SITE } from '../../site.mjs';
+import Featured from '../../components/Featured.astro';
 import Card from '../../components/Card.astro';
 import { ICONS } from '../../site.mjs';
 export function getStaticPaths(){ return Object.keys(TYPES).map(type => ({ params: { type } })); }
@@ -15,6 +16,7 @@ const jsonld = { '@context':'https://schema.org','@type':'CollectionPage', name:
 <section class="hero" style="padding-top:12px"><span class="eyebrow"><span aria-hidden="true">{ICONS[type]}</span> {label}</span>
 <h1>AI agents for {label.toLowerCase()}</h1>
 <p class="lead">{list.length} real example{list.length===1?'':'s'}, each linked to its public source.</p></section>
+<Featured type={type} />
 <div class="grid">{list.map(u => <Card u={u} />)}</div>
 <p><a class="btn btn-ghost" href="/">← See all use cases</a></p>
 </Base>
