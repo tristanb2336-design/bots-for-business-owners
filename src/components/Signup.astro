@@ -1,19 +1,19 @@
 ---
-const { id = 'wl', title = 'Get one real use case a week, free', compact = false } = Astro.props;
+const { id = 'wl', title = 'Get Hands Free: one real use case a week', compact = false } = Astro.props;
 const to = 'hello@example.com';
 ---
 <section class="panel signup" aria-labelledby={`${id}-h`}>
 <h2 id={`${id}-h`} style={compact ? 'font-size:1.25rem' : undefined}>{title}</h2>
-<p style="margin:0 0 12px">The newsletter is launching soon. Join the waitlist and you'll get the first issue: one sourced example, in plain English.</p>
-<form class="signup-form" action={`mailto:${to}?subject=Waitlist%3A%20Bots%20for%20Business%20Owners`} method="post" enctype="text/plain" data-to={to}>
+<p style="margin:0 0 12px"><strong>Hands Free</strong> is the weekly Bots for Business Owners newsletter, launching soon. Join the waitlist and you'll get the first issue: one sourced example, in plain English.</p>
+<form class="signup-form" action={`mailto:${to}?subject=Hands%20Free%20waitlist`} method="post" enctype="text/plain" data-to={to}>
   <label for={`${id}-em`}>Your email</label>
   <div class="row"><input id={`${id}-em`} name="email" type="email" autocomplete="email" required placeholder="you@yourbusiness.com" />
-  <button class="btn btn-primary" type="submit">Join the waitlist</button></div>
-  <small>This opens your email app with a ready-to-send note to <a href={`mailto:${to}?subject=Waitlist%3A%20Bots%20for%20Business%20Owners`}>{to}</a>. Just hit send. We only use it for the newsletter, and never sell it.</small>
+  <button class="btn btn-primary" type="submit">Join the Hands Free waitlist</button></div>
+  <small>This opens your email app with a ready-to-send note to <a href={`mailto:${to}?subject=Hands%20Free%20waitlist`}>{to}</a>. Just hit send. We only use it for Hands Free, and never sell it.</small>
   <p class="done" role="status" hidden>Your email app should be open now. Hit send and you're on the list.</p>
 </form>
 </section>
 <script is:inline>
 document.querySelectorAll('.signup-form').forEach(f=>{if(f.dataset.b)return;f.dataset.b=1;f.addEventListener('submit',e=>{e.preventDefault();const em=f.querySelector('input').value.trim();if(!f.checkValidity())return;
-location.href='mailto:'+f.dataset.to+'?subject='+encodeURIComponent('Waitlist: Bots for Business Owners')+'&body='+encodeURIComponent('Please add me to the newsletter waitlist.\n\nEmail: '+em);f.querySelector('.done').hidden=false;});});
+location.href='mailto:'+f.dataset.to+'?subject='+encodeURIComponent('Hands Free waitlist')+'&body='+encodeURIComponent('Please add me to the Hands Free newsletter waitlist.\n\nEmail: '+em);f.querySelector('.done').hidden=false;});});
 </script>
