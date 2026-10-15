@@ -37,8 +37,22 @@ export default async function handler(req, res) {
     const r = await fetch(`https://api.resend.com/audiences/${aud}/contacts`, {
       method: 'POST', headers: { Authorization: `Bearer ${key}`, 'Content-Type': 'application/json' },
       body: JSON.stringify({ email, unsubscribed: false }) });
+    if (r.ok) await agentmailNotify(`[BFBO waitlist] New Hands Free signup: ${email}`, `New Hands Free waitlist signup\nEmail: ${email}\nAt: ${new Date().toISOString()}`);
     if (r.ok || r.status === 409) return send(res, 200, { ok: true, message: "You're on the Hands Free waitlist. Thanks!" });
     console.error('resend error', r.status);
     return send(res, 502, { ok: false, error: 'Could not save your email right now. Please try again later.' });
   } catch (e) { console.error('resend fetch failed'); return send(res, 502, { ok: false, error: 'Could not save your email right now. Please try again later.' }); }
+}
+
+// Notify the project's AgentMail inbox (sends from the inbox to itself; never to outside addresses).
+async function agentmailNotify(subject, text, replyTo) {
+  const key = process.env.AGENTMAIL_API_KEY, inbox = process.env.AGENTMAIL_INBOX || 'bots-for-business@agentmail.to';
+  if (!key) return false;
+  try {
+    const r = await fetch(`https://api.agentmail.to/v0/inboxes/${encodeURIComponent(inbox)}/messages/send`, {
+      method: 'POST', headers: { Authorization: `Bearer ${key}`, 'Content-Type': 'application/json' },
+      body: JSON.stringify({ to: inbox, subject, text, labels: ['bfbo'], ...(replyTo ? { reply_to: replyTo } : {}) }) });
+    if (!r.ok) console.error('agentmail', r.status);
+    return r.ok;
+  } catch (e) { console.error('agentmail', e?.message); return false; }
 }

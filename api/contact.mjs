@@ -53,15 +53,26 @@ export default async function handler(req, res) {
     r = await fetch(`https://api.resend.com/contacts/${encodeURIComponent(email)}`, { method: 'PATCH', headers: H,
       body: JSON.stringify({ properties: { contact_name: name, topic: TOPICS[topic], message: all, submitted_at: at } }) });
     if (!r.ok) { console.error('contact patch', r.status); throw 0; }
-  } catch { return reply(req, res, 502, { ok: false, error: "Sorry, your message couldn't be saved right now. Please try again later." }); }
+  } catch {
+    // Resend store failed: still accept if the AgentMail notice lands.
+    if (await agentmailNotify(`[BFBO contact] ${TOPICS[topic]} from ${name}`, `Topic: ${TOPICS[topic]}\nName: ${name}\nEmail: ${email}\nAt: ${at}\n\n${message}\n\n(Not saved to Resend audience.)`, email))
+      return reply(req, res, 200, { ok: true, message: "Thanks! Your message was received. We'll reply by email." });
+    return reply(req, res, 502, { ok: false, error: "Sorry, your message couldn't be saved right now. Please try again later." }); }
 
-  // Optional notice via Resend's test sender (only delivers to the Resend account owner's address).
-  const to = process.env.CONTACT_TO;
-  if (to && EMAIL.test(to)) {
-    try { await fetch('https://api.resend.com/emails', { method: 'POST', headers: H, body: JSON.stringify({
-      from: 'Bots for Business Owners <onboarding@resend.dev>', to: [to], reply_to: email,
-      subject: `[BFBO contact] ${TOPICS[topic]} from ${name}`,
-      text: `Topic: ${TOPICS[topic]}\nName: ${name}\nEmail: ${email}\nAt: ${at}\n\n${message}` }) }); } catch {}
-  }
+  await agentmailNotify(`[BFBO contact] ${TOPICS[topic]} from ${name}`,
+    `Topic: ${TOPICS[topic]}\nName: ${name}\nEmail: ${email}\nAt: ${at}\n\n${message}`, email);
   return reply(req, res, 200, { ok: true, message: "Thanks! Your message was received. We'll reply by email." });
+}
+
+// Notify the project's AgentMail inbox (sends from the inbox to itself; never to outside addresses).
+async function agentmailNotify(subject, text, replyTo) {
+  const key = process.env.AGENTMAIL_API_KEY, inbox = process.env.AGENTMAIL_INBOX || 'bots-for-business@agentmail.to';
+  if (!key) return false;
+  try {
+    const r = await fetch(`https://api.agentmail.to/v0/inboxes/${encodeURIComponent(inbox)}/messages/send`, {
+      method: 'POST', headers: { Authorization: `Bearer ${key}`, 'Content-Type': 'application/json' },
+      body: JSON.stringify({ to: inbox, subject, text, labels: ['bfbo'], ...(replyTo ? { reply_to: replyTo } : {}) }) });
+    if (!r.ok) console.error('agentmail', r.status);
+    return r.ok;
+  } catch (e) { console.error('agentmail', e?.message); return false; }
 }
