@@ -1,4 +1,5 @@
 // Every entry is drawn from the cited public source. Numbers appear only when the source states them.
+// `added` = date the entry was published on this site (YYYY-MM-DD, America/Chicago). Used for sitemap lastmod and Article datePublished.
 export const TYPES = {
   food: "Food & Restaurants",
   shops: "Shops & E-commerce",
@@ -11,6 +12,7 @@ export const TYPES = {
 export const useCases = [
 {
   slug: "pizzeria-ai-phone-orders-boardwalk-pizza",
+  added: "2026-10-14",
   title: "A 12-year-old pizzeria lets an AI answer the phone and take orders",
   business: "Boardwalk Pizza", type: "food",
   job: "Answers every phone call, takes orders (including half-and-half pizzas, coupons and specials), answers dietary questions and sends orders straight into the point-of-sale system.",
@@ -24,6 +26,7 @@ export const useCases = [
 },
 {
   slug: "restaurant-ai-phone-agent-silvios",
+  added: "2026-10-14",
   title: "A three-site restaurant replaced its seasonal phone hire with an AI phone agent",
   business: "Silvio's", type: "food",
   job: "Answers every call instantly during the lunch and dinner rush, takes orders straight into the system, and transfers callers who want a person to staff.",
@@ -37,6 +40,7 @@ export const useCases = [
 },
 {
   slug: "pizzeria-phone-ai-prepaid-takeout-fournos",
+  added: "2026-10-14",
   title: "A neighborhood pizzeria lets an AI take paid takeout orders by phone",
   business: "Fournos Pizzeria and Bistro", type: "food",
   job: "Takes unscripted phone orders, answers questions, collects payment over the phone and sends the ticket straight to the kitchen. Customers just walk in, say their name and pick up.",
@@ -51,6 +55,7 @@ export const useCases = [
 },
 {
   slug: "hot-chicken-shop-ai-phone-ordering-fiery-nashville",
+  added: "2026-10-14",
   title: "A hot chicken shop forwarded its phone line to an AI and stopped missing calls",
   business: "Fiery Nashville Hot Chicken", type: "food",
   job: "Answers the store phone and takes orders so the crew can keep cooking.",
@@ -64,6 +69,7 @@ export const useCases = [
 },
 {
   slug: "quick-service-restaurants-chatgpt-paperwork-pricing",
+  added: "2026-10-14",
   title: "A couple running three restaurants use ChatGPT for health rules, HR policies and pricing",
   business: "Ted and Tami Taylor (three quick-service restaurants in New Mexico)", type: "food",
   job: "Drafts required written procedures and HR policies, helps answer customer complaint emails, compares menu prices with local competitors, and (in progress) watches the catering inbox for urgent orders.",
@@ -77,6 +83,7 @@ export const useCases = [
 },
 {
   slug: "coffee-shop-ai-sales-questions-partners-coffee",
+  added: "2026-10-14",
   title: "A coffee roaster asks its point-of-sale AI which menu items really sell",
   business: "Partners Coffee", type: "food",
   job: "Answers plain-English questions about sales data inside the POS, like year-over-year comparisons of menu items, so menu decisions are based on numbers instead of gut feel.",
@@ -90,6 +97,7 @@ export const useCases = [
 },
 {
   slug: "smoothie-chain-square-ai-forecast-ingredients-keva-juice",
+  added: "2026-10-14",
   title: "A family-run smoothie chain uses its POS AI to forecast seasonal ingredients",
   business: "Keva Juice", type: "food",
   job: "Answers questions about what sells, add-ons and average ticket in seconds, and helps forecast how much of a seasonal ingredient to buy and when to launch seasonal items.",
@@ -103,6 +111,7 @@ export const useCases = [
 },
 {
   slug: "cafe-chain-chatgpt-staff-onboarding-plex-coffee",
+  added: "2026-10-14",
   title: "A small café chain turned its staff handbook into an AI that answers barista questions",
   business: "Plex Coffee", type: "food",
   job: "Answers staff questions from the company wiki on an in-store iPad, teaches new hires through a custom GPT built from the handbook, and helps with expansion research and demand questions.",
@@ -116,6 +125,7 @@ export const useCases = [
 },
 {
   slug: "tamale-business-chatgpt-farmers-market-tracker",
+  added: "2026-10-14",
   title: "A third-generation tamale business built a farmers market finder with ChatGPT",
   business: "The Original Tamale Co.", type: "food",
   job: "Wrote the code for a searchable farmers-market tracker on the company website, helps create social media content, and helps an owner whose second language is English write staff letters and messages.",
@@ -129,6 +139,7 @@ export const useCases = [
 },
 {
   slug: "cottage-bakery-launch-with-claude-chatgpt-family-kneads",
+  added: "2026-10-14",
   title: "A Texas family launched a cottage bakery using Claude and ChatGPT for the planning",
   business: "Family Kneads", type: "food",
   job: "Helped research what a Texas cottage bakery needs, name the business, scale recipes, write a brand guide, draft logo concepts, and produce social media and customer messages.",
@@ -142,6 +153,7 @@ export const useCases = [
 },
 {
   slug: "texas-food-business-team-of-ai-agents-blended-salsa",
+  added: "2026-10-14",
   title: "A Texas food business owner runs his businesses, rentals and books with a team of AI agents",
   business: "Blended Salsa (the founder of this site)", type: "food",
   job: "A set of AI agents handles the inbox, keeps an eye on delivery-platform orders, helps manage the Shopify store, helps with bookkeeping, and organizes recipes. The owner reviews and approves anything that goes out.",
@@ -155,6 +167,7 @@ export const useCases = [
 },
 {
   slug: "fudge-maker-gemini-new-flavors-rolys-fudge",
+  added: "2026-10-14",
   title: "A family fudge maker uses Gemini to research new recipes",
   business: "Roly's Fudge (Dartmouth)", type: "makers",
   job: "Researches ingredients and alternative recipes, like sugar-free fudge that keeps its taste, texture and shelf life, and brainstorms new flavors that follow food trends.",
@@ -168,6 +181,7 @@ export const useCases = [
 },
 {
   slug: "granola-brand-gemini-retailer-compliance-jamies-farm",
+  added: "2026-10-14",
   title: "A small granola brand uses Gemini to handle retailer rules and inventory sheets",
   business: "Jamie's Farm", type: "makers",
   job: "Reads dense retailer delivery-guideline PDFs to avoid chargebacks, generates CSV files for shipping labels, writes spreadsheet formulas for inventory and cost-of-goods tracking, and finds themes in customer reviews.",
@@ -181,6 +195,7 @@ export const useCases = [
 },
 {
   slug: "seed-farm-chatgpt-voice-logging-crop-ledger",
+  added: "2026-10-14",
   title: "A family seed farm made 50 years of handwritten crop records searchable with ChatGPT",
   business: "Sharp & Sharp Certified Seed", type: "makers",
   job: "Makes decades of crop records searchable, logs loads by voice from the combine, diagnoses stressed plants from photos, and double-checks equipment parts mid-repair.",
@@ -194,6 +209,7 @@ export const useCases = [
 },
 {
   slug: "winemaker-chatgpt-harvest-forecast-massican",
+  added: "2026-10-14",
   title: "A Napa winemaker uses ChatGPT to compare 17 years of vineyard data and plan harvest",
   business: "Massican Winery (Dan Petroski)", type: "makers",
   job: "Compares current vineyard data with past vintages to anticipate harvest timing, logs field observations by voice into a spreadsheet, and turns third-party reviews into a 'flavor lexicon' for each wine.",
@@ -207,6 +223,7 @@ export const useCases = [
 },
 {
   slug: "salvage-yard-chatgpt-troubleshooting-part-numbers",
+  added: "2026-10-14",
   title: "An 86-year-old salvage yard uses ChatGPT to fix machines and organize 1,000 parts",
   business: "Reno Salvage", type: "trades",
   job: "Troubleshoots broken equipment on the spot, looks up specs and materials for customers, and created a part-numbering system for over 1,000 products.",
@@ -220,6 +237,7 @@ export const useCases = [
 },
 {
   slug: "plumbing-company-ai-virtual-agent-superior-plumbing",
+  added: "2026-10-14",
   title: "A plumbing company's AI phone agent books jobs and hands tough calls to staff",
   business: "Superior Plumbing (Atlanta area)", type: "trades",
   job: "Answers calls as a front-line call taker or as a fallback, books and reschedules appointments, and escalates to a human when needed.",
@@ -233,6 +251,7 @@ export const useCases = [
 },
 {
   slug: "hvac-company-ai-voice-agent-bill-joplins",
+  added: "2026-10-14",
   title: "A Texas HVAC company's AI voice agent books most calls during demand spikes",
   business: "Bill Joplin's Air Conditioning and Heating (Dallas-Fort Worth)", type: "trades",
   job: "Answers inbound calls, schedules appointments and keeps customers off hold when a maintenance campaign makes the phones light up.",
@@ -246,6 +265,7 @@ export const useCases = [
 },
 {
   slug: "hvac-plumbing-bilingual-voice-ai-dr-cool",
+  added: "2026-10-14",
   title: "A Las Vegas HVAC and plumbing company answers every peak-season call with bilingual voice AI",
   business: "Dr. Cool Services", type: "trades",
   job: "Picks up instantly in English or Spanish, identifies the customer, figures out the issue and urgency, finds an open slot and confirms the booking.",
@@ -259,6 +279,7 @@ export const useCases = [
 },
 {
   slug: "landscaping-company-ai-receptionist-jobber-make",
+  added: "2026-10-14",
   title: "A landscaping owner built her own AI receptionist after losing most of her crew",
   business: "Andrea Palacio's South Florida landscaping company", type: "trades",
   job: "An AI receptionist answers calls and books estimate visits directly in Jobber, and sends upset clients to the owner. A separate automation texts clients a photo after every service and routes happy clients to Google reviews.",
@@ -272,6 +293,7 @@ export const useCases = [
 },
 {
   slug: "mobile-truck-repair-ai-receptionist-rite-wrench",
+  added: "2026-10-14",
   title: "A mobile truck repair shop's AI receptionist turns missed calls into new customers",
   business: "Rite Wrench (Fort Lauderdale)", type: "trades",
   job: "Answers when nobody can get to the phone, collects the caller's contact info, vehicle details and reason for calling, and emails a transcript so the team can follow up prepared.",
@@ -285,6 +307,7 @@ export const useCases = [
 },
 {
   slug: "landlords-24-units-baselane-asana-chatgpt",
+  added: "2026-10-14",
   title: "Two side-hustle landlords run 24 units with a $20-a-month software stack",
   business: "Connor Swofford and Pieter Louw (Buffalo rental portfolio)", type: "rentals",
   job: "Baselane collects rent, flags unpaid tenants, categorizes expenses and reports on property performance; Asana assigns contractor and maintenance tasks; ChatGPT drafts emails and helps answer landlord-vs-tenant questions, including during their first eviction.",
@@ -298,6 +321,7 @@ export const useCases = [
 },
 {
   slug: "property-manager-ai-leasing-assistant-maine-properties",
+  added: "2026-10-14",
   title: "A local property manager's AI assistant answers after-hours leads and books tours",
   business: "Maine Properties", type: "rentals",
   job: "An AI assistant named 'Maddie' handles leasing conversations and tour scheduling, replies to after-hours messages, follows up on cancellations and assigns tours to agents by area to cut travel.",
@@ -311,6 +335,7 @@ export const useCases = [
 },
 {
   slug: "upholstery-cleaning-whatsapp-ai-quotes-maribel-clean",
+  added: "2026-10-14",
   title: "A two-person cleaning business lets a WhatsApp AI give quotes and book jobs overnight",
   business: "Maribel Clean (Brasília, Brazil)", type: "services",
   job: "Greets customers on WhatsApp, asks for city and item details, prices a sofa from a photo, gives instant quotes, negotiates small discounts, understands voice notes and books the job, including between midnight and 5 AM.",
@@ -324,6 +349,7 @@ export const useCases = [
 },
 {
   slug: "makeup-studio-whatsapp-ai-booking-deposits-consi-studio",
+  added: "2026-10-14",
   title: "A bridal makeup studio lets an AI agent book, take deposits and reschedule on WhatsApp",
   business: "Consi Studio (Montevideo, Uruguay)", type: "services",
   job: "Checks each artist's real-time availability, holds the slot, explains the 50% deposit policy, verifies payment, confirms the booking, sends reminders and handles reschedules, all in the WhatsApp chat.",
@@ -337,6 +363,7 @@ export const useCases = [
 },
 {
   slug: "jewelry-maker-whatsapp-ai-customer-service-piedra-nomada",
+  added: "2026-10-14",
   title: "A one-woman jewelry maker lets an AI answer WhatsApp customers while she crafts",
   business: "Piedra Nómada (Playa del Carmen, Mexico)", type: "shops",
   job: "Responds right away to customer questions on WhatsApp from people who clicked her ads, in her voice and tone, while the owner jumps in when needed.",
@@ -350,6 +377,7 @@ export const useCases = [
 },
 {
   slug: "handmade-home-goods-shopify-ai-sales-assistant-katikaia",
+  added: "2026-10-14",
   title: "A Shopify store for handmade home goods uses an AI assistant to answer shoppers 24/7",
   business: "Katikaia", type: "shops",
   job: "Answers detailed shopper questions about materials, care instructions and international shipping around the clock, in the store's brand voice.",
@@ -363,6 +391,7 @@ export const useCases = [
 },
 {
   slug: "fashion-brands-shopify-sidekick-weekly-reports-maggy-london",
+  added: "2026-10-14",
   title: "A four-person e-commerce team runs six brands with Shopify's built-in AI assistant",
   business: "Maggy London", type: "shops",
   job: "Delivers weekly performance summaries with year-over-year analytics, builds customer segments, audits collections, and helped find and update URL redirects and set up an llms.txt file for AI discovery.",
@@ -377,6 +406,7 @@ export const useCases = [
 
 {
   slug: "home-kitchen-thai-restaurant-chatgpt-bangkok-rush",
+  added: "2026-10-15",
   title: "A couple used ChatGPT to launch a Thai restaurant from their home kitchen",
   business: "Bangkok Rush Thai Kitchen (Alameda, California)", type: "food",
   job: "Researched neighborhoods and kitchen economics, found a legal home-kitchen permit path, turned health rules into checklists, set prices and packaging, drafted flyers and review replies, and keeps a daily to-do list.",
@@ -390,6 +420,7 @@ export const useCases = [
 },
 {
   slug: "rage-room-chatgpt-pricing-competitors-break-life-houston",
+  added: "2026-10-15",
   title: "A Houston rage-room owner uses ChatGPT to research rivals and explain her prices",
   business: "Break Life Houston", type: "services",
   job: "Researches competitors, drafts clearer answers to pricing questions, and looks for ways to bring in more weekday visits for a family-run entertainment business.",
@@ -403,6 +434,7 @@ export const useCases = [
 },
 {
   slug: "contractor-chatgpt-seo-invoice-filing-beach-cities-builder",
+  added: "2026-10-15",
   title: "A beach-cities contractor uses ChatGPT for local SEO and invoice filing",
   business: "Beach Cities Builder (Hermosa Beach, California)", type: "trades",
   job: "Rebuilds local SEO pages and metadata to win more remodel leads, and runs a script that reads subcontractor invoices from email and files each one in the right job folder.",
@@ -413,5 +445,47 @@ export const useCases = [
   start: ["Ask ChatGPT to rewrite one service page for a city you serve, using searches your customers actually type.", "Describe how you file invoices today and ask it to outline a simple email-to-folder workflow.", "Keep a human check on the first week of automated filing before you trust it fully."],
   sourceName: "OpenAI Academy",
   sourceUrl: "https://academy.openai.com/public/blogs/how-chatgpt-became-a-contractors-back-office-2026-05-07",
+},
+{
+  slug: "cupcake-bakery-claude-order-labels-candys-cupcakes",
+  added: "2026-10-16",
+  title: "A cupcake bakery used Claude to automate order labels, gift tags and topper prints",
+  business: "Candy's Cupcakes (Ashton-under-Lyne, England)", type: "food",
+  job: "Prints every order, gift tag and label with one button and pulls cupcake-topper templates ready to print, work a staff member used to do by hand.",
+  story: "Candice Bannister started Candy's Cupcakes in her Manchester kitchen in 2011; it now ships nationwide from a warehouse with 21 staff and handles 100 to 350 orders a day. When the employee who printed each order, gift tag and label (and cropped every topper image) left for another job, Candice and her husband Oliver experimented with Claude for a few months. Those manual steps now run automatically, and the kitchen team labels boxes faster with fewer mistakes. Everything is still baked by hand, and they say they have no plans to cut jobs.",
+  results: ["The 'one-button' order label printing tool saves an estimated 86 hours a month, Oliver Bannister says (per This is Money).", "The couple believe AI has saved them about £20,000 a year in staff costs.", "Peeling and sticking gift tags is gone, which frees time for larger branded orders and customer service."],
+  tools: ["Claude (Anthropic)", "Order label and topper printing workflow"],
+  cost: "£20/month Claude subscription (per the source)",
+  start: ["Write down every step one person does by hand to get an order out the door: printing, labels, gift tags, images.", "Paste that list into an AI chat and ask it to help you build a one-click way to print them from your order export.", "Run the old way and the new way side by side for a week and check every label before you switch."],
+  sourceName: "This is Money (Daily Mail group), Oct 1, 2026",
+  sourceUrl: "https://www.thisismoney.co.uk/money/smallbusiness/article-16129337/Our-cupcake-business-saved-20k-year-using-AI-instead-hiring-staff.html",
+},
+{
+  slug: "holiday-decor-brand-chatgpt-product-line-inventory-black-paper-party",
+  added: "2026-10-16",
+  title: "A small holiday-decor brand uses ChatGPT to plan collections, write in its voice and forecast inventory",
+  business: "Black Paper Party", type: "shops",
+  job: "Brainstorms product ideas and seasonal collections, writes captions in the brand's own voice, helps with financial modeling and inventory forecasting, and finds partners for pop-ups in new cities.",
+  story: "Jasmine Hudson, a former Walmart buyer, launched Black Paper Party to bring authentic Black representation to seasonal goods like wrapping paper, ornaments and Santas. Her team is lean and she also runs a nonprofit for Black entrepreneurs. The team went back and forth with ChatGPT to remix \"The 12 Days of Christmas,\" and that remix became the anchor of a holiday collection now carried by Walmart. She trained ChatGPT on past Instagram captions and campaigns so it writes in the brand's \"rich auntie\" tone.",
+  results: ["A ChatGPT-assisted lyric remix became the foundation of a holiday product line now carried by Walmart (per OpenAI Academy).", "The team also uses it for inventory forecasting and to find pop-up partners in new cities.", "\"It lets us duplicate ourselves without burning out,\" Hudson says."],
+  tools: ["ChatGPT"],
+  cost: null,
+  start: ["Paste 10 of your best past captions or emails into ChatGPT and ask it to describe your brand voice back to you.", "Ask it to brainstorm a seasonal collection around one theme your customers love, then edit hard.", "Give it last season's sales by item and ask for a simple reorder estimate you can sanity-check."],
+  sourceName: "OpenAI Academy",
+  sourceUrl: "https://academy.openai.com/public/blogs/a-cultural-remix-of-christmas-built-for-the-shelves-2026-01-06",
+},
+{
+  slug: "family-plumber-ai-receptionist-messages-frankies-plumbing",
+  added: "2026-10-16",
+  title: "A husband-and-wife plumbing company lets an AI receptionist take messages while they're on jobs",
+  business: "Frankie's Plumbing (San Diego, California)", type: "trades",
+  job: "Answers the phone when the plumber can't, takes clear messages with the caller's details, and logs them so he can call back between jobs.",
+  story: "Frank Galvin plumbed for 12 years before starting Frankie's Plumbing with his wife, Monica. The business began on pen and paper and Google Calendar, then moved quoting, scheduling, invoicing and payments into one field-service app. Emergency calls come in all day, and a missed call while he's under a sink can mean a lost job, so he uses the app's AI receptionist to capture messages and customer details and follows up between jobs.",
+  results: ["\"The AI takes a message. It jots down the information very well... we're able to get their business, and we don't lose any money,\" Galvin says (per the Jobber customer story).", "The vendor story says the business grew from about $100,000 to an estimated $800,000 in annual revenue after switching software overall; that growth is not attributed to the AI receptionist alone."],
+  tools: ["Jobber Receptionist (AI phone answering)", "Jobber field-service software", "QuickBooks Online"],
+  cost: null,
+  start: ["Check your call log for how many calls you missed last week while on a job.", "Turn on an AI receptionist inside the scheduling app you already use, so messages land with the customer record.", "Read every message it takes for the first two weeks and call back fast; fix its business info where it gets things wrong."],
+  sourceName: "Jobber customer story",
+  sourceUrl: "https://www.getjobber.com/academy/plumbing/frankies-plumbing/",
 },
 ];
