@@ -7,5 +7,6 @@ import Signup from '../components/Signup.astro';
 <p class="lead">The weekly Bots for Business Owners newsletter. One real, sourced example of a small business using AI, in plain English, with how to start. No hype, no spam. Join the waitlist and you'll get the first issue.</p></section>
 <p class="panel" id="nl-status" role="status" hidden></p>
 <Signup id="wl-page" title="Join the Hands Free waitlist" />
+<p class="biz" style="margin-top:16px">Prefer a feed reader? New use cases also go out in the <a href="/rss.xml">RSS feed</a>.</p>
 <script is:inline>const st=new URLSearchParams(location.search).get("status");if(st){const e=document.getElementById("nl-status");e.hidden=false;e.textContent=st==="joined"?"You're on the Hands Free waitlist. Thanks!":"Sorry, we couldn't add you. Please check your email address and try again.";}</script>
 </Base>

@@ -39,4 +39,4 @@ Allow: /
 
 Sitemap: https://bots-for-business-owners.vercel.app/sitemap.xml
 
-# AI assistants: structured index at /llms.txt (full text at /llms-full.txt)
+# AI assistants: structured index at /llms.txt (full text at /llms-full.txt, new entries at /rss.xml)
