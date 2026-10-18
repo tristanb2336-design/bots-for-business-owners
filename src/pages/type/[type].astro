@@ -1,21 +1,44 @@
 ---
 import Base from '../../layouts/Base.astro';
 import { useCases, TYPES } from '../../data/usecases.mjs';
-import { SITE } from '../../site.mjs';
+import { SITE, NAME } from '../../site.mjs';
 import Featured from '../../components/Featured.astro';
 import Card from '../../components/Card.astro';
 import { ICONS } from '../../site.mjs';
 export function getStaticPaths(){ return Object.keys(TYPES).map(type => ({ params: { type } })); }
 const { type } = Astro.params; const label = TYPES[type];
 const list = useCases.filter(u => u.type === type);
-const jsonld = { '@context':'https://schema.org','@type':'CollectionPage', name:`AI agent use cases: ${label}`, url:`${SITE}/type/${type}/`,
-  mainEntity:{ '@type':'ItemList', itemListElement: list.map((u,i)=>({ '@type':'ListItem', position:i+1, url:`${SITE}/use-cases/${u.slug}/`, name:u.title })) } };
+// Plain-English hub intros. General guidance only: no numbers or claims beyond what the linked entries say.
+const INTROS = {
+  food: "Restaurants, cafés, food trucks and bakeries are using AI to answer the phone and take orders during the rush, handle catering requests, draft policies and menus, and read their own sales data. Each example below is a real business, linked to the article or case study it came from.",
+  shops: "Shops and online stores are using AI to answer shopper questions around the clock, reply to customers on WhatsApp and chat, write product descriptions, and plan collections and inventory. Each example below is a real business, linked to its public source.",
+  rentals: "Landlords, property managers and letting agents are using AI to answer rental enquiries after hours, qualify applicants, book viewings and keep small portfolios organized on a tight software budget. Each example below is a real business, linked to its public source.",
+  trades: "Plumbers, HVAC companies, contractors, repair shops and haulers are using AI phone agents so calls get answered while the crew is on a job, plus AI assistants for quotes, invoices and back-office work. Each example below is a real business, linked to its public source.",
+  services: "Salons, studios, cleaners and other appointment-based businesses are using AI receptionists and messaging agents to answer calls, give quotes, take deposits and book or reschedule clients. Each example below is a real business, linked to its public source.",
+  makers: "Farms, food makers and small producers are using AI to research recipes, handle retailer paperwork and inventory sheets, and make years of records searchable. Each example below is a real business, linked to its public source.",
+};
+const intro = INTROS[type];
+const toolCounts = {};
+for (const u of list) { const t = u.tools[0]; toolCounts[t] = (toolCounts[t] || 0) + 1; }
+const tools = Object.entries(toolCounts).sort((a,b)=>b[1]-a[1] || a[0].localeCompare(b[0])).map(([t])=>t);
+const url = `${SITE}/type/${type}/`;
+const desc = `${list.length} real, sourced examples of how ${label.toLowerCase()} owners use AI agents, with how to start in plain English.`;
+const jsonld = { '@context':'https://schema.org','@graph':[
+  { '@type':'CollectionPage', name:`AI agent use cases: ${label}`, url, description:desc, inLanguage:'en-US',
+    isPartOf:{ '@type':'WebSite', name:NAME, url:SITE+'/' },
+    mainEntity:{ '@type':'ItemList', numberOfItems:list.length, itemListElement: list.map((u,i)=>({ '@type':'ListItem', position:i+1, url:`${SITE}/use-cases/${u.slug}/`, name:u.title })) } },
+  { '@type':'BreadcrumbList', itemListElement:[
+    { '@type':'ListItem', position:1, name:'Use cases', item:SITE+'/' },
+    { '@type':'ListItem', position:2, name:label, item:url } ] } ] };
 ---
-<Base title={`AI agents for ${label}: ${list.length} real examples`} description={`Real, sourced examples of how ${label.toLowerCase()} owners use AI agents, and how to start in plain English.`} path={`/type/${type}/`} jsonld={jsonld}>
+<Base title={`AI agents for ${label}: ${list.length} real examples`} description={desc} path={`/type/${type}/`} jsonld={jsonld}>
 <p class="crumbs"><a href="/">Use cases</a> / {label}</p>
 <section class="hero" style="padding-top:12px"><span class="eyebrow"><span aria-hidden="true">{ICONS[type]}</span> {label}</span>
 <h1>AI agents for {label.toLowerCase()}</h1>
-<p class="lead">{list.length} real example{list.length===1?'':'s'}, each linked to its public source.</p></section>
+<p class="lead">{list.length} real example{list.length===1?'':'s'}, each linked to its public source.</p>
+{intro && <p>{intro}</p>}
+{tools.length > 0 && <p class="biz" style="font-size:.95rem"><b>Tools in these examples:</b> {tools.join(', ')}. We're <a href="/about/">vendor-neutral</a>: listings are picked for usefulness, not by vendor.</p>}
+</section>
 <Featured type={type} />
 <div class="grid">{list.map(u => <Card u={u} />)}</div>
 <p><a class="btn btn-ghost" href="/">← See all use cases</a></p>
