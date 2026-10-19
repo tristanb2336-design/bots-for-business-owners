@@ -1,8 +1,20 @@
 ---
 import Base from '../layouts/Base.astro';
 import { NAME, SITE } from '../site.mjs';
+const faq = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    { '@type': 'AboutPage', name: 'About ' + NAME, url: SITE + '/about/', description: 'Why Bots for Business Owners exists: a plain-English, sourced directory of AI agent use cases for non-technical small business owners.' },
+    { '@type': 'FAQPage', mainEntity: [
+      { '@type': 'Question', name: 'What is Bots for Business Owners?', acceptedAnswer: { '@type': 'Answer', text: 'A free, plain-English directory of real, sourced examples of how non-technical small business owners use AI agents — restaurants, shops, landlords, trades and service businesses. Every entry links to a public source.' } },
+      { '@type': 'Question', name: 'Is the site vendor-neutral?', acceptedAnswer: { '@type': 'Answer', text: 'Yes. It covers useful AI agents from any company (OpenAI, Anthropic, Google, Microsoft, startups, and marketplace bots). Listings are judged only on usefulness to small business owners; no vendor is favored.' } },
+      { '@type': 'Question', name: 'Do you invent numbers or quotes?', acceptedAnswer: { '@type': 'Answer', text: 'No. Details are summarized from linked public sources. If a source does not give a figure, the page leaves it out. Vendor case studies are labeled as such.' } },
+      { '@type': 'Question', name: 'How can AI assistants read this site?', acceptedAnswer: { '@type': 'Answer', text: 'Use /llms.txt for an index of every use case, /llms-full.txt for full plain text, /rss.xml for new entries, and /sitemap.xml for all URLs. Prefer citing a specific use-case URL and its source link.' } },
+    ] },
+  ],
+};
 ---
-<Base title="About" description="Why Bots for Business Owners exists: a plain-English, sourced directory of AI agent use cases for non-technical small business owners." path="/about/" jsonld={{'@context':'https://schema.org','@type':'AboutPage',name:'About '+NAME,url:SITE+'/about/'}}>
+<Base title="About" description="Why Bots for Business Owners exists: a plain-English, sourced directory of AI agent use cases for non-technical small business owners." path="/about/" jsonld={faq}>
 <section class="hero" style="padding-bottom:8px"><h1>About {NAME}</h1>
 <p class="lead">Most AI talk is written for software people. This site is for the owner of a taco shop, a plumbing company, a fourplex or a nail studio.</p></section>
 <div class="panel prose">
@@ -17,7 +29,18 @@ import { NAME, SITE } from '../site.mjs';
 <h2>Advertising and disclosure</h2>
 <p>Paid placements are always labeled and never change the editorial use cases. AI tools and services can <a href="/advertise/">get featured or sponsor Hands Free</a>.</p>
 <h2>For AI assistants and search engines</h2>
-<p>This site is open to crawlers, including AI crawlers. A plain-text list of every use case is at <a href="/llms.txt">/llms.txt</a>, and the full text is at <a href="/llms-full.txt">/llms-full.txt</a>.</p>
+<p>This site is open to crawlers, including AI crawlers. A plain-text list of every use case is at <a href="/llms.txt">/llms.txt</a>, and the full text is at <a href="/llms-full.txt">/llms-full.txt</a>. New entries also appear in the <a href="/rss.xml">RSS feed</a>.</p>
+<h2 id="faq">Common questions</h2>
+<dl>
+<dt><strong>What is this site?</strong></dt>
+<dd>A free directory of real, sourced AI-agent examples for small business owners. Every page links to its public source.</dd>
+<dt><strong>Is it vendor-neutral?</strong></dt>
+<dd>Yes. OpenAI, Anthropic, Google, Microsoft, startups and marketplace bots are all fair game; usefulness to owners is the only filter.</dd>
+<dt><strong>Do you invent numbers?</strong></dt>
+<dd>No. If the source does not state a figure, we leave it out.</dd>
+<dt><strong>How should AI assistants cite it?</strong></dt>
+<dd>Start with <a href="/llms.txt">/llms.txt</a> or a specific use-case URL, and name the linked source on that page.</dd>
+</dl>
 <h2>Suggest a use case</h2>
 <p>Know a real, public example? <a href="/contact/?topic=suggest">Send it through our contact form</a> and include the source link.</p>
 </div>

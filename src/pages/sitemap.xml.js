@@ -7,6 +7,7 @@ export function GET(){
   const latest = newest(useCases);
   const urls = [
     ['/', latest], ['/about/', latest], ['/newsletter/', latest], ['/advertise/', latest], ['/contact/', latest],
+    ['/rss.xml', latest], ['/llms.txt', latest], ['/llms-full.txt', latest],
     ...Object.keys(TYPES).map(t=>[`/type/${t}/`, newest(useCases.filter(u=>u.type===t)) ?? latest]),
     ...useCases.map(u=>[`/use-cases/${u.slug}/`, mod(u)]),
   ];
