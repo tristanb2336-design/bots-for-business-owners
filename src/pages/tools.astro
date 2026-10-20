@@ -1,0 +1,33 @@
+---
+import Base from '../layouts/Base.astro';
+import { useCases, TYPES } from '../data/usecases.mjs';
+import { groupByTool } from '../data/tools.mjs';
+import { SITE, NAME, ICONS } from '../site.mjs';
+const groups = groupByTool();
+const path = '/tools/', url = SITE + path;
+const desc = `Real small business AI use cases grouped by the AI tool they use: ChatGPT, Claude, Gemini, Microsoft Copilot, AI phone agents and more. ${useCases.length} sourced examples.`;
+const jsonld = { '@context':'https://schema.org','@graph':[
+  { '@type':'CollectionPage', name:'Small business AI use cases by tool', url, description:desc, inLanguage:'en-US',
+    isPartOf:{ '@type':'WebSite', name:NAME, url:SITE+'/' },
+    hasPart: groups.map(g => ({ '@type':'ItemList', name:`${g.name} (${g.maker})`, url:`${url}#${g.key}`, numberOfItems:g.list.length,
+      itemListElement: g.list.map((u,i)=>({ '@type':'ListItem', position:i+1, url:`${SITE}/use-cases/${u.slug}/`, name:u.title })) })) },
+  { '@type':'BreadcrumbList', itemListElement:[
+    { '@type':'ListItem', position:1, name:'Use cases', item:SITE+'/' },
+    { '@type':'ListItem', position:2, name:'By AI tool', item:url } ] } ] };
+---
+<Base title="Small business AI use cases by tool: ChatGPT, Claude, Gemini, Copilot and more" description={desc} path={path} jsonld={jsonld}>
+<p class="crumbs"><a href="/">Use cases</a> / By AI tool</p>
+<section class="hero" style="padding-top:12px"><span class="eyebrow">Browse by AI tool</span>
+<h1>Which AI tools are small businesses actually using?</h1>
+<p class="lead">All {useCases.length} use cases, grouped by the AI tool each owner used. Some use more than one tool, so they appear in more than one group.</p>
+<p>We're <a href="/about/">vendor-neutral</a>: groups are listed alphabetically and no tool is favored. Every example links to its public source, so you can check exactly what the owner did.</p>
+<nav aria-label="Tools on this page"><ul class="tools" style="margin-top:12px">{groups.map(g => <li><a href={`#${g.key}`}>{g.name} ({g.list.length})</a></li>)}</ul></nav>
+</section>
+{groups.map(g => (
+<section class="panel prose" id={g.key} aria-labelledby={`h-${g.key}`}>
+<h2 id={`h-${g.key}`}>{g.name} <small style="font-weight:400;color:var(--mut)">· {g.maker}</small></h2>
+<p>{g.blurb} {g.list.length} use case{g.list.length===1?'':'s'}:</p>
+<ul>{g.list.map(u => <li><a href={`/use-cases/${u.slug}/`}>{u.title}</a> <span class="biz">· <span aria-hidden="true">{ICONS[u.type]}</span> {u.business} ({TYPES[u.type]})</span></li>)}</ul>
+</section>))}
+<p><a class="btn btn-ghost" href="/">← See all use cases</a></p>
+</Base>
