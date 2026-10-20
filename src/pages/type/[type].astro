@@ -37,7 +37,7 @@ const jsonld = { '@context':'https://schema.org','@graph':[
 <h1>AI agents for {label.toLowerCase()}</h1>
 <p class="lead">{list.length} real example{list.length===1?'':'s'}, each linked to its public source.</p>
 {intro && <p>{intro}</p>}
-{tools.length > 0 && <p class="biz" style="font-size:.95rem"><b>Tools in these examples:</b> {tools.join(', ')}. We're <a href="/about/">vendor-neutral</a>: listings are picked for usefulness, not by vendor.</p>}
+{tools.length > 0 && <p class="biz" style="font-size:.95rem"><b>Tools in these examples:</b> {tools.join(', ')}. We're <a href="/about/">vendor-neutral</a>: listings are picked for usefulness, not by vendor. <a href="/tools/">Browse all use cases by AI tool</a>.</p>}
 </section>
 <Featured type={type} />
 <div class="grid">{list.map(u => <Card u={u} />)}</div>
