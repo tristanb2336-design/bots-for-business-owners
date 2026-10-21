@@ -5,7 +5,7 @@ export function GET(){
   for (const u of useCases) {
     t += `## ${u.title}\n\nURL: ${SITE}/use-cases/${u.slug}/\nAdded: ${u.added}\nBusiness: ${u.business}\nBusiness type: ${TYPES[u.type]}\nJob the AI does: ${u.job}\nStory: ${u.story}\n`;
     if (u.results.length) t += `Reported results (per source): ${u.results.join(' ')}\n`;
-    t += `Tools: ${u.tools.join(', ')}\nCost: ${u.cost ?? 'Not stated in source'}\nHow to start:\n${u.start.map((s,i)=>`${i+1}. ${s}`).join('\n')}\nSource: ${u.sourceName} — ${u.sourceUrl}\n\n`;
+    t += `Tools: ${u.tools.join(', ')}\nCost: ${u.cost ? (typeof u.cost==='string'?u.cost:(u.cost.basis==='list-price'?'Tool list price: ':'')+u.cost.value+' ('+u.cost.note+(u.cost.url?' '+u.cost.url:'')+')') : 'Not stated in source'}\nSetup time: ${(u.setupTime??u.setup) ? (typeof (u.setupTime??u.setup)==='string'?(u.setupTime??u.setup):u.setupTime.value+' ('+u.setupTime.note+')') : 'Not stated in source'}\nHow to start:\n${u.start.map((s,i)=>`${i+1}. ${s}`).join('\n')}\nSource: ${u.sourceName} — ${u.sourceUrl}\n\n`;
   }
   return new Response(t, { headers: { 'Content-Type': 'text/plain; charset=utf-8' } });
 }

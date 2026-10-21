@@ -38,7 +38,7 @@ const full = (path === '/' || title.includes(NAME)) ? title : `${title} | ${NAME
 @font-face{font-family:Inter;src:url(/fonts/inter-600.woff2) format('woff2');font-weight:451 800;font-display:swap}
 :root{color-scheme:light dark;
 --bg:#fbf6ee;--surface:#ffffff;--ink:#2a211b;--mut:#6b5d52;--line:#ece2d4;
---brand:#b53d0b;--ctl:#a8988a;--brand-ink:#9a3412;--brand-soft:#fde7d6;--leaf:#166534;--leaf-soft:#dcf2e3;--sun:#fef3c7;--shadow:0 1px 2px rgba(60,40,20,.06),0 8px 24px rgba(60,40,20,.07)}
+--brand:#b53d0b;--ctl:#8f7f70;--brand-ink:#9a3412;--brand-soft:#fde7d6;--leaf:#166534;--leaf-soft:#dcf2e3;--sun:#fef3c7;--shadow:0 1px 2px rgba(60,40,20,.06),0 8px 24px rgba(60,40,20,.07)}
 @media (prefers-color-scheme:dark){:root{--bg:#1a1613;--surface:#241e1a;--ink:#f5ede4;--mut:#c4b5a6;--line:#3a312a;--ctl:#7a6a5c;--brand:#fb923c;--brand-ink:#fdba74;--brand-soft:#3b2416;--leaf:#86efac;--leaf-soft:#173322;--sun:#3a2f14;--shadow:0 1px 2px rgba(0,0,0,.3),0 8px 24px rgba(0,0,0,.25)}}
 *{box-sizing:border-box}html{-webkit-text-size-adjust:100%}
 body{margin:0;font:400 17px/1.65 Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;color:var(--ink);background:var(--bg)}
@@ -50,7 +50,7 @@ a{color:var(--brand-ink);text-underline-offset:3px}a:hover{color:var(--brand)}
 .site-head{position:sticky;top:0;z-index:5;background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
 .site-head .wrap{display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:64px;flex-wrap:wrap}
 .logo{font-weight:700;font-size:1.2rem;color:var(--ink);text-decoration:none;display:flex;align-items:center;gap:10px}
-.logo-mark{display:grid;place-items:center;width:36px;height:36px;border-radius:10px;background:var(--brand);color:#fff;font-size:1.1rem}
+.logo .short{display:none}.logo-mark{display:grid;place-items:center;width:36px;height:36px;border-radius:10px;background:var(--brand);color:#fff;font-size:1.1rem}
 .nav{display:flex;gap:4px;flex-wrap:wrap}.nav a{padding:8px 12px;border-radius:999px;text-decoration:none;color:var(--ink);font-weight:500;font-size:.95rem}
 .nav a:hover,.nav a[aria-current=page]{background:var(--brand-soft);color:var(--brand-ink)}
 main{padding-bottom:48px}
@@ -113,7 +113,11 @@ main{padding-bottom:48px}
 .site-foot{border-top:1px solid var(--line);background:var(--surface);color:var(--mut);font-size:.93rem;padding:36px 0}
 .site-foot .wrap{display:grid;grid-template-columns:2fr 1fr;gap:24px}.site-foot nav{display:flex;flex-direction:column;gap:6px}
 @media (max-width:640px){.site-foot .wrap{grid-template-columns:1fr}.hero{padding:36px 0 24px}.nav a{padding:6px 10px}}
-.chip,.type-tile,.btn-ghost,.share a,.signup-form input{border-color:var(--ctl)}
+.chip,.type-tile,.btn,.btn-ghost,.share a,.signup-form input,.signup-form button,.contact-form input,.contact-form button,.card,.panel,.quick li{border-color:var(--ctl)}
+.tool-link,.see-all-tools{display:inline-flex;align-items:center;min-height:44px;padding:0 4px}.tools li.tool-li{padding:0 6px}
+.fact-note{display:block;margin-top:4px;color:var(--mut);font-size:.82rem}.not-stated{margin:10px 0 6px;font-size:.88rem;color:var(--mut)}
+.logo{min-height:44px}.js-paged .card.is-hidden{display:none}.more-wrap{text-align:center;margin:20px 0 8px}
+@media (max-width:340px){.logo .short{display:none!important}.nav a{padding:0 5px;font-size:.85rem;white-space:normal}}
 .nav a,.share a{min-height:44px;display:inline-flex;align-items:center}.chip{min-height:44px}
 .site-foot nav{gap:0}.site-foot nav a{padding:10px 0;display:block}
 .crumbs a{display:inline-block;padding:12px 2px}
@@ -135,8 +139,8 @@ main{padding-bottom:48px}
 .signup-form .done{margin:10px 0 0;font-weight:600;color:var(--leaf)}
 @media (max-width:640px){
   .site-head .wrap{flex-wrap:nowrap;min-height:56px;gap:6px}
-  .logo{font-size:1rem;gap:8px}.logo .full{display:none}.logo-mark{width:32px;height:32px}
-  .nav{flex-wrap:nowrap;gap:0}.nav a{padding:0 9px;font-size:.92rem}
+  .logo{font-size:.92rem;gap:8px;min-height:44px;line-height:1.05;flex-shrink:0}.logo .full{display:none}.logo .short{display:inline}.nav a{white-space:nowrap}.logo-mark{width:32px;height:32px}
+  .nav{flex-wrap:nowrap;gap:0}.nav a{padding:0 6px;font-size:.88rem}
   .types{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;gap:10px;margin-inline:-20px;padding:4px 20px 12px}
   .type-tile{flex:0 0 150px;scroll-snap-align:start;min-height:96px}
   .hero{padding:24px 0 16px}.hero .lead{font-size:1.05rem}.trust{margin-top:16px;gap:6px 16px}
@@ -147,7 +151,7 @@ main{padding-bottom:48px}
 </head>
 <body>
 <a class="skip" href="#main">Skip to content</a>
-<header class="site-head"><div class="wrap"><a class="logo" href="/"><span class="logo-mark" aria-hidden="true">🤖</span><span>Bots<span class="full"> for Business Owners</span></span></a>
+<header class="site-head"><div class="wrap"><a class="logo" href="/"><span class="logo-mark" aria-hidden="true">🤖</span><span>Bots<span class="full"> for Business Owners</span><span class="short"> for<br>Owners</span></span></a>
 <nav class="nav" aria-label="Main"><a href="/" aria-current={path==='/'?'page':undefined}>Use cases</a><a href="/about/" aria-current={path==='/about/'?'page':undefined}>About</a><a href="/newsletter/" aria-current={path==='/newsletter/'?'page':undefined}>Newsletter</a></nav></div></header>
 <main id="main" class="wrap"><slot /></main>
 <footer class="site-foot"><div class="wrap">

@@ -34,6 +34,8 @@ const jsonld = { '@context': 'https://schema.org', '@graph': [
 <Featured />
 <div class="grid" id="list">{useCases.slice(0, 6).map(u => <Card u={u} />)}</div>
 <Signup id="wl-mid" compact title="Want one of these in your inbox each week?" />
-<div class="grid">{useCases.slice(6).map(u => <Card u={u} />)}</div>
+<div class="grid" id="list-more">{useCases.slice(6).map(u => <Card u={u} />)}</div>
+<div class="more-wrap" id="more-wrap" hidden><button type="button" class="btn btn-ghost" id="show-more" aria-controls="list-more">Show 12 more</button> <a class="link-quiet" href="/tools/">or browse by AI tool</a></div>
+<script is:inline>(function(){var g=document.getElementById('list-more'),w=document.getElementById('more-wrap'),b=document.getElementById('show-more');if(!g)return;var c=[].slice.call(g.querySelectorAll('.card')),n=6,step=12;if(c.length<=n)return;g.classList.add('js-paged');function upd(){c.forEach(function(e,i){e.classList.toggle('is-hidden',i>=n)});var left=c.length-n;w.hidden=left<=0;b.textContent='Show '+Math.min(step,left)+' more ('+left+' left)';}b.addEventListener('click',function(){var first=n;n+=step;upd();if(c[first])c[first].focus();});upd();})();</script>
 <Signup id="wl-end" />
 </Base>
