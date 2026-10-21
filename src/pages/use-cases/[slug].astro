@@ -41,7 +41,7 @@ const addedLabel = new Date(u.added + 'T12:00:00Z').toLocaleDateString('en-US', 
 <h1>{u.title}</h1><p class="biz">{u.business}</p>
 <p class="biz" style="font-size:.9rem">Added <time datetime={u.added}>{addedLabel}</time></p>
 {(cost || setupTime || u.tools.length > 0) && (<ul class="quick" aria-label="At a glance">
-{cost && <li><span aria-hidden="true">💵</span><b>Cost</b><span>{label(cost)}{cost.value}</span></li>}
+{cost && <li><span aria-hidden="true">💵</span><b>Cost</b><span>{label(cost)}{cost.value}{cost.basis === 'list-price' && <small class="lp-note">List price, not what they paid</small>}</span></li>}
 {setupTime && <li><span aria-hidden="true">⏱️</span><b>Setup time</b><span>{setupTime.value}</span></li>}
 {u.tools.length > 0 && <li><span aria-hidden="true">🧰</span><b>What you need</b><span>{u.tools.join(', ')}</span></li>}
 </ul>)}</header>
