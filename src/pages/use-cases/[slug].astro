@@ -6,10 +6,17 @@ import { short } from '../../components.mjs';
 import Card from '../../components/Card.astro';
 import Signup from '../../components/Signup.astro';
 import { ICONS } from '../../site.mjs';
+import { TOOL_GROUPS } from '../../data/tools.mjs';
 export function getStaticPaths(){ return useCases.map(u => ({ params: { slug: u.slug }, props: { u } })); }
 const { u } = Astro.props;
 const path = `/use-cases/${u.slug}/`, url = SITE + path;
 const related = useCases.filter(x => x.type === u.type && x.slug !== u.slug).slice(0, 3);
+// Cross-links by AI tool: which /tools/ groups this entry belongs to, plus up to 3 other entries using the same tool.
+const myGroups = TOOL_GROUPS.filter(g => u.tools.some(t => g.match.test(t)));
+const toolLinks = myGroups.length ? myGroups.map(g => ({ key: g.key, name: g.name })) : [{ key: 'other', name: 'Other AI agents and custom setups' }];
+const shown = new Set([u.slug, ...related.map(r => r.slug)]);
+const sameTool = myGroups.flatMap(g => useCases.filter(x => x.tools.some(t => g.match.test(t))).map(x => ({ x, g })))
+  .filter(({ x }) => !shown.has(x.slug) && (shown.add(x.slug), true)).slice(0, 3);
 const jsonld = { '@context':'https://schema.org','@graph':[
  { '@type':'Article', headline:u.title, description:short(u.job), url, mainEntityOfPage:url, image:SITE+'/og.png',
    about:{ '@type':'Organization', name:u.business }, publisher:{ '@type':'Organization', name:NAME, url:SITE+'/' },
@@ -46,6 +53,7 @@ const addedLabel = new Date(u.added + 'T12:00:00Z').toLocaleDateString('en-US', 
 <dt>Business</dt><dd>{u.business}</dd>
 <dt>Type</dt><dd>{TYPES[u.type]}</dd>
 <dt>Tools used</dt><dd><ul class="tools">{u.tools.map(t => <li>{t}</li>)}</ul></dd>
+<dt>Browse by tool</dt><dd><ul class="tools">{toolLinks.map(g => <li><a href={`/tools/#${g.key}`}>{g.name}</a></li>)}</ul></dd>
 <dt>Rough cost</dt><dd>{u.cost ?? 'Not stated in source. Ask the vendor for current pricing.'}</dd>
 </dl></div>
 <div class="panel source"><p class="side-label">Source</p><a href={u.sourceUrl} rel="noopener" target="_blank">Read the original: {u.sourceName} ↗<span class="sr-only"> (external site, opens in a new tab)</span></a><small>Details on this page are summarized from this source. Vendor case studies are written by the vendor; results are theirs, not ours.</small></div>
@@ -57,4 +65,5 @@ const addedLabel = new Date(u.added + 'T12:00:00Z').toLocaleDateString('en-US', 
 </aside>
 </div>
 {related.length > 0 && (<section style="margin-top:48px"><h2 class="section-title">More for {TYPES[u.type].toLowerCase()}</h2><div class="grid">{related.map(r => <Card u={r} />)}</div></section>)}
+{sameTool.length > 0 && (<section style="margin-top:40px"><h2 class="section-title">Other businesses using {myGroups.length === 1 ? myGroups[0].name : 'the same AI tools'}</h2><div class="grid">{sameTool.map(({ x }) => <Card u={x} />)}</div><p><a href={`/tools/#${toolLinks[0].key}`}>See every use case by AI tool →</a></p></section>)}
 </Base>
