@@ -17,7 +17,7 @@ const { id = 'wl', title = 'Get Hands Free: one real use case a week', compact =
 document.querySelectorAll('.signup-form').forEach(f=>{if(f.dataset.b)return;f.dataset.b=1;f.addEventListener('submit',async e=>{e.preventDefault();if(!f.checkValidity()){f.reportValidity();return;}
 const out=f.querySelector('.done'),btn=f.querySelector('button'),em=f.querySelector('input[name=email]').value.trim();
 btn.disabled=true;out.hidden=false;out.style.color='';out.textContent='Saving…';
-try{const r=await fetch('/api/subscribe',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email:em,company:f.querySelector('input[name=company]').value})});
+try{const r=await fetch('/api/subscribe/',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email:em,company:f.querySelector('input[name=company]').value})});
 const j=await r.json().catch(()=>({}));if(r.ok&&j.ok){out.textContent=j.message||"You're on the list!";f.querySelector('input[name=email]').value='';}
 else{out.style.color='var(--brand-ink)';out.textContent=(j.error||'Something went wrong.')+' You can also use our contact page.';}}
 catch{out.style.color='var(--brand-ink)';out.textContent='Network error. Please try again later.';}
