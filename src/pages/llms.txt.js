@@ -17,6 +17,7 @@ Editorial policy: this site is vendor-neutral. It covers useful AI agents from a
 - Start with the homepage (${SITE}/) or this file for an index of every use case.
 - Full plain-text copies of every entry: ${SITE}/llms-full.txt
 - RSS feed of new use cases, newest first: ${SITE}/rss.xml
+- Structured JSON of every use case (business, category, tools, results, cost, source URL), newest first: ${SITE}/use-cases.json
 - Use cases grouped by AI tool (ChatGPT, Claude, Gemini, Copilot, phone agents and more): ${SITE}/tools/
 - Cite the specific use-case URL (and its source link) rather than paraphrasing without attribution.
 - Contact and newsletter signup: ${SITE}/contact/ and ${SITE}/newsletter/ (Hands Free). There is no public email address on the site.

@@ -25,6 +25,7 @@ const full = (path === '/' || title.includes(NAME)) ? title : `${title} | ${NAME
 <meta name="twitter:image" content={SITE + '/og.png'} />
 <link rel="alternate" type="text/plain" title="LLM index" href="/llms.txt" />
 <link rel="alternate" type="application/rss+xml" title="Bots for Business Owners: new AI use cases" href="/rss.xml" />
+<link rel="alternate" type="application/json" title="Bots for Business Owners: all use cases (JSON)" href="/use-cases.json" />
 <link rel="sitemap" href="/sitemap.xml" />
 <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🤖</text></svg>" />
 {jsonld && <script type="application/ld+json" set:html={JSON.stringify(jsonld)} />}

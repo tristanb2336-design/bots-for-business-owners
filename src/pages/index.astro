@@ -11,7 +11,12 @@ const counts = Object.fromEntries(Object.keys(TYPES).map(k => [k, useCases.filte
 const jsonld = { '@context': 'https://schema.org', '@graph': [
   { '@type': 'WebSite', name: NAME, url: SITE + '/', description: TAGLINE },
   { '@type': 'ItemList', name: 'AI agent use cases for small business owners', numberOfItems: useCases.length,
-    itemListElement: useCases.map((u, i) => ({ '@type': 'ListItem', position: i + 1, url: `${SITE}/use-cases/${u.slug}/`, name: u.title })) } ] };
+    itemListElement: useCases.map((u, i) => ({ '@type': 'ListItem', position: i + 1, url: `${SITE}/use-cases/${u.slug}/`, name: u.title })) },
+  { '@type': 'Dataset', name: `${NAME}: small business AI use cases`, description: `${useCases.length} real, sourced examples of small businesses using AI agents, with the tools used, stated results and the public source for each.`,
+    url: SITE + '/', isAccessibleForFree: true, creator: { '@type': 'Organization', name: NAME, url: SITE + '/' },
+    keywords: ['small business', 'AI agents', 'AI use cases', 'restaurants', 'retail', 'trades', 'landlords'],
+    dateModified: useCases.map(u => u.updated ?? u.added).sort().at(-1),
+    distribution: [ { '@type': 'DataDownload', encodingFormat: 'application/json', contentUrl: SITE + '/use-cases.json' }, { '@type': 'DataDownload', encodingFormat: 'text/plain', contentUrl: SITE + '/llms-full.txt' } ] } ] };
 ---
 <Base title={`${NAME}: ${useCases.length} real ways small business owners use AI agents`} description={`${useCases.length} real, sourced examples of restaurants, shops, landlords, trades and service businesses using AI agents, with how to start in plain English.`} jsonld={jsonld}>
 <section class="hero hero-split">
