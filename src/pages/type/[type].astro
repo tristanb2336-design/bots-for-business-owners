@@ -25,7 +25,7 @@ const url = `${SITE}/type/${type}/`;
 const desc = `${list.length} real, sourced examples of how ${label.toLowerCase()} owners use AI agents, with how to start in plain English.`;
 const jsonld = { '@context':'https://schema.org','@graph':[
   { '@type':'CollectionPage', name:`AI agent use cases: ${label}`, url, description:desc, inLanguage:'en-US',
-    isPartOf:{ '@type':'WebSite', name:NAME, url:SITE+'/' },
+    isPartOf:{ '@id':SITE+'/#website' }, publisher:{ '@id':SITE+'/#organization' },
     mainEntity:{ '@type':'ItemList', numberOfItems:list.length, itemListElement: list.map((u,i)=>({ '@type':'ListItem', position:i+1, url:`${SITE}/use-cases/${u.slug}/`, name:u.title })) } },
   { '@type':'BreadcrumbList', itemListElement:[
     { '@type':'ListItem', position:1, name:'Use cases', item:SITE+'/' },
