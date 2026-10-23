@@ -19,9 +19,9 @@ const sameTool = myGroups.flatMap(g => useCases.filter(x => x.tools.some(t => g.
   .filter(({ x }) => !shown.has(x.slug) && (shown.add(x.slug), true)).slice(0, 3);
 const jsonld = { '@context':'https://schema.org','@graph':[
  { '@type':'Article', headline:u.title, description:short(u.job), url, mainEntityOfPage:url, image:SITE+'/og.png',
-   about:{ '@type':'Organization', name:u.business }, publisher:{ '@type':'Organization', name:NAME, url:SITE+'/' },
+   about:{ '@type':'Organization', name:u.business }, publisher:{ '@id':SITE+'/#organization' }, author:{ '@id':SITE+'/#organization' }, isPartOf:{ '@id':SITE+'/#website' }, publishingPrinciples:SITE+'/about/',
    datePublished:u.added, dateModified:u.updated ?? u.added, inLanguage:'en-US',
-   citation:u.sourceUrl, isBasedOn:u.sourceUrl, keywords:[TYPES[u.type], 'AI agent', 'small business', ...u.tools].join(', ') },
+   citation:{ '@type':'CreativeWork', name:u.sourceName, url:u.sourceUrl }, isBasedOn:u.sourceUrl, keywords:[TYPES[u.type], 'AI agent', 'small business', ...u.tools].join(', ') },
  { '@type':'HowTo', name:`How to start: ${u.title}`, step:u.start.map((s,i)=>({ '@type':'HowToStep', position:i+1, text:s })) },
  { '@type':'BreadcrumbList', itemListElement:[
    { '@type':'ListItem', position:1, name:'Use cases', item:SITE+'/' },

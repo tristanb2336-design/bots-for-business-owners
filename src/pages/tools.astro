@@ -8,7 +8,7 @@ const path = '/tools/', url = SITE + path;
 const desc = `Real small business AI use cases grouped by the AI tool they use: ChatGPT, Claude, Gemini, Microsoft Copilot, AI phone agents and more. ${useCases.length} sourced examples.`;
 const jsonld = { '@context':'https://schema.org','@graph':[
   { '@type':'CollectionPage', name:'Small business AI use cases by tool', url, description:desc, inLanguage:'en-US',
-    isPartOf:{ '@type':'WebSite', name:NAME, url:SITE+'/' },
+    isPartOf:{ '@id':SITE+'/#website' }, publisher:{ '@id':SITE+'/#organization' },
     hasPart: groups.map(g => ({ '@type':'ItemList', name:`${g.name} (${g.maker})`, url:`${url}#${g.key}`, numberOfItems:g.list.length,
       itemListElement: g.list.map((u,i)=>({ '@type':'ListItem', position:i+1, url:`${SITE}/use-cases/${u.slug}/`, name:u.title })) })) },
   { '@type':'BreadcrumbList', itemListElement:[

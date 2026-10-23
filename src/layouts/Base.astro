@@ -1,7 +1,17 @@
 ---
-import { SITE, NAME } from '../site.mjs';
+import { SITE, NAME, TAGLINE } from '../site.mjs';
 const { title, description, path = '/', jsonld = null, ogType = 'website' } = Astro.props;
 const url = SITE + path;
+// Sitewide entity graph: one Organization (publisher) and one WebSite with stable @ids, so every page's JSON-LD
+// (Article publisher, CollectionPage isPartOf, Dataset creator) can point at the same entities.
+const siteGraph = { '@context': 'https://schema.org', '@graph': [
+  { '@type': 'Organization', '@id': SITE + '/#organization', name: NAME, url: SITE + '/', logo: SITE + '/og.png',
+    description: 'A free, vendor-neutral directory of real, sourced examples of small businesses using AI agents.',
+    publishingPrinciples: SITE + '/about/', ethicsPolicy: SITE + '/about/',
+    contactPoint: { '@type': 'ContactPoint', contactType: 'editorial and sponsorship', url: SITE + '/contact/' },
+    sameAs: ['https://github.com/tristanb2336-design/bots-for-business-owners'] },
+  { '@type': 'WebSite', '@id': SITE + '/#website', name: NAME, url: SITE + '/', description: TAGLINE, inLanguage: 'en-US',
+    publisher: { '@id': SITE + '/#organization' } } ] };
 const full = (path === '/' || title.includes(NAME)) ? title : `${title} | ${NAME}`;
 ---
 <!doctype html>
@@ -28,6 +38,7 @@ const full = (path === '/' || title.includes(NAME)) ? title : `${title} | ${NAME
 <link rel="alternate" type="application/json" title="Bots for Business Owners: all use cases (JSON)" href="/use-cases.json" />
 <link rel="sitemap" href="/sitemap.xml" />
 <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🤖</text></svg>" />
+<script type="application/ld+json" set:html={JSON.stringify(siteGraph)} />
 {jsonld && <script type="application/ld+json" set:html={JSON.stringify(jsonld)} />}
 <link rel="preload" href="/fonts/fraunces-700.woff2" as="font" type="font/woff2" crossorigin />
 <link rel="preload" href="/fonts/inter-400.woff2" as="font" type="font/woff2" crossorigin />
