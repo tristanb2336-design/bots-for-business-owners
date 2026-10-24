@@ -1,6 +1,7 @@
 ---
 import { SITE, NAME, TAGLINE } from '../site.mjs';
-const { title, description, path = '/', jsonld = null, ogType = 'website' } = Astro.props;
+const { title, description, path = '/', jsonld = null, ogType = 'website', published = null, section = null } = Astro.props;
+const OG_ALT = `${NAME}: real, sourced examples of small businesses using AI agents`;
 const url = SITE + path;
 // Sitewide entity graph: one Organization (publisher) and one WebSite with stable @ids, so every page's JSON-LD
 // (Article publisher, CollectionPage isPartOf, Dataset creator) can point at the same entities.
@@ -29,15 +30,23 @@ const full = (path === '/' || title.includes(NAME)) ? title : `${title} | ${NAME
 <meta property="og:description" content={description} />
 <meta property="og:url" content={url} />
 <meta property="og:image" content={SITE + '/og.png'} />
+<meta property="og:image:type" content="image/png" />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta property="og:image:alt" content={OG_ALT} />
+<meta property="og:locale" content="en_US" />
+{published && <meta property="article:published_time" content={published} />}
+{section && <meta property="article:section" content={section} />}
 <meta name="twitter:card" content="summary_large_image" />
 <meta name="twitter:title" content={full} />
 <meta name="twitter:description" content={description} />
 <meta name="twitter:image" content={SITE + '/og.png'} />
+<meta name="twitter:image:alt" content={OG_ALT} />
 <link rel="alternate" type="text/plain" title="LLM index" href="/llms.txt" />
 <link rel="alternate" type="application/rss+xml" title="Bots for Business Owners: new AI use cases" href="/rss.xml" />
 <link rel="alternate" type="application/json" title="Bots for Business Owners: all use cases (JSON)" href="/use-cases.json" />
 <link rel="sitemap" href="/sitemap.xml" />
-<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🤖</text></svg>" />
+<link rel="icon" href="/favicon.svg" type="image/svg+xml" sizes="any" />
 <script type="application/ld+json" set:html={JSON.stringify(siteGraph)} />
 {jsonld && <script type="application/ld+json" set:html={JSON.stringify(jsonld)} />}
 <link rel="preload" href="/fonts/fraunces-700.woff2" as="font" type="font/woff2" crossorigin />

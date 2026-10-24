@@ -35,7 +35,7 @@ const label = f => f.basis === 'list-price' ? 'Tool list price: ' : '';
 const shareText = encodeURIComponent(u.title);
 const addedLabel = new Date(u.added + 'T12:00:00Z').toLocaleDateString('en-US', { year:'numeric', month:'short', day:'numeric', timeZone:'UTC' });
 ---
-<Base title={u.title} description={short(`${u.business}: ${u.job}`)} path={path} jsonld={jsonld} ogType="article">
+<Base title={u.title} description={short(`${u.business}: ${u.job}`)} path={path} jsonld={jsonld} ogType="article" published={u.added} section={TYPES[u.type]}>
 <p class="crumbs"><a href="/">Use cases</a> / <a href={`/type/${u.type}/`}>{TYPES[u.type]}</a></p>
 <header class="entry-head"><span class="badge"><span class="ic" aria-hidden="true">{ICONS[u.type]}</span>{TYPES[u.type]}</span>
 <h1>{u.title}</h1><p class="biz">{u.business}</p>
