@@ -17,11 +17,15 @@ const toolLinks = myGroups.length ? myGroups.map(g => ({ key: g.key, name: g.nam
 const shown = new Set([u.slug, ...related.map(r => r.slug)]);
 const sameTool = myGroups.flatMap(g => useCases.filter(x => x.tools.some(t => g.match.test(t))).map(x => ({ x, g })))
   .filter(({ x }) => !shown.has(x.slug) && (shown.add(x.slug), true)).slice(0, 3);
+// Named AI products this entry uses, as SoftwareApplication entities with their maker, so search engines and AI assistants
+// can connect the story to the product (e.g. "small businesses using Gemini"). Multi-vendor groups ("Various ...") are skipped.
+const softwareMentions = myGroups.filter(g => !/^Various/.test(g.maker)).map(g => ({ '@type':'SoftwareApplication', name:g.name,
+  applicationCategory:'BusinessApplication', creator:{ '@type':'Organization', name:g.maker }, url:`${SITE}/tools/#${g.key}` }));
 const jsonld = { '@context':'https://schema.org','@graph':[
  { '@type':'Article', headline:u.title, description:short(u.job), url, mainEntityOfPage:url, image:SITE+'/og.png',
    about:{ '@type':'Organization', name:u.business }, publisher:{ '@id':SITE+'/#organization' }, author:{ '@id':SITE+'/#organization' }, isPartOf:{ '@id':SITE+'/#website' }, publishingPrinciples:SITE+'/about/',
    datePublished:u.added, dateModified:u.updated ?? u.added, inLanguage:'en-US',
-   citation:{ '@type':'CreativeWork', name:u.sourceName, url:u.sourceUrl }, isBasedOn:u.sourceUrl, keywords:[TYPES[u.type], 'AI agent', 'small business', ...u.tools].join(', ') },
+   citation:{ '@type':'CreativeWork', name:u.sourceName, url:u.sourceUrl }, isBasedOn:u.sourceUrl, ...(softwareMentions.length ? { mentions:softwareMentions } : {}), keywords:[TYPES[u.type], 'AI agent', 'small business', ...u.tools].join(', ') },
  { '@type':'HowTo', name:`How to start: ${u.title}`, step:u.start.map((s,i)=>({ '@type':'HowToStep', position:i+1, text:s })) },
  { '@type':'BreadcrumbList', itemListElement:[
    { '@type':'ListItem', position:1, name:'Use cases', item:SITE+'/' },
