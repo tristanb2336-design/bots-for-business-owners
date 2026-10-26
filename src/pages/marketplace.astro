@@ -1,0 +1,53 @@
+---
+import Base from '../layouts/Base.astro';
+import Signup from '../components/Signup.astro';
+import { editions, latestEdition, fmtDate } from '../data/marketplace.mjs';
+import { SITE } from '../site.mjs';
+const path = '/marketplace/', url = SITE + path;
+const ed = latestEdition;
+const desc = `Marketplace picks, edition ${ed.number} (${fmtDate(ed.date)}): ${ed.picks.length} vendor-neutral, ready-made AI bots and templates small business owners can use, from ChatGPT apps, Copilot Studio, Shopify, Zapier, Make and more.`;
+const jsonld = { '@context':'https://schema.org','@graph':[
+  { '@type':'CollectionPage', name:'Marketplace picks: AI bots and templates for small business owners', url, description:desc, inLanguage:'en-US',
+    isPartOf:{ '@id':SITE+'/#website' }, publisher:{ '@id':SITE+'/#organization' }, publishingPrinciples:SITE+'/about/',
+    datePublished:editions.at(-1).date, dateModified:ed.date,
+    hasPart: editions.map(e => ({ '@type':'ItemList', '@id':`${url}#edition-${e.number}`, name:`Marketplace picks, edition ${e.number}: ${e.theme}`, url:`${url}#edition-${e.number}`,
+      datePublished:e.date, numberOfItems:e.picks.length, itemListOrder:'https://schema.org/ItemListUnordered',
+      itemListElement: e.picks.map((p,i) => ({ '@type':'ListItem', position:i+1, item:{ '@type':'SoftwareApplication', name:p.name, url:p.url,
+        applicationCategory:'BusinessApplication', description:p.does, creator:{ '@type':'Organization', name:p.maker },
+        ...(p.price ? { offers:{ '@type':'Offer', description:`List price: ${p.price.value}`, url:p.price.url, ...(p.price.value === 'Free' ? { price:'0', priceCurrency:'USD' } : {}) } } : {}) } })) })) },
+  { '@type':'BreadcrumbList', itemListElement:[
+    { '@type':'ListItem', position:1, name:'Use cases', item:SITE+'/' },
+    { '@type':'ListItem', position:2, name:'Marketplace picks', item:url } ] } ] };
+---
+<Base title="Marketplace picks: ready-made AI bots and templates for small business owners" description={desc} path={path} jsonld={jsonld}>
+<p class="crumbs"><a href="/">Use cases</a> / Marketplace picks</p>
+<section class="hero" style="padding-top:12px;padding-bottom:8px"><span class="eyebrow">Recurring feature · Edition {ed.number}</span>
+<h1>Marketplace picks</h1>
+<p class="lead">Every AI company now runs a store of ready-made bots and templates: ChatGPT apps, Copilot Studio templates, Gemini, Zapier and Make templates, Shopify apps, Grok Bot templates and more. Most are built for software teams. Each edition, we pick a handful that a busy owner could actually use this week.</p>
+</section>
+<div class="panel prose" id="rule">
+<h2>The rule: vendor-neutral, usefulness only</h2>
+<p>Picks are judged on one thing: how useful they are to a non-technical small business owner. No marketplace or maker is favored, and that includes any AI tools used by the people behind this site. Nobody pays to be picked. Within an edition, picks are listed alphabetically by marketplace, not ranked.</p>
+<p>Every pick links its official listing, checked on the edition date. A price appears only when the official page states it, and it's labelled as a list price. We never estimate. Listings change, so check the page before you sign up.</p>
+</div>
+{editions.map(e => (
+<section id={`edition-${e.number}`} aria-labelledby={`h-ed-${e.number}`}>
+<h2 class="section-title" id={`h-ed-${e.number}`}>Edition {e.number}: {e.theme} <small style="font-weight:400;color:var(--mut);font-size:1rem">· <time datetime={e.date}>{fmtDate(e.date)}</time></small></h2>
+<p>{e.intro}</p>
+{e.picks.map((p, i) => (
+<article class="panel prose" id={p.id} aria-labelledby={`h-${p.id}`}>
+<p class="biz" style="margin:0 0 4px">{p.marketplace} · {p.platformMaker}</p>
+<h3 id={`h-${p.id}`} style="margin-top:0">{p.name}</h3>
+<dl class="facts">
+<dt>Made by</dt><dd>{p.maker}</dd>
+<dt>What it does for you</dt><dd>{p.does}</dd>
+<dt>Good for</dt><dd>{p.goodFor}</dd>
+<dt>Before you start</dt><dd>{p.watch}</dd>
+<dt>Price</dt><dd>{p.price ? <>List price: {p.price.value}<small class="fact-note"> From the official listing. Your actual cost can differ, and the AI service it connects to may bill separately.</small></> : <span>Not stated on the official page.</span>}</dd>
+</dl>
+<p><a href={p.url} rel="noopener" target="_blank">Official listing ↗<span class="sr-only"> (external site, opens in a new tab)</span></a>{p.moreUrl && <> · <a href={p.moreUrl} rel="noopener" target="_blank">Requirements ↗<span class="sr-only"> (external site, opens in a new tab)</span></a></>}</p>
+</article>))}
+</section>))}
+<p class="biz">Want real stories instead of listings? <a href="/">Browse the sourced use cases</a> or <a href="/tools/">see them by AI tool</a>. Know a marketplace bot owners should see? <a href="/contact/">Tell us</a>.</p>
+<Signup id="wl-picks" compact title="Get new picks in Hands Free" />
+</Base>
