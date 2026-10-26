@@ -39,7 +39,7 @@ const label = f => f.basis === 'list-price' ? 'Tool list price: ' : '';
 const shareText = encodeURIComponent(u.title);
 const addedLabel = new Date(u.added + 'T12:00:00Z').toLocaleDateString('en-US', { year:'numeric', month:'short', day:'numeric', timeZone:'UTC' });
 ---
-<Base title={u.title} description={short(`${u.business}: ${u.job}`)} path={path} jsonld={jsonld} ogType="article" published={u.added} section={TYPES[u.type]}>
+<Base title={u.title} description={short(`${u.business}: ${u.job}`)} path={path} jsonld={jsonld} ogType="article" published={u.added} section={TYPES[u.type]} markdown={`/use-cases/${u.slug}.md`}>
 <p class="crumbs"><a href="/">Use cases</a> / <a href={`/type/${u.type}/`}>{TYPES[u.type]}</a></p>
 <header class="entry-head"><span class="badge"><span class="ic" aria-hidden="true">{ICONS[u.type]}</span>{TYPES[u.type]}</span>
 <h1>{u.title}</h1><p class="biz">{u.business}</p>
@@ -66,7 +66,7 @@ const addedLabel = new Date(u.added + 'T12:00:00Z').toLocaleDateString('en-US', 
 {cost && (<><dt>Cost</dt><dd>{label(cost)}{cost.value}<small class="fact-note">{cost.note}{cost.url && <> <a href={cost.url} rel="noopener" target="_blank">{cost.basis === 'list-price' ? 'Vendor pricing page' : 'Source'} ↗<span class="sr-only"> (external site, opens in a new tab)</span></a></>}</small></dd></>)}
 {setupTime && (<><dt>Setup time</dt><dd>{setupTime.value}<small class="fact-note">{setupTime.note}</small></dd></>)}
 </dl></div>
-<div class="panel source"><p class="side-label">Source</p><a href={u.sourceUrl} rel="noopener" target="_blank">Read the original: {u.sourceName} ↗<span class="sr-only"> (external site, opens in a new tab)</span></a>{missing.length > 0 && <p class="not-stated">Not stated in the source: {missing.join(', ')}.</p>}<small>Details on this page are summarized from this source. Vendor case studies are written by the vendor; results are theirs, not ours.</small></div>
+<div class="panel source"><p class="side-label">Source</p><a href={u.sourceUrl} rel="noopener" target="_blank">Read the original: {u.sourceName} ↗<span class="sr-only"> (external site, opens in a new tab)</span></a>{missing.length > 0 && <p class="not-stated">Not stated in the source: {missing.join(', ')}.</p>}<p class="not-stated"><a href={`/use-cases/${u.slug}.md`} type="text/markdown">Plain-text (Markdown) version</a> for AI assistants and note-taking.</p><small>Details on this page are summarized from this source. Vendor case studies are written by the vendor; results are theirs, not ours.</small></div>
 <div class="panel"><p class="side-label">Share this</p><div class="share">
 <a href={`https://x.com/intent/post?text=${shareText}&url=${encodeURIComponent(url)}`} rel="noopener" aria-label="Share on X">X</a>
 <a href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`} rel="noopener" aria-label="Share on Facebook">Facebook</a>

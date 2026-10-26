@@ -1,6 +1,6 @@
 ---
 import { SITE, NAME, TAGLINE } from '../site.mjs';
-const { title, description, path = '/', jsonld = null, ogType = 'website', published = null, section = null } = Astro.props;
+const { title, description, path = '/', jsonld = null, ogType = 'website', published = null, section = null, markdown = null } = Astro.props;
 const OG_ALT = `${NAME}: real, sourced examples of small businesses using AI agents`;
 const url = SITE + path;
 // Sitewide entity graph: one Organization (publisher) and one WebSite with stable @ids, so every page's JSON-LD
@@ -45,6 +45,7 @@ const full = (path === '/' || title.includes(NAME)) ? title : `${title} | ${NAME
 <link rel="alternate" type="text/plain" title="LLM index" href="/llms.txt" />
 <link rel="alternate" type="application/rss+xml" title="Bots for Business Owners: new AI use cases" href="/rss.xml" />
 <link rel="alternate" type="application/json" title="Bots for Business Owners: all use cases (JSON)" href="/use-cases.json" />
+{markdown && <link rel="alternate" type="text/markdown" title="This page as Markdown" href={markdown} />}
 <link rel="sitemap" href="/sitemap.xml" />
 <link rel="icon" href="/favicon.svg" type="image/svg+xml" sizes="any" />
 <script type="application/ld+json" set:html={JSON.stringify(siteGraph)} />
