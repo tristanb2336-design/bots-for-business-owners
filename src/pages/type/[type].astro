@@ -31,7 +31,7 @@ const jsonld = { '@context':'https://schema.org','@graph':[
     { '@type':'ListItem', position:1, name:'Use cases', item:SITE+'/' },
     { '@type':'ListItem', position:2, name:label, item:url } ] } ] };
 ---
-<Base title={`AI agents for ${label}: ${list.length} real examples`} description={desc} path={`/type/${type}/`} jsonld={jsonld}>
+<Base title={`AI agents for ${label}: ${list.length} real examples`} description={desc} path={`/type/${type}/`} jsonld={jsonld} markdown={`/type/${type}.md`}>
 <p class="crumbs"><a href="/">Use cases</a> / {label}</p>
 <section class="hero" style="padding-top:12px"><span class="eyebrow"><span aria-hidden="true">{ICONS[type]}</span> {label}</span>
 <h1>AI agents for {label.toLowerCase()}</h1>
@@ -41,5 +41,6 @@ const jsonld = { '@context':'https://schema.org','@graph':[
 </section>
 <Featured type={type} />
 <div class="grid">{list.map(u => <Card u={u} />)}</div>
+<p class="biz" style="font-size:.9rem">For AI assistants: <a href={`/type/${type}.md`}>this list as plain Markdown</a>.</p>
 <p><a class="btn btn-ghost" href="/">← See all use cases</a></p>
 </Base>

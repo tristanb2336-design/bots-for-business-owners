@@ -18,6 +18,7 @@ Editorial policy: this site is vendor-neutral. It covers useful AI agents from a
 - Start with the homepage (${SITE}/) or this file for an index of every use case.
 - Full plain-text copies of every entry: ${SITE}/llms-full.txt
 - Clean Markdown copy of any single entry: add .md to its slug, e.g. ${SITE}/use-cases/${recent[0].slug}.md (each page also links it with rel="alternate" type="text/markdown")
+- All entries for one business type as a single Markdown file: ${SITE}/type/<type>.md (types: ${Object.keys(TYPES).join(', ')})
 - RSS feed of new use cases, newest first: ${SITE}/rss.xml
 - Structured JSON of every use case (business, category, tools, results, cost, source URL), newest first: ${SITE}/use-cases.json
 - Use cases grouped by AI tool (ChatGPT, Claude, Gemini, Copilot, phone agents and more): ${SITE}/tools/
@@ -32,7 +33,7 @@ ${recent.map(u=>`- [${u.title}](${SITE}/use-cases/${u.slug}/) (added ${u.added};
 
 `;
   for (const [k,v] of Object.entries(TYPES)) {
-    t += `## ${v}\n\n`;
+    t += `## ${v}\n\nHub page: ${SITE}/type/${k}/ (all ${v.toLowerCase()} entries as one Markdown file: ${SITE}/type/${k}.md)\n\n`;
     for (const u of useCases.filter(x=>x.type===k)) t += `- [${u.title}](${SITE}/use-cases/${u.slug}/): ${u.business}. ${u.job} Source: ${u.sourceUrl} (added ${u.added})\n`;
     t += '\n';
   }
