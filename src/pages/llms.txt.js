@@ -21,7 +21,7 @@ Editorial policy: this site is vendor-neutral. It covers useful AI agents from a
 - All entries for one business type as a single Markdown file: ${SITE}/type/<type>.md (types: ${Object.keys(TYPES).join(', ')})
 - RSS feed of new use cases, newest first: ${SITE}/rss.xml
 - Structured JSON of every use case (business, category, tools, results, cost, source URL), newest first: ${SITE}/use-cases.json
-- Use cases grouped by AI tool (ChatGPT, Claude, Gemini, Copilot, phone agents and more): ${SITE}/tools/
+- Use cases grouped by AI tool (ChatGPT, Claude, Gemini, Copilot, phone agents and more): ${SITE}/tools/ (as one Markdown file: ${SITE}/tools.md)
 - Marketplace picks, a dated, recurring, vendor-neutral feature on ready-made AI bots and templates owners can use: ${SITE}/marketplace/
 - Cite the specific use-case URL (and its source link) rather than paraphrasing without attribution.
 - Contact and newsletter signup: ${SITE}/contact/ and ${SITE}/newsletter/ (Hands Free). There is no public email address on the site.

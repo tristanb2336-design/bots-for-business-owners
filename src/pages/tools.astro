@@ -15,7 +15,7 @@ const jsonld = { '@context':'https://schema.org','@graph':[
     { '@type':'ListItem', position:1, name:'Use cases', item:SITE+'/' },
     { '@type':'ListItem', position:2, name:'By AI tool', item:url } ] } ] };
 ---
-<Base title="Small business AI use cases by tool: ChatGPT, Claude, Gemini, Copilot and more" description={desc} path={path} jsonld={jsonld}>
+<Base title="Small business AI use cases by tool: ChatGPT, Claude, Gemini, Copilot and more" description={desc} path={path} jsonld={jsonld} markdown="/tools.md">
 <p class="crumbs"><a href="/">Use cases</a> / By AI tool</p>
 <section class="hero" style="padding-top:12px"><span class="eyebrow">Browse by AI tool</span>
 <h1>Which AI tools are small businesses actually using?</h1>
@@ -29,5 +29,6 @@ const jsonld = { '@context':'https://schema.org','@graph':[
 <p>{g.blurb} {g.list.length} use case{g.list.length===1?'':'s'}:</p>
 <ul>{g.list.map(u => <li><a href={`/use-cases/${u.slug}/`}>{u.title}</a> <span class="biz">· <span aria-hidden="true">{ICONS[u.type]}</span> {u.business} ({TYPES[u.type]})</span></li>)}</ul>
 </section>))}
+<p class="small">For AI assistants and readers who prefer plain text: <a href="/tools.md">this page as one Markdown file</a>.</p>
 <p><a class="btn btn-ghost" href="/">← See all use cases</a></p>
 </Base>
