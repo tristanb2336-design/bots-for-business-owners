@@ -20,6 +20,7 @@ Editorial policy: this site is vendor-neutral. It covers useful AI agents from a
 - Clean Markdown copy of any single entry: add .md to its slug, e.g. ${SITE}/use-cases/${recent[0].slug}.md (each page also links it with rel="alternate" type="text/markdown")
 - All entries for one business type as a single Markdown file: ${Object.keys(TYPES).map(k=>`${SITE}/type/${k}.md`).join(', ')}
 - RSS feed of new use cases, newest first: ${SITE}/rss.xml
+- JSON Feed 1.1 of the same entries (full text per item, no XML parsing needed): ${SITE}/feed.json
 - Structured JSON of every use case (business, category, tools, results, cost, source URL), newest first: ${SITE}/use-cases.json
 - Use cases grouped by AI tool (ChatGPT, Claude, Gemini, Copilot, phone agents and more): ${SITE}/tools/ (as one Markdown file: ${SITE}/tools.md)
 - Marketplace picks, a dated, recurring, vendor-neutral feature on ready-made AI bots and templates owners can use: ${SITE}/marketplace/
@@ -46,6 +47,6 @@ ${recent.map(u=>`- [${u.title}](${SITE}/use-cases/${u.slug}/) (added ${u.added};
     for (const p of e.picks) t += `- [${p.name}](${p.url}) (${p.marketplace}; made by ${p.maker}): ${p.does}${p.price ? ' List price: ' + p.price.value + '.' : ''} Details: ${SITE}/marketplace/#${p.id}\n`;
     t += '\n';
   }
-  t += `## Optional\n\n- [Full text of all use cases](${SITE}/llms-full.txt)\n- [About](${SITE}/about/)\n- [Use cases by AI tool](${SITE}/tools/)\n- [Marketplace picks](${SITE}/marketplace/)\n- [Advertise / Get featured](${SITE}/advertise/): featured listings and Hands Free newsletter sponsorships, always labeled as paid\n- [Contact](${SITE}/contact/)\n- [RSS feed of new use cases](${SITE}/rss.xml)\n- [Sitemap](${SITE}/sitemap.xml)\n`;
+  t += `## Optional\n\n- [Full text of all use cases](${SITE}/llms-full.txt)\n- [About](${SITE}/about/)\n- [Use cases by AI tool](${SITE}/tools/)\n- [Marketplace picks](${SITE}/marketplace/)\n- [Advertise / Get featured](${SITE}/advertise/): featured listings and Hands Free newsletter sponsorships, always labeled as paid\n- [Contact](${SITE}/contact/)\n- [RSS feed of new use cases](${SITE}/rss.xml)\n- [JSON Feed of new use cases](${SITE}/feed.json)\n- [Sitemap](${SITE}/sitemap.xml)\n`;
   return new Response(t, { headers: { 'Content-Type': 'text/plain; charset=utf-8' } });
 }
