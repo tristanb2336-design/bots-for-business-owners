@@ -21,7 +21,19 @@ const sameTool = myGroups.flatMap(g => useCases.filter(x => x.tools.some(t => g.
 // can connect the story to the product (e.g. "small businesses using Gemini"). Multi-vendor groups ("Various ...") are skipped.
 const softwareMentions = myGroups.filter(g => !/^Various/.test(g.maker)).map(g => ({ '@type':'SoftwareApplication', name:g.name,
   applicationCategory:'BusinessApplication', creator:{ '@type':'Organization', name:g.maker }, url:`${SITE}/tools/#${g.key}` }));
+// Question-and-answer pairs built only from fields shown on the page, so AI assistants and search engines can lift a direct
+// answer to "what did it cost?" or "which AI tool did they use?". Questions without a stated answer are left out.
+const factOf = f => !f ? null : (typeof f === 'string' ? f : f.basis === 'list-price' ? `Tool list price: ${f.value} (list price, not what they paid).` : f.value);
+const bizName = u.business.split(' (')[0];
+const qa = [
+  [`What does the AI do for ${bizName}?`, u.job],
+  u.tools.length > 0 && [`Which AI tools does ${bizName} use?`, u.tools.join(', ') + '.'],
+  factOf(u.cost) && [`What did ${bizName}'s AI setup cost?`, factOf(u.cost)],
+  factOf(u.setupTime ?? u.setup) && [`How long did setup take at ${bizName}?`, factOf(u.setupTime ?? u.setup)],
+  u.results.length > 0 && [`What results does the source report?`, u.results.join(' ')],
+].filter(Boolean);
 const jsonld = { '@context':'https://schema.org','@graph':[
+ { '@type':'FAQPage', mainEntity: qa.map(([q, a]) => ({ '@type':'Question', name:q, acceptedAnswer:{ '@type':'Answer', text:a } })) },
  { '@type':'Article', headline:u.title, description:short(u.job), url, mainEntityOfPage:url, image:SITE+'/og.png',
    about:{ '@type':'Organization', name:u.business }, publisher:{ '@id':SITE+'/#organization' }, author:{ '@id':SITE+'/#organization' }, isPartOf:{ '@id':SITE+'/#website' }, publishingPrinciples:SITE+'/about/',
    datePublished:u.added, dateModified:u.updated ?? u.added, inLanguage:'en-US',
