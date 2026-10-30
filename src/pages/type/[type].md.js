@@ -18,6 +18,6 @@ export function GET({ params }){
     if (setup) t += `- Setup time: ${setup.value}\n`;
     t += `- Added: ${u.added}\n- Full entry: ${SITE}/use-cases/${u.slug}/ (Markdown: ${SITE}/use-cases/${u.slug}.md)\n- Original source: [${u.sourceName}](${u.sourceUrl})\n\n`;
   }
-  t += `---\n\nFrom ${NAME} (${SITE}/), a free, vendor-neutral directory of real small-business AI use cases. Other business types: ${Object.keys(TYPES).map(k => `${SITE}/type/${k}.md`).join(', ')}\n`;
+  t += `---\n\nFrom ${NAME} (${SITE}/), a free, vendor-neutral directory of real small-business AI use cases. Other business types:\n\n${Object.entries(TYPES).map(([k, n]) => `- [${n}](${SITE}/type/${k}.md)`).join('\n')}\n`;
   return new Response(t, { headers: { 'Content-Type': 'text/markdown; charset=utf-8' } });
 }

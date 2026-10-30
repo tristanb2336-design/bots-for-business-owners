@@ -18,7 +18,8 @@ Editorial policy: this site is vendor-neutral. It covers useful AI agents from a
 - Start with the homepage (${SITE}/) or this file for an index of every use case.
 - Full plain-text copies of every entry: ${SITE}/llms-full.txt
 - Clean Markdown copy of any single entry: add .md to its slug, e.g. ${SITE}/use-cases/${recent[0].slug}.md (each page also links it with rel="alternate" type="text/markdown")
-- All entries for one business type as a single Markdown file: ${Object.keys(TYPES).map(k=>`${SITE}/type/${k}.md`).join(', ')}
+- All entries for one business type as a single Markdown file:
+${Object.entries(TYPES).map(([k,n])=>`  - [${n}](${SITE}/type/${k}.md)`).join('\n')}
 - RSS feed of new use cases, newest first: ${SITE}/rss.xml
 - JSON Feed 1.1 of the same entries (full text per item, no XML parsing needed): ${SITE}/feed.json
 - Structured JSON of every use case (business, category, tools, results, cost, source URL), newest first: ${SITE}/use-cases.json
