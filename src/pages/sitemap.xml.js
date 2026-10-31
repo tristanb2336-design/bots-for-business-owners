@@ -7,7 +7,7 @@ export function GET(){
   const newest = list => list.map(mod).sort().at(-1);
   const latest = newest(useCases);
   const urls = [
-    ['/', latest], ['/about/', latest], ['/newsletter/', latest], ['/advertise/', latest], ['/contact/', latest], ['/tools/', latest], ['/marketplace/', latestEdition.date],
+    ['/', latest], ['/about/', latest], ['/newsletter/', latest], ['/advertise/', latest], ['/contact/', latest], ['/tools/', latest], ['/costs/', latest], ['/marketplace/', latestEdition.date],
     ['/rss.xml', latest], ['/feed.json', latest], ['/llms.txt', latest], ['/llms-full.txt', latest], ['/use-cases.json', latest],
     ...Object.keys(TYPES).map(t=>[`/type/${t}/`, newest(useCases.filter(u=>u.type===t)) ?? latest]),
     ...useCases.map(u=>[`/use-cases/${u.slug}/`, mod(u)]),

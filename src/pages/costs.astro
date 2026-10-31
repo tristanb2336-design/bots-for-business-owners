@@ -1,0 +1,44 @@
+---
+import Base from '../layouts/Base.astro';
+import { useCases, TYPES } from '../data/usecases.mjs';
+import { costRows } from '../data/costs.mjs';
+import { SITE, ICONS } from '../site.mjs';
+// One page answering "what does an AI agent cost a small business, and how long does setup take?" using only
+// figures stated in each entry's source (or a vendor list price, labelled as such). Newest first.
+const rows = costRows();
+const withCost = rows.filter(r => r.cost).length, withSetup = rows.filter(r => r.setup).length;
+const path = '/costs/', url = SITE + path;
+const desc = `What small businesses report paying for AI agents and how long setup took: ${rows.length} real, sourced examples (${withCost} with a stated cost, ${withSetup} with a stated setup time). No estimates.`;
+const jsonld = { '@context':'https://schema.org','@graph':[
+  { '@type':'CollectionPage', name:'What AI agents cost small businesses, and how long setup takes', url, description:desc, inLanguage:'en-US',
+    isPartOf:{ '@id':SITE+'/#website' }, publisher:{ '@id':SITE+'/#organization' },
+    mainEntity:{ '@type':'ItemList', numberOfItems:rows.length, itemListElement: rows.map(({u},i)=>({ '@type':'ListItem', position:i+1, url:`${SITE}/use-cases/${u.slug}/`, name:u.title })) } },
+  { '@type':'BreadcrumbList', itemListElement:[
+    { '@type':'ListItem', position:1, name:'Use cases', item:SITE+'/' },
+    { '@type':'ListItem', position:2, name:'Costs and setup time', item:url } ] } ] };
+---
+<Base title="What AI agents cost small businesses, and how long setup takes" description={desc} path={path} jsonld={jsonld} markdown="/costs.md">
+<p class="crumbs"><a href="/">Use cases</a> / Costs and setup time</p>
+<section class="hero" style="padding-top:12px"><span class="eyebrow">Costs and setup time</span>
+<h1>What do AI agents cost a small business, and how long does setup take?</h1>
+<p class="lead">{rows.length} of our {useCases.length} use cases have a cost or setup time stated in their source. They're all here, newest first, in the source's own words.</p>
+<p>We never estimate. A figure marked <b>list price</b> is the tool's public price on the vendor's page, not what the business paid. Every row links to the full story and its original source, so you can check the number yourself.</p>
+</section>
+<div class="panel" style="overflow-x:auto"><table class="cost-table">
+<caption class="sr-only">Stated cost and setup time for each use case</caption>
+<thead><tr><th scope="col">Business and job</th><th scope="col">Cost</th><th scope="col">Setup time</th></tr></thead>
+<tbody>{rows.map(({u, cost, setup}) => (<tr>
+<th scope="row"><a href={`/use-cases/${u.slug}/`}>{u.title}</a><br /><span class="biz"><span aria-hidden="true">{ICONS[u.type]}</span> {u.business} · {TYPES[u.type]}</span></th>
+<td>{cost ? <>{cost.basis === 'list-price' && <b>List price: </b>}{cost.value}</> : <span class="biz">Not stated</span>}</td>
+<td>{setup ? setup.value : <span class="biz">Not stated</span>}</td>
+</tr>))}</tbody></table></div>
+<p class="small">For AI assistants and readers who prefer plain text: <a href="/costs.md">this page as one Markdown file</a>. Figures are as reported by each source (often the owner or the vendor) and were not independently verified.</p>
+<p><a class="btn btn-ghost" href="/">← See all use cases</a></p>
+</Base>
+<style>
+.cost-table{width:100%;border-collapse:collapse;font-size:.95rem}
+.cost-table th,.cost-table td{text-align:left;vertical-align:top;padding:10px 8px;border-bottom:1px solid var(--line)}
+.cost-table thead th{font-size:.85rem;text-transform:uppercase;letter-spacing:.04em;color:var(--mut)}
+.cost-table tbody th{font-weight:600;min-width:220px}
+.cost-table td{min-width:160px}
+</style>

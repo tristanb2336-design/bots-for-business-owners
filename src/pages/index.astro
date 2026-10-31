@@ -34,7 +34,7 @@ const jsonld = { '@context': 'https://schema.org', '@graph': [
 </section>
 <h2 class="section-title">Find your kind of business</h2>
 <nav aria-label="Business types"><div class="types">{Object.entries(TYPES).map(([k, v]) => <a class="type-tile" href={`/type/${k}/`}><span class="ic" aria-hidden="true">{ICONS[k]}</span><span>{v}</span><small>{`${counts[k]} use case${counts[k]===1?'':'s'}`}</small></a>)}</div></nav>
-<p><a class="link-quiet" href="/tools/">Or browse by AI tool: ChatGPT, Claude, Gemini, Copilot, phone agents →</a></p>
+<p><a class="link-quiet" href="/tools/">Or browse by AI tool: ChatGPT, Claude, Gemini, Copilot, phone agents →</a> <a class="link-quiet" href="/costs/">See what they cost and how long setup took →</a></p>
 <p><a class="link-quiet" href="/marketplace/">New: Marketplace picks, edition {latestEdition.number} ({fmtDate(latestEdition.date)}). {latestEdition.picks.length} ready-made AI bots and templates owners can use →</a></p>
 <h2 class="section-title" id="browse" style="margin-top:32px">All {useCases.length} use cases</h2>
 <Featured />
