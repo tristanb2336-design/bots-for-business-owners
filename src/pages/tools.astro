@@ -9,7 +9,7 @@ const desc = `Real small business AI use cases grouped by the AI tool they use: 
 const jsonld = { '@context':'https://schema.org','@graph':[
   { '@type':'CollectionPage', name:'Small business AI use cases by tool', url, description:desc, inLanguage:'en-US',
     isPartOf:{ '@id':SITE+'/#website' }, publisher:{ '@id':SITE+'/#organization' },
-    hasPart: groups.map(g => ({ '@type':'ItemList', name:`${g.name} (${g.maker})`, url:`${url}#${g.key}`, numberOfItems:g.list.length,
+    hasPart: groups.map(g => ({ '@type':'ItemList', name:`${g.name} (${g.maker})`, url:`${url}${g.key}/`, numberOfItems:g.list.length,
       itemListElement: g.list.map((u,i)=>({ '@type':'ListItem', position:i+1, url:`${SITE}/use-cases/${u.slug}/`, name:u.title })) })) },
   { '@type':'BreadcrumbList', itemListElement:[
     { '@type':'ListItem', position:1, name:'Use cases', item:SITE+'/' },
@@ -25,8 +25,8 @@ const jsonld = { '@context':'https://schema.org','@graph':[
 </section>
 {groups.map(g => (
 <section class="panel prose" id={g.key} aria-labelledby={`h-${g.key}`}>
-<h2 id={`h-${g.key}`}>{g.name} <small style="font-weight:400;color:var(--mut)">· {g.maker}</small></h2>
-<p>{g.blurb} {g.list.length} use case{g.list.length===1?'':'s'}:</p>
+<h2 id={`h-${g.key}`}><a href={`/tools/${g.key}/`}>{g.name}</a> <small style="font-weight:400;color:var(--mut)">· {g.maker}</small></h2>
+<p>{g.blurb} {g.list.length} use case{g.list.length===1?'':'s'} (<a href={`/tools/${g.key}/`}>own page</a>):</p>
 <ul>{g.list.map(u => <li><a href={`/use-cases/${u.slug}/`}>{u.title}</a> <span class="biz">· <span aria-hidden="true">{ICONS[u.type]}</span> {u.business} ({TYPES[u.type]})</span></li>)}</ul>
 </section>))}
 <p class="small">For AI assistants and readers who prefer plain text: <a href="/tools.md">this page as one Markdown file</a>.</p>

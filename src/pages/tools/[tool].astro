@@ -1,0 +1,39 @@
+---
+// One landing page per AI tool group (e.g. /tools/claude/), so searches and AI assistants asking
+// "how do small businesses use Claude / Gemini / an AI receptionist?" land on a focused list.
+// Built only from the entries themselves; vendor-neutral, no ranking between tools.
+import Base from '../../layouts/Base.astro';
+import Card from '../../components/Card.astro';
+import { useCases, TYPES } from '../../data/usecases.mjs';
+import { groupByTool } from '../../data/tools.mjs';
+import { SITE } from '../../site.mjs';
+export function getStaticPaths(){ return groupByTool().map(g => ({ params: { tool: g.key }, props: { g } })); }
+const { g } = Astro.props;
+const list = g.list;
+const path = `/tools/${g.key}/`, url = SITE + path;
+const types = [...new Set(list.map(u => u.type))].map(t => TYPES[t]);
+const desc = `${list.length} real, sourced examples of small businesses using ${g.name}${g.key === 'other' ? '' : ` (${g.maker})`}: what it does for them, stated results and how to start.`;
+const others = groupByTool().filter(x => x.key !== g.key);
+const jsonld = { '@context':'https://schema.org','@graph':[
+  { '@type':'CollectionPage', name:`${g.name}: small business use cases`, url, description:desc, inLanguage:'en-US',
+    isPartOf:{ '@id':SITE+'/#website' }, publisher:{ '@id':SITE+'/#organization' },
+    ...(g.key === 'other' ? {} : { about:{ '@type':'SoftwareApplication', name:g.name, applicationCategory:'BusinessApplication', creator:{ '@type':'Organization', name:g.maker } } }),
+    mainEntity:{ '@type':'ItemList', numberOfItems:list.length, itemListElement: list.map((u,i)=>({ '@type':'ListItem', position:i+1, url:`${SITE}/use-cases/${u.slug}/`, name:u.title })) } },
+  { '@type':'BreadcrumbList', itemListElement:[
+    { '@type':'ListItem', position:1, name:'Use cases', item:SITE+'/' },
+    { '@type':'ListItem', position:2, name:'By AI tool', item:SITE+'/tools/' },
+    { '@type':'ListItem', position:3, name:g.name, item:url } ] } ] };
+---
+<Base title={`${g.name} for small business: ${list.length} real example${list.length===1?'':'s'}`} description={desc} path={path} jsonld={jsonld} markdown={`/tools/${g.key}.md`}>
+<p class="crumbs"><a href="/">Use cases</a> / <a href="/tools/">By AI tool</a> / {g.name}</p>
+<section class="hero" style="padding-top:12px"><span class="eyebrow">{g.maker}</span>
+<h1>{g.key === 'other' ? 'Other AI agents and custom setups small businesses use' : `How small businesses use ${g.name}`}</h1>
+<p class="lead">{list.length} real example{list.length===1?'':'s'}, each linked to its public source. {g.blurb}</p>
+<p class="biz" style="font-size:.95rem"><b>Business types:</b> {types.join(', ')}. We're <a href="/about/">vendor-neutral</a>: this page groups examples by the tool named in the source and doesn't rank or recommend it over others.</p>
+</section>
+<div class="grid">{list.map(u => <Card u={u} />)}</div>
+<section class="panel prose" aria-labelledby="h-other-tools"><h2 id="h-other-tools">Other AI tools</h2>
+<ul class="tools">{others.map(x => <li class="tool-li"><a class="tool-link" href={`/tools/${x.key}/`}>{x.name} ({x.list.length})</a></li>)}</ul></section>
+<p class="biz" style="font-size:.9rem">For AI assistants: <a href={`/tools/${g.key}.md`}>this list as plain Markdown</a>.</p>
+<p><a class="btn btn-ghost" href="/tools/">← All use cases by AI tool</a></p>
+</Base>

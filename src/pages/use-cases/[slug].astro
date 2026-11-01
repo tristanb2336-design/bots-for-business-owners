@@ -20,7 +20,7 @@ const sameTool = myGroups.flatMap(g => useCases.filter(x => x.tools.some(t => g.
 // Named AI products this entry uses, as SoftwareApplication entities with their maker, so search engines and AI assistants
 // can connect the story to the product (e.g. "small businesses using Gemini"). Multi-vendor groups ("Various ...") are skipped.
 const softwareMentions = myGroups.filter(g => !/^Various/.test(g.maker)).map(g => ({ '@type':'SoftwareApplication', name:g.name,
-  applicationCategory:'BusinessApplication', creator:{ '@type':'Organization', name:g.maker }, url:`${SITE}/tools/#${g.key}` }));
+  applicationCategory:'BusinessApplication', creator:{ '@type':'Organization', name:g.maker }, url:`${SITE}/tools/${g.key}/` }));
 // Question-and-answer pairs built only from fields shown on the page, so AI assistants and search engines can lift a direct
 // answer to "what did it cost?" or "which AI tool did they use?". Questions without a stated answer are left out.
 const factOf = f => !f ? null : (typeof f === 'string' ? f : f.basis === 'list-price' ? `Tool list price: ${f.value} (list price, not what they paid).` : f.value);
@@ -74,7 +74,7 @@ const addedLabel = new Date(u.added + 'T12:00:00Z').toLocaleDateString('en-US', 
 <dt>Business</dt><dd>{u.business}</dd>
 <dt>Type</dt><dd>{TYPES[u.type]}</dd>
 <dt>Tools used</dt><dd><ul class="tools">{u.tools.map(t => <li>{t}</li>)}</ul></dd>
-<dt>Browse by tool</dt><dd><ul class="tools">{toolLinks.map(g => <li class="tool-li"><a class="tool-link" href={`/tools/#${g.key}`}>{g.name}</a></li>)}</ul></dd>
+<dt>Browse by tool</dt><dd><ul class="tools">{toolLinks.map(g => <li class="tool-li"><a class="tool-link" href={`/tools/${g.key}/`}>{g.name}</a></li>)}</ul></dd>
 {cost && (<><dt>Cost</dt><dd>{label(cost)}{cost.value}<small class="fact-note">{cost.note}{cost.url && <> <a href={cost.url} rel="noopener" target="_blank">{cost.basis === 'list-price' ? 'Vendor pricing page' : 'Source'} ↗<span class="sr-only"> (external site, opens in a new tab)</span></a></>}</small></dd></>)}
 {setupTime && (<><dt>Setup time</dt><dd>{setupTime.value}<small class="fact-note">{setupTime.note}</small></dd></>)}
 </dl></div>

@@ -1,6 +1,7 @@
 import { useCases, TYPES } from '../data/usecases.mjs';
 import { SITE } from '../site.mjs';
 import { latestEdition } from '../data/marketplace.mjs';
+import { groupByTool } from '../data/tools.mjs';
 export function GET(){
   // lastmod reflects real content changes: each use case's own date, list pages = newest entry they show.
   const mod = u => u.updated ?? u.added;
@@ -10,6 +11,7 @@ export function GET(){
     ['/', latest], ['/about/', latest], ['/newsletter/', latest], ['/advertise/', latest], ['/contact/', latest], ['/tools/', latest], ['/costs/', latest], ['/marketplace/', latestEdition.date],
     ['/rss.xml', latest], ['/feed.json', latest], ['/llms.txt', latest], ['/llms-full.txt', latest], ['/use-cases.json', latest],
     ...Object.keys(TYPES).map(t=>[`/type/${t}/`, newest(useCases.filter(u=>u.type===t)) ?? latest]),
+    ...groupByTool().map(g=>[`/tools/${g.key}/`, newest(g.list) ?? latest]),
     ...useCases.map(u=>[`/use-cases/${u.slug}/`, mod(u)]),
   ];
   const body = `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls.map(([u,d])=>`  <url><loc>${SITE}${u}</loc><lastmod>${d}</lastmod></url>`).join('\n')}\n</urlset>\n`;

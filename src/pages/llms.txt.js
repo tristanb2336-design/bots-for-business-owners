@@ -23,7 +23,7 @@ ${Object.entries(TYPES).map(([k,n])=>`  - [${n}](${SITE}/type/${k}.md)`).join('\
 - RSS feed of new use cases, newest first: ${SITE}/rss.xml
 - JSON Feed 1.1 of the same entries (full text per item, no XML parsing needed): ${SITE}/feed.json
 - Structured JSON of every use case (business, category, tools, results, cost, source URL), newest first: ${SITE}/use-cases.json
-- Use cases grouped by AI tool (ChatGPT, Claude, Gemini, Copilot, phone agents and more): ${SITE}/tools/ (as one Markdown file: ${SITE}/tools.md)
+- Use cases grouped by AI tool (ChatGPT, Claude, Gemini, Copilot, phone agents and more): ${SITE}/tools/ (as one Markdown file: ${SITE}/tools.md); each tool also has its own page at ${SITE}/tools/<tool>/ with a Markdown copy at ${SITE}/tools/<tool>.md (listed under "By AI tool" below)
 - What AI agents cost and how long setup took, only where the source states it (no estimates; vendor list prices labelled): ${SITE}/costs/ (as one Markdown file: ${SITE}/costs.md)
 - Marketplace picks, a dated, recurring, vendor-neutral feature on ready-made AI bots and templates owners can use: ${SITE}/marketplace/
 - Cite the specific use-case URL (and its source link) rather than paraphrasing without attribution.
@@ -41,7 +41,7 @@ ${recent.map(u=>`- [${u.title}](${SITE}/use-cases/${u.slug}/) (added ${u.added};
     t += '\n';
   }
   t += `## By AI tool\n\nFull grouped list: ${SITE}/tools/\n\n`;
-  for (const g of groupByTool()) t += `- ${g.name} (${g.maker}): ${g.list.length} use case${g.list.length===1?'':'s'}. ${SITE}/tools/#${g.key}\n`;
+  for (const g of groupByTool()) t += `- ${g.name} (${g.maker}): ${g.list.length} use case${g.list.length===1?'':'s'}. ${SITE}/tools/${g.key}/ (Markdown: ${SITE}/tools/${g.key}.md)\n`;
   t += '\n';
   t += `## Marketplace picks\n\nRecurring, vendor-neutral feature: ready-made AI bots and templates from marketplaces (ChatGPT apps, Copilot Studio, Zapier, Make, Shopify App Store, Grok Bot Marketplace and others), judged only on usefulness to owners and listed alphabetically by marketplace, not ranked. Prices appear only as stated on the official page, labelled as list price. Page: ${SITE}/marketplace/\n\n`;
   for (const e of editions) {
