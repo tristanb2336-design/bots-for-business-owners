@@ -17,6 +17,8 @@ export function GET(){
     useCases: items.map(u => ({
       url: `${SITE}/use-cases/${u.slug}/`,
       slug: u.slug,
+      markdown: `${SITE}/use-cases/${u.slug}.md`,
+      json: `${SITE}/use-cases/${u.slug}.json`,
       title: u.title,
       business: u.business,
       category: u.type,

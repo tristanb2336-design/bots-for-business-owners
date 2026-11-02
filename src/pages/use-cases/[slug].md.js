@@ -11,7 +11,7 @@ export function GET({ props }){
   const costLine = cost ? `${cost.basis === 'list-price' ? 'Tool list price (not what this business paid): ' : ''}${cost.value} (${cost.note}${cost.url ? ` ${cost.url}` : ''})` : 'Not stated in the source.';
   const setupLine = setup ? `${setup.value} (${setup.note})` : 'Not stated in the source.';
   let t = `# ${u.title}\n\n`;
-  t += `- Business: ${u.business}\n- Business type: ${TYPES[u.type]}\n- Added: ${u.added}\n- Web page: ${url}\n- Original source: [${u.sourceName}](${u.sourceUrl})\n\n`;
+  t += `- Business: ${u.business}\n- Business type: ${TYPES[u.type]}\n- Added: ${u.added}\n- Web page: ${url}\n- JSON: ${SITE}/use-cases/${u.slug}.json\n- Original source: [${u.sourceName}](${u.sourceUrl})\n\n`;
   t += `## The job the AI does\n\n${u.job}\n\n## The story\n\n${u.story}\n\n`;
   if (u.results.length) t += `## What the source reports\n\n${u.results.map(r => `- ${r}`).join('\n')}\n\n`;
   t += `## Tools used\n\n${u.tools.map(x => `- ${x}`).join('\n')}\n\n`;
