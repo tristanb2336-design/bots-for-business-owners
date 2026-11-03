@@ -16,7 +16,7 @@ const jsonld = { '@context': 'https://schema.org', '@graph': [
     url: SITE + '/', isAccessibleForFree: true, creator: { '@id': SITE + '/#organization' }, publisher: { '@id': SITE + '/#organization' }, isPartOf: { '@id': SITE + '/#website' },
     keywords: ['small business', 'AI agents', 'AI use cases', 'restaurants', 'retail', 'trades', 'landlords'],
     dateModified: useCases.map(u => u.updated ?? u.added).sort().at(-1),
-    distribution: [ { '@type': 'DataDownload', encodingFormat: 'application/json', contentUrl: SITE + '/use-cases.json' }, { '@type': 'DataDownload', encodingFormat: 'text/plain', contentUrl: SITE + '/llms-full.txt' } ] } ] };
+    distribution: [ { '@type': 'DataDownload', encodingFormat: 'application/json', contentUrl: SITE + '/use-cases.json' }, { '@type': 'DataDownload', encodingFormat: 'text/csv', contentUrl: SITE + '/use-cases.csv' }, { '@type': 'DataDownload', encodingFormat: 'text/plain', contentUrl: SITE + '/llms-full.txt' } ] } ] };
 ---
 <Base title={`${NAME}: ${useCases.length} real ways small business owners use AI agents`} description={`${useCases.length} real, sourced examples of restaurants, shops, landlords, trades and service businesses using AI agents, with how to start in plain English.`} jsonld={jsonld}>
 <section class="hero hero-split">

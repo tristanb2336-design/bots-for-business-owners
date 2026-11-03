@@ -9,7 +9,7 @@ export function GET(){
   const latest = newest(useCases);
   const urls = [
     ['/', latest], ['/about/', latest], ['/newsletter/', latest], ['/advertise/', latest], ['/contact/', latest], ['/tools/', latest], ['/costs/', latest], ['/marketplace/', latestEdition.date],
-    ['/rss.xml', latest], ['/feed.json', latest], ['/llms.txt', latest], ['/llms-full.txt', latest], ['/use-cases.json', latest],
+    ['/rss.xml', latest], ['/feed.json', latest], ['/llms.txt', latest], ['/llms-full.txt', latest], ['/use-cases.json', latest], ['/use-cases.csv', latest],
     ...Object.keys(TYPES).map(t=>[`/type/${t}/`, newest(useCases.filter(u=>u.type===t)) ?? latest]),
     ...groupByTool().map(g=>[`/tools/${g.key}/`, newest(g.list) ?? latest]),
     ...useCases.map(u=>[`/use-cases/${u.slug}/`, mod(u)]),

@@ -24,6 +24,7 @@ ${Object.entries(TYPES).map(([k,n])=>`  - [${n}](${SITE}/type/${k}.md)`).join('\
 - RSS feed of new use cases, newest first: ${SITE}/rss.xml
 - JSON Feed 1.1 of the same entries (full text per item, no XML parsing needed): ${SITE}/feed.json
 - Structured JSON of every use case (business, category, tools, results, cost, source URL), newest first: ${SITE}/use-cases.json
+- The same entries as one CSV spreadsheet (one row per use case; opens in Excel or Google Sheets; empty cost/setup cells mean the source does not say): ${SITE}/use-cases.csv
 - Use cases grouped by AI tool (ChatGPT, Claude, Gemini, Copilot, phone agents and more): ${SITE}/tools/ (as one Markdown file: ${SITE}/tools.md); each tool also has its own page at ${SITE}/tools/<tool>/ with a Markdown copy at ${SITE}/tools/<tool>.md (listed under "By AI tool" below)
 - What AI agents cost and how long setup took, only where the source states it (no estimates; vendor list prices labelled): ${SITE}/costs/ (as one Markdown file: ${SITE}/costs.md)
 - Marketplace picks, a dated, recurring, vendor-neutral feature on ready-made AI bots and templates owners can use: ${SITE}/marketplace/
@@ -50,6 +51,6 @@ ${recent.map(u=>`- [${u.title}](${SITE}/use-cases/${u.slug}/) (added ${u.added};
     for (const p of e.picks) t += `- [${p.name}](${p.url}) (${p.marketplace}; made by ${p.maker}): ${p.does}${p.price ? ' List price: ' + p.price.value + '.' : ''} Details: ${SITE}/marketplace/#${p.id}\n`;
     t += '\n';
   }
-  t += `## Optional\n\n- [Full text of all use cases](${SITE}/llms-full.txt)\n- [About](${SITE}/about/)\n- [Use cases by AI tool](${SITE}/tools/)\n- [Costs and setup time](${SITE}/costs/)\n- [Marketplace picks](${SITE}/marketplace/)\n- [Advertise / Get featured](${SITE}/advertise/): featured listings and Hands Free newsletter sponsorships, always labeled as paid\n- [Contact](${SITE}/contact/)\n- [RSS feed of new use cases](${SITE}/rss.xml)\n- [JSON Feed of new use cases](${SITE}/feed.json)\n- [Sitemap](${SITE}/sitemap.xml)\n`;
+  t += `## Optional\n\n- [Full text of all use cases](${SITE}/llms-full.txt)\n- [About](${SITE}/about/)\n- [Use cases by AI tool](${SITE}/tools/)\n- [Costs and setup time](${SITE}/costs/)\n- [Marketplace picks](${SITE}/marketplace/)\n- [Advertise / Get featured](${SITE}/advertise/): featured listings and Hands Free newsletter sponsorships, always labeled as paid\n- [Contact](${SITE}/contact/)\n- [RSS feed of new use cases](${SITE}/rss.xml)\n- [JSON Feed of new use cases](${SITE}/feed.json)\n- [All use cases as a CSV spreadsheet](${SITE}/use-cases.csv)\n- [Sitemap](${SITE}/sitemap.xml)\n`;
   return new Response(t, { headers: { 'Content-Type': 'text/plain; charset=utf-8' } });
 }

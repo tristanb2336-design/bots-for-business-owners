@@ -46,6 +46,7 @@ const full = (path === '/' || title.includes(NAME)) ? title : `${title} | ${NAME
 <link rel="alternate" type="application/rss+xml" title="Bots for Business Owners: new AI use cases" href="/rss.xml" />
 <link rel="alternate" type="application/feed+json" title="Bots for Business Owners: new AI use cases (JSON Feed)" href="/feed.json" />
 <link rel="alternate" type="application/json" title="Bots for Business Owners: all use cases (JSON)" href="/use-cases.json" />
+<link rel="alternate" type="text/csv" title="Bots for Business Owners: all use cases (CSV spreadsheet)" href="/use-cases.csv" />
 {markdown && <link rel="alternate" type="text/markdown" title="This page as Markdown" href={markdown} />}
 {json && <link rel="alternate" type="application/json" title="This use case as JSON" href={json} />}
 <link rel="sitemap" href="/sitemap.xml" />
@@ -181,7 +182,7 @@ main{padding-bottom:48px}
 <footer class="site-foot"><div class="wrap">
 <div><p style="margin-top:0"><strong style="color:var(--ink);font-family:Fraunces,Georgia,serif;font-size:1.1rem">{NAME}</strong></p>
 <p>A free directory of real AI-agent use cases for non-technical small business owners. Every entry links to its public source. Paid placements are always labeled and never change the editorial use cases.</p></div>
-<nav aria-label="Footer"><a href="/about/">About</a><a href="/tools/">Use cases by AI tool</a><a href="/costs/">Costs and setup time</a><a href="/marketplace/">Marketplace picks</a><a href="/newsletter/">Hands Free newsletter</a><a href="/advertise/">Advertise / Get featured</a><a href="/contact/">Contact</a><a href="/sitemap.xml">Sitemap</a><a href="/rss.xml">RSS feed</a><a href="/llms.txt">llms.txt</a><a href="https://github.com/tristanb2336-design/bots-for-business-owners">GitHub</a></nav>
+<nav aria-label="Footer"><a href="/about/">About</a><a href="/tools/">Use cases by AI tool</a><a href="/costs/">Costs and setup time</a><a href="/marketplace/">Marketplace picks</a><a href="/newsletter/">Hands Free newsletter</a><a href="/advertise/">Advertise / Get featured</a><a href="/contact/">Contact</a><a href="/sitemap.xml">Sitemap</a><a href="/rss.xml">RSS feed</a><a href="/llms.txt">llms.txt</a><a href="/use-cases.csv">Download all (CSV)</a><a href="https://github.com/tristanb2336-design/bots-for-business-owners">GitHub</a></nav>
 </div></footer>
 </body>
 </html>
