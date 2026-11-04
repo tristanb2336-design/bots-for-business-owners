@@ -1,0 +1,38 @@
+---
+// Hub of use cases by country, so "how do small businesses in the UK / Canada / Texas use AI" searches
+// and AI assistants land on a focused list. Only locations stated in the entries are used.
+import Base from '../layouts/Base.astro';
+import { useCases, TYPES } from '../data/usecases.mjs';
+import { groupByCountry, placeOf, PAGE_MIN } from '../data/places.mjs';
+import { SITE, ICONS } from '../site.mjs';
+const groups = groupByCountry();
+const mapped = groups.reduce((n, g) => n + g.list.length, 0);
+const path = '/places/', url = SITE + path;
+const desc = `Real small business AI use cases by country: ${groups.slice(0, 4).map(g => g.name).join(', ')} and ${groups.length - 4} more. ${mapped} sourced examples with the town or region stated.`;
+const jsonld = { '@context':'https://schema.org','@graph':[
+  { '@type':'CollectionPage', name:'Small business AI use cases by country', url, description:desc, inLanguage:'en-US',
+    isPartOf:{ '@id':SITE+'/#website' }, publisher:{ '@id':SITE+'/#organization' },
+    hasPart: groups.map(g => ({ '@type':'ItemList', name:`Small business AI use cases in ${g.name}`, ...(g.list.length >= PAGE_MIN ? { url:`${url}${g.key}/` } : {}), numberOfItems:g.list.length,
+      about:{ '@type':'Country', name:g.name },
+      itemListElement: g.list.map((u,i)=>({ '@type':'ListItem', position:i+1, url:`${SITE}/use-cases/${u.slug}/`, name:u.title })) })) },
+  { '@type':'BreadcrumbList', itemListElement:[
+    { '@type':'ListItem', position:1, name:'Use cases', item:SITE+'/' },
+    { '@type':'ListItem', position:2, name:'By country', item:url } ] } ] };
+---
+<Base title="Small business AI use cases by country: US, UK, Canada and more" description={desc} path={path} jsonld={jsonld} markdown="/places.md">
+<p class="crumbs"><a href="/">Use cases</a> / By country</p>
+<section class="hero" style="padding-top:12px"><span class="eyebrow">Browse by country</span>
+<h1>Where are small businesses using AI agents?</h1>
+<p class="lead">{mapped} of our {useCases.length} use cases name the town or region the business is in. Here they are by country, each linked to its public source.</p>
+<p>Locations come only from the entry and its source; entries that don't say where the business is aren't listed here. See <a href="/">all use cases</a> for everything.</p>
+<nav aria-label="Countries on this page"><ul class="tools" style="margin-top:12px">{groups.map(g => <li><a href={`#${g.key}`}>{g.name} ({g.list.length})</a></li>)}</ul></nav>
+</section>
+{groups.map(g => (
+<section class="panel prose" id={g.key} aria-labelledby={`h-${g.key}`}>
+<h2 id={`h-${g.key}`}>{g.list.length >= PAGE_MIN ? <a href={`/places/${g.key}/`}>{g.name}</a> : g.name}</h2>
+<p>{g.list.length} use case{g.list.length===1?'':'s'}{g.list.length >= PAGE_MIN ? <> (<a href={`/places/${g.key}/`}>own page</a>)</> : ''}:</p>
+<ul>{g.list.map(u => <li><a href={`/use-cases/${u.slug}/`}>{u.title}</a> <span class="biz">· <span aria-hidden="true">{ICONS[u.type]}</span> {placeOf(u).place} · {TYPES[u.type]}</span></li>)}</ul>
+</section>))}
+<p class="small">For AI assistants and readers who prefer plain text: <a href="/places.md">this page as one Markdown file</a>.</p>
+<p><a class="btn btn-ghost" href="/">← See all use cases</a></p>
+</Base>

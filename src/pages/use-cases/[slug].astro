@@ -7,8 +7,11 @@ import Card from '../../components/Card.astro';
 import Signup from '../../components/Signup.astro';
 import { ICONS } from '../../site.mjs';
 import { TOOL_GROUPS } from '../../data/tools.mjs';
+import { placeOf, groupByCountry, PAGE_MIN } from '../../data/places.mjs';
 export function getStaticPaths(){ return useCases.map(u => ({ params: { slug: u.slug }, props: { u } })); }
 const { u } = Astro.props;
+const loc = placeOf(u);
+const locHref = loc ? ((groupByCountry().find(g => g.key === loc.key)?.list.length ?? 0) >= PAGE_MIN ? `/places/${loc.key}/` : `/places/#${loc.key}`) : null;
 const path = `/use-cases/${u.slug}/`, url = SITE + path;
 const related = useCases.filter(x => x.type === u.type && x.slug !== u.slug).slice(0, 3);
 // Cross-links by AI tool: which /tools/ groups this entry belongs to, plus up to 3 other entries using the same tool.
@@ -73,6 +76,7 @@ const addedLabel = new Date(u.added + 'T12:00:00Z').toLocaleDateString('en-US', 
 <div class="panel" role="group" aria-label="Quick facts"><dl class="facts">
 <dt>Business</dt><dd>{u.business}</dd>
 <dt>Type</dt><dd>{TYPES[u.type]}</dd>
+{loc && (<><dt>Where</dt><dd>{loc.place}, <a href={locHref}>{loc.country}</a></dd></>)}
 <dt>Tools used</dt><dd><ul class="tools">{u.tools.map(t => <li>{t}</li>)}</ul></dd>
 <dt>Browse by tool</dt><dd><ul class="tools">{toolLinks.map(g => <li class="tool-li"><a class="tool-link" href={`/tools/${g.key}/`}>{g.name}</a></li>)}</ul></dd>
 {cost && (<><dt>Cost</dt><dd>{label(cost)}{cost.value}<small class="fact-note">{cost.note}{cost.url && <> <a href={cost.url} rel="noopener" target="_blank">{cost.basis === 'list-price' ? 'Vendor pricing page' : 'Source'} ↗<span class="sr-only"> (external site, opens in a new tab)</span></a></>}</small></dd></>)}

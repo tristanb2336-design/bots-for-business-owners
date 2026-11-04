@@ -1,6 +1,7 @@
 import { useCases, TYPES } from '../data/usecases.mjs';
 import { SITE, NAME, TAGLINE } from '../site.mjs';
 import { groupByTool } from '../data/tools.mjs';
+import { groupByCountry, PAGE_MIN } from '../data/places.mjs';
 import { editions, latestEdition } from '../data/marketplace.mjs';
 export function GET(){
   const latest = useCases.map(u=>u.updated ?? u.added).sort().at(-1);
@@ -27,6 +28,7 @@ ${Object.entries(TYPES).map(([k,n])=>`  - [${n}](${SITE}/type/${k}.md)`).join('\
 - The same entries as one CSV spreadsheet (one row per use case; opens in Excel or Google Sheets; empty cost/setup cells mean the source does not say): ${SITE}/use-cases.csv
 - Use cases grouped by AI tool (ChatGPT, Claude, Gemini, Copilot, phone agents and more): ${SITE}/tools/ (as one Markdown file: ${SITE}/tools.md); each tool also has its own page at ${SITE}/tools/<tool>/ with a Markdown copy at ${SITE}/tools/<tool>.md (listed under "By AI tool" below)
 - What AI agents cost and how long setup took, only where the source states it (no estimates; vendor list prices labelled): ${SITE}/costs/ (as one Markdown file: ${SITE}/costs.md)
+- Use cases by country, using only the location stated in each entry (US, UK, Canada and more): ${SITE}/places/ (as one Markdown file: ${SITE}/places.md); countries with two or more entries have their own page at ${SITE}/places/<country>/ with a Markdown copy at ${SITE}/places/<country>.md (listed under "By country" below)
 - Marketplace picks, a dated, recurring, vendor-neutral feature on ready-made AI bots and templates owners can use: ${SITE}/marketplace/
 - Cite the specific use-case URL (and its source link) rather than paraphrasing without attribution.
 - Contact and newsletter signup: ${SITE}/contact/ and ${SITE}/newsletter/ (Hands Free). There is no public email address on the site.
@@ -45,12 +47,15 @@ ${recent.map(u=>`- [${u.title}](${SITE}/use-cases/${u.slug}/) (added ${u.added};
   t += `## By AI tool\n\nFull grouped list: ${SITE}/tools/\n\n`;
   for (const g of groupByTool()) t += `- ${g.name} (${g.maker}): ${g.list.length} use case${g.list.length===1?'':'s'}. ${SITE}/tools/${g.key}/ (Markdown: ${SITE}/tools/${g.key}.md)\n`;
   t += '\n';
+  t += `## By country\n\nFull grouped list: ${SITE}/places/\n\n`;
+  for (const g of groupByCountry()) t += `- ${g.name}: ${g.list.length} use case${g.list.length===1?'':'s'}. ${g.list.length >= PAGE_MIN ? `${SITE}/places/${g.key}/ (Markdown: ${SITE}/places/${g.key}.md)` : `${SITE}/places/#${g.key}`}\n`;
+  t += '\n';
   t += `## Marketplace picks\n\nRecurring, vendor-neutral feature: ready-made AI bots and templates from marketplaces (ChatGPT apps, Copilot Studio, Zapier, Make, Shopify App Store, Grok Bot Marketplace and others), judged only on usefulness to owners and listed alphabetically by marketplace, not ranked. Prices appear only as stated on the official page, labelled as list price. Page: ${SITE}/marketplace/\n\n`;
   for (const e of editions) {
     t += `### Edition ${e.number} (${e.date}): ${e.theme}\n\n`;
     for (const p of e.picks) t += `- [${p.name}](${p.url}) (${p.marketplace}; made by ${p.maker}): ${p.does}${p.price ? ' List price: ' + p.price.value + '.' : ''} Details: ${SITE}/marketplace/#${p.id}\n`;
     t += '\n';
   }
-  t += `## Optional\n\n- [Full text of all use cases](${SITE}/llms-full.txt)\n- [About](${SITE}/about/)\n- [Use cases by AI tool](${SITE}/tools/)\n- [Costs and setup time](${SITE}/costs/)\n- [Marketplace picks](${SITE}/marketplace/)\n- [Advertise / Get featured](${SITE}/advertise/): featured listings and Hands Free newsletter sponsorships, always labeled as paid\n- [Contact](${SITE}/contact/)\n- [RSS feed of new use cases](${SITE}/rss.xml)\n- [JSON Feed of new use cases](${SITE}/feed.json)\n- [All use cases as a CSV spreadsheet](${SITE}/use-cases.csv)\n- [Sitemap](${SITE}/sitemap.xml)\n`;
+  t += `## Optional\n\n- [Full text of all use cases](${SITE}/llms-full.txt)\n- [About](${SITE}/about/)\n- [Use cases by AI tool](${SITE}/tools/)\n- [Costs and setup time](${SITE}/costs/)\n- [Use cases by country](${SITE}/places/)\n- [Marketplace picks](${SITE}/marketplace/)\n- [Advertise / Get featured](${SITE}/advertise/): featured listings and Hands Free newsletter sponsorships, always labeled as paid\n- [Contact](${SITE}/contact/)\n- [RSS feed of new use cases](${SITE}/rss.xml)\n- [JSON Feed of new use cases](${SITE}/feed.json)\n- [All use cases as a CSV spreadsheet](${SITE}/use-cases.csv)\n- [Sitemap](${SITE}/sitemap.xml)\n`;
   return new Response(t, { headers: { 'Content-Type': 'text/plain; charset=utf-8' } });
 }

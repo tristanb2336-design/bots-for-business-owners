@@ -1,0 +1,39 @@
+---
+// One landing page per country with at least PAGE_MIN entries (e.g. /places/united-kingdom/).
+import Base from '../../layouts/Base.astro';
+import Card from '../../components/Card.astro';
+import { TYPES } from '../../data/usecases.mjs';
+import { groupByCountry, placeOf, PAGE_MIN } from '../../data/places.mjs';
+import { SITE } from '../../site.mjs';
+export function getStaticPaths(){ return groupByCountry().filter(g => g.list.length >= PAGE_MIN).map(g => ({ params: { place: g.key }, props: { g } })); }
+const { g } = Astro.props;
+const list = g.list;
+const path = `/places/${g.key}/`, url = SITE + path;
+const places = [...new Set(list.map(u => placeOf(u).place))];
+const types = [...new Set(list.map(u => u.type))].map(t => TYPES[t]);
+const desc = `${list.length} real, sourced examples of small businesses in ${g.short} using AI agents and assistants: what the AI does, the tools, stated results and how to start.`;
+const others = groupByCountry().filter(x => x.key !== g.key);
+const jsonld = { '@context':'https://schema.org','@graph':[
+  { '@type':'CollectionPage', name:`Small business AI use cases in ${g.name}`, url, description:desc, inLanguage:'en-US',
+    isPartOf:{ '@id':SITE+'/#website' }, publisher:{ '@id':SITE+'/#organization' },
+    about:{ '@type':'Country', name:g.name }, spatialCoverage:{ '@type':'Country', name:g.name },
+    mainEntity:{ '@type':'ItemList', numberOfItems:list.length, itemListElement: list.map((u,i)=>({ '@type':'ListItem', position:i+1, url:`${SITE}/use-cases/${u.slug}/`, name:u.title })) } },
+  { '@type':'BreadcrumbList', itemListElement:[
+    { '@type':'ListItem', position:1, name:'Use cases', item:SITE+'/' },
+    { '@type':'ListItem', position:2, name:'By country', item:SITE+'/places/' },
+    { '@type':'ListItem', position:3, name:g.name, item:url } ] } ] };
+---
+<Base title={`AI for small businesses in ${g.short}: ${list.length} real examples`} description={desc} path={path} jsonld={jsonld} markdown={`/places/${g.key}.md`}>
+<p class="crumbs"><a href="/">Use cases</a> / <a href="/places/">By country</a> / {g.name}</p>
+<section class="hero" style="padding-top:12px"><span class="eyebrow">{g.name}</span>
+<h1>How small businesses in {g.short} use AI agents</h1>
+<p class="lead">{list.length} real examples, each linked to its public source.</p>
+<p class="biz" style="font-size:.95rem"><b>Where:</b> {places.join('; ')}.</p>
+<p class="biz" style="font-size:.95rem"><b>Business types:</b> {types.join(', ')}.</p>
+</section>
+<div class="grid">{list.map(u => <Card u={u} />)}</div>
+<section class="panel prose" aria-labelledby="h-other-places"><h2 id="h-other-places">Other countries</h2>
+<ul class="tools">{others.map(x => <li class="tool-li">{x.list.length >= PAGE_MIN ? <a class="tool-link" href={`/places/${x.key}/`}>{x.name} ({x.list.length})</a> : <a class="tool-link" href={`/places/#${x.key}`}>{x.name} ({x.list.length})</a>}</li>)}</ul></section>
+<p class="biz" style="font-size:.9rem">For AI assistants: <a href={`/places/${g.key}.md`}>this list as plain Markdown</a>.</p>
+<p><a class="btn btn-ghost" href="/places/">← All use cases by country</a></p>
+</Base>
