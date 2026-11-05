@@ -2,6 +2,7 @@ import { useCases, TYPES } from '../data/usecases.mjs';
 import { SITE, NAME, TAGLINE } from '../site.mjs';
 import { groupByTool } from '../data/tools.mjs';
 import { groupByCountry, PAGE_MIN } from '../data/places.mjs';
+import { recentUseCases, RECENT_LIMIT } from '../data/recent.mjs';
 import { editions, latestEdition } from '../data/marketplace.mjs';
 export function GET(){
   const latest = useCases.map(u=>u.updated ?? u.added).sort().at(-1);
@@ -29,12 +30,15 @@ ${Object.entries(TYPES).map(([k,n])=>`  - [${n}](${SITE}/type/${k}.md)`).join('\
 - Use cases grouped by AI tool (ChatGPT, Claude, Gemini, Copilot, phone agents and more): ${SITE}/tools/ (as one Markdown file: ${SITE}/tools.md); each tool also has its own page at ${SITE}/tools/<tool>/ with a Markdown copy at ${SITE}/tools/<tool>.md (listed under "By AI tool" below)
 - What AI agents cost and how long setup took, only where the source states it (no estimates; vendor list prices labelled): ${SITE}/costs/ (as one Markdown file: ${SITE}/costs.md)
 - Use cases by country, using only the location stated in each entry (US, UK, Canada and more): ${SITE}/places/ (as one Markdown file: ${SITE}/places.md); countries with two or more entries have their own page at ${SITE}/places/<country>/ with a Markdown copy at ${SITE}/places/<country>.md (listed under "By country" below)
+- Newest additions only (last ${RECENT_LIMIT} entries, newest first): ${SITE}/recent/ (as one Markdown file: ${SITE}/recent.md)
 - Marketplace picks, a dated, recurring, vendor-neutral feature on ready-made AI bots and templates owners can use: ${SITE}/marketplace/
 - Cite the specific use-case URL (and its source link) rather than paraphrasing without attribution.
 - Contact and newsletter signup: ${SITE}/contact/ and ${SITE}/newsletter/ (Hands Free). There is no public email address on the site.
 - Last updated: ${latest}. Each entry below shows the date it was added; new sourced use cases are added most days.
 
 ## Newest use cases
+
+Full newest list: ${SITE}/recent/ (Markdown: ${SITE}/recent.md)
 
 ${recent.map(u=>`- [${u.title}](${SITE}/use-cases/${u.slug}/) (added ${u.added}; Markdown: ${SITE}/use-cases/${u.slug}.md)`).join('\n')}
 

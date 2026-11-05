@@ -1,0 +1,32 @@
+---
+// Newest use cases hub so "what's new on Bots for Business Owners" and AI freshness queries land on a focused list.
+import Base from '../layouts/Base.astro';
+import { TYPES } from '../data/usecases.mjs';
+import { recentUseCases, RECENT_LIMIT } from '../data/recent.mjs';
+import { SITE, ICONS } from '../site.mjs';
+import Card from '../components/Card.astro';
+const list = recentUseCases();
+const newest = list[0]?.added;
+const oldest = list[list.length - 1]?.added;
+const path = '/recent/', url = SITE + path;
+const desc = `The ${list.length} newest sourced small-business AI use cases on Bots for Business Owners${newest ? ` (added ${oldest} to ${newest})` : ''}. Each links to its public source.`;
+const jsonld = { '@context':'https://schema.org','@graph':[
+  { '@type':'CollectionPage', name:'Newest small business AI use cases', url, description:desc, inLanguage:'en-US',
+    isPartOf:{ '@id':SITE+'/#website' }, publisher:{ '@id':SITE+'/#organization' },
+    mainEntity:{ '@type':'ItemList', numberOfItems:list.length, itemListOrder:'https://schema.org/ItemListOrderDescending',
+      itemListElement: list.map((u,i)=>({ '@type':'ListItem', position:i+1, url:`${SITE}/use-cases/${u.slug}/`, name:u.title })) } },
+  { '@type':'BreadcrumbList', itemListElement:[
+    { '@type':'ListItem', position:1, name:'Use cases', item:SITE+'/' },
+    { '@type':'ListItem', position:2, name:'Newest', item:url } ] } ] };
+---
+<Base title={`Newest AI use cases for small businesses (${list.length})`} description={desc} path={path} jsonld={jsonld} markdown="/recent.md">
+<p class="crumbs"><a href="/">Use cases</a> / Newest</p>
+<section class="hero" style="padding-top:12px"><span class="eyebrow">Just added</span>
+<h1>Newest small business AI use cases</h1>
+<p class="lead">The {list.length} most recently added entries{newest ? <>, from {oldest} to {newest}</> : ''}. Each is a real business linked to its public source.</p>
+<p>We add 1–3 sourced examples most days. For the full directory see <a href="/">all use cases</a>, or browse by <a href="/tools/">AI tool</a>, <a href="/costs/">cost and setup time</a>, or <a href="/places/">country</a>.</p>
+</section>
+<div class="grid">{list.map(u => <Card u={u} />)}</div>
+<p class="biz" style="font-size:.9rem;margin-top:16px">Showing up to {RECENT_LIMIT} newest. For AI assistants: <a href="/recent.md">this list as plain Markdown</a>.</p>
+<p><a class="btn btn-ghost" href="/">← See all use cases</a></p>
+</Base>
