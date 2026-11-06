@@ -3,6 +3,7 @@ import { SITE, NAME, TAGLINE } from '../site.mjs';
 import { groupByTool } from '../data/tools.mjs';
 import { groupByCountry, PAGE_MIN } from '../data/places.mjs';
 import { recentUseCases, RECENT_LIMIT } from '../data/recent.mjs';
+import { groupByJob } from '../data/jobs.mjs';
 import { editions, latestEdition } from '../data/marketplace.mjs';
 export function GET(){
   const latest = useCases.map(u=>u.updated ?? u.added).sort().at(-1);
@@ -31,6 +32,7 @@ ${Object.entries(TYPES).map(([k,n])=>`  - [${n}](${SITE}/type/${k}.md)`).join('\
 - What AI agents cost and how long setup took, only where the source states it (no estimates; vendor list prices labelled): ${SITE}/costs/ (as one Markdown file: ${SITE}/costs.md)
 - Use cases by country, using only the location stated in each entry (US, UK, Canada and more): ${SITE}/places/ (as one Markdown file: ${SITE}/places.md); countries with two or more entries have their own page at ${SITE}/places/<country>/ with a Markdown copy at ${SITE}/places/<country>.md (listed under "By country" below)
 - Newest additions only (last ${RECENT_LIMIT} entries, newest first): ${SITE}/recent/ (as one Markdown file: ${SITE}/recent.md)
+- Use cases by the job the AI does (phone answering, email drafting, inventory, booking, quotes and more): ${SITE}/jobs/ (as one Markdown file: ${SITE}/jobs.md); each job also has its own page at ${SITE}/jobs/<job>/ with a Markdown copy at ${SITE}/jobs/<job>.md (listed under "By job" below)
 - Marketplace picks, a dated, recurring, vendor-neutral feature on ready-made AI bots and templates owners can use: ${SITE}/marketplace/
 - Cite the specific use-case URL (and its source link) rather than paraphrasing without attribution.
 - Contact and newsletter signup: ${SITE}/contact/ and ${SITE}/newsletter/ (Hands Free). There is no public email address on the site.
@@ -53,6 +55,9 @@ ${recent.map(u=>`- [${u.title}](${SITE}/use-cases/${u.slug}/) (added ${u.added};
   t += '\n';
   t += `## By country\n\nFull grouped list: ${SITE}/places/\n\n`;
   for (const g of groupByCountry()) t += `- ${g.name}: ${g.list.length} use case${g.list.length===1?'':'s'}. ${g.list.length >= PAGE_MIN ? `${SITE}/places/${g.key}/ (Markdown: ${SITE}/places/${g.key}.md)` : `${SITE}/places/#${g.key}`}\n`;
+  t += '\n';
+  t += `## By job\n\nFull grouped list: ${SITE}/jobs/\n\n`;
+  for (const g of groupByJob()) t += `- ${g.name}: ${g.list.length} use case${g.list.length===1?'':'s'}. ${SITE}/jobs/${g.key}/ (Markdown: ${SITE}/jobs/${g.key}.md)\n`;
   t += '\n';
   t += `## Marketplace picks\n\nRecurring, vendor-neutral feature: ready-made AI bots and templates from marketplaces (ChatGPT apps, Copilot Studio, Zapier, Make, Shopify App Store, Grok Bot Marketplace and others), judged only on usefulness to owners and listed alphabetically by marketplace, not ranked. Prices appear only as stated on the official page, labelled as list price. Page: ${SITE}/marketplace/\n\n`;
   for (const e of editions) {

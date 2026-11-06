@@ -8,7 +8,7 @@ export const TOOL_GROUPS = [
     match: /phone|receptionist|voice agent|virtual agent|ServiceTitan AI|AI Employee|Goodcall/i },
   { key: 'chat-messaging-agents', name: 'AI chat, leasing and guest-messaging agents', maker: 'Various startups',
     blurb: 'Reply to website chats, rental enquiries and guest messages, qualify leads and book viewings.',
-    match: /EliseAI|Lightwork|Frontline|YepAI|Enso Connect|chat assistant/i },
+    match: /EliseAI|Lightwork|Frontline|YepAI|Enso Connect|chat assistant|Millie|in-store AI/i },
   { key: 'chatgpt', name: 'ChatGPT', maker: 'OpenAI', blurb: 'General-purpose AI assistant used for drafting, research, pricing and back-office work.', match: /ChatGPT|Custom GPTs/ },
   { key: 'claude', name: 'Claude', maker: 'Anthropic', blurb: 'General-purpose AI assistant, also used by owners to build their own simple tools.', match: /\bClaude\b/ },
   { key: 'gemini', name: 'Gemini', maker: 'Google', blurb: 'AI assistant on its own and inside Google Workspace (Gmail, Docs, Sheets).', match: /Gemini/ },
