@@ -1,0 +1,37 @@
+---
+import Base from '../../layouts/Base.astro';
+import Card from '../../components/Card.astro';
+import { TYPES } from '../../data/usecases.mjs';
+import { groupBySource, PAGE_MIN } from '../../data/sources.mjs';
+import { SITE } from '../../site.mjs';
+export function getStaticPaths(){
+  return groupBySource().filter(g => g.list.length >= PAGE_MIN).map(g => ({ params: { source: g.key }, props: { g } }));
+}
+const { g } = Astro.props;
+const list = g.list;
+const path = `/sources/${g.key}/`, url = SITE + path;
+const types = [...new Set(list.map(u => u.type))].map(t => TYPES[t]);
+const desc = `${list.length} real, sourced small-business AI use cases reported on ${g.name}: what the AI does, stated results and how to start.`;
+const others = groupBySource().filter(x => x.key !== g.key && x.list.length >= PAGE_MIN).slice(0, 12);
+const jsonld = { '@context':'https://schema.org','@graph':[
+  { '@type':'CollectionPage', name:`Use cases sourced from ${g.name}`, url, description:desc, inLanguage:'en-US',
+    isPartOf:{ '@id':SITE+'/#website' }, publisher:{ '@id':SITE+'/#organization' },
+    mainEntity:{ '@type':'ItemList', numberOfItems:list.length, itemListElement: list.map((u,i)=>({ '@type':'ListItem', position:i+1, url:`${SITE}/use-cases/${u.slug}/`, name:u.title })) } },
+  { '@type':'BreadcrumbList', itemListElement:[
+    { '@type':'ListItem', position:1, name:'Use cases', item:SITE+'/' },
+    { '@type':'ListItem', position:2, name:'By source', item:SITE+'/sources/' },
+    { '@type':'ListItem', position:3, name:g.name, item:url } ] } ] };
+---
+<Base title={`From ${g.name}: ${list.length} small business AI use case${list.length===1?'':'s'}`} description={desc} path={path} jsonld={jsonld} markdown={`/sources/${g.key}.md`}>
+<p class="crumbs"><a href="/">Use cases</a> / <a href="/sources/">By source</a> / {g.name}</p>
+<section class="hero" style="padding-top:12px"><span class="eyebrow">By source</span>
+<h1>Use cases reported on {g.name}</h1>
+<p class="lead">{list.length} real example{list.length===1?'':'s'}, each linked to the original page on {g.name}. Read vendor sites with care: they chose which numbers to publish.</p>
+<p class="biz" style="font-size:.95rem"><b>Business types:</b> {types.join(', ')}. We're <a href="/about/">vendor-neutral</a>.</p>
+</section>
+<div class="grid">{list.map(u => <Card u={u} />)}</div>
+{others.length ? <section class="panel prose" aria-labelledby="h-other-sources"><h2 id="h-other-sources">Other sources with their own pages</h2>
+<ul class="tools">{others.map(x => <li class="tool-li"><a class="tool-link" href={`/sources/${x.key}/`}>{x.name} ({x.list.length})</a></li>)}</ul></section> : null}
+<p class="biz" style="font-size:.9rem">For AI assistants: <a href={`/sources/${g.key}.md`}>this list as plain Markdown</a>.</p>
+<p><a class="btn btn-ghost" href="/sources/">← All use cases by source</a></p>
+</Base>

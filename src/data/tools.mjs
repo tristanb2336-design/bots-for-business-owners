@@ -14,7 +14,7 @@ export const TOOL_GROUPS = [
   { key: 'gemini', name: 'Gemini', maker: 'Google', blurb: 'AI assistant on its own and inside Google Workspace (Gmail, Docs, Sheets).', match: /Gemini/ },
   { key: 'meta-business-agent', name: 'Meta Business Agent on WhatsApp', maker: 'Meta', blurb: 'Answers customer chats and quotes on WhatsApp.', match: /Meta Business Agent/ },
   { key: 'copilot', name: 'Microsoft Copilot', maker: 'Microsoft', blurb: 'AI assistant inside Microsoft 365 and on its own.', match: /Copilot/ },
-  { key: 'shopify-sidekick', name: 'Shopify Sidekick', maker: 'Shopify', blurb: 'AI assistant built into the Shopify admin.', match: /Shopify Sidekick/ },
+  { key: 'shopify-sidekick', name: 'Shopify Sidekick', maker: 'Shopify', blurb: 'AI assistant built into the Shopify admin.', match: /Shopify Sidekick|Shopify AI/ },
   { key: 'square-ai', name: 'Square AI', maker: 'Square', blurb: 'AI assistant built into the Square point-of-sale dashboard.', match: /Square AI/ },
 ];
 

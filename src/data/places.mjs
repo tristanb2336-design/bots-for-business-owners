@@ -87,6 +87,9 @@ export const PLACES = {
   'catering-venue-chatgpt-claude-checklists-recipe-scaling-arlingtons': ['united-states', 'Springfield, Illinois'],
   'gift-shop-in-store-ai-assistant-millie-cotton-company': ['united-states', 'Wake Forest, North Carolina'],
   'commercial-electrician-ai-receptionist-job-briefs-hughes': ['united-kingdom', 'Erdington, Birmingham, England'],
+  'jewelry-store-chatgpt-social-captions-ads-radiant': ['united-states', 'Plymouth, Michigan'],
+  'kids-clothing-brand-shopify-gemini-klaviyo-inventory-guava-jammies': ['united-states', 'Hawaiʻi'],
+  'brunch-bakery-yelp-host-ai-phone-waitlist-buttermilk-ranch': ['united-states', 'Nashville, Tennessee'],
 };
 
 export function placeOf(u){ const p = PLACES[u.slug]; return p ? { key: p[0], country: COUNTRIES[p[0]].name, place: p[1] } : null; }
