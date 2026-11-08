@@ -90,6 +90,9 @@ export const PLACES = {
   'jewelry-store-chatgpt-social-captions-ads-radiant': ['united-states', 'Plymouth, Michigan'],
   'kids-clothing-brand-shopify-gemini-klaviyo-inventory-guava-jammies': ['united-states', 'Hawaiʻi'],
   'brunch-bakery-yelp-host-ai-phone-waitlist-buttermilk-ranch': ['united-states', 'Nashville, Tennessee'],
+  'creperie-toast-ai-online-menu-stock-la-maracucha': ['united-states', 'Gainesville, Florida'],
+  'salon-canva-glossgenius-captions-booking-marisol': ['united-states', 'Cedar Falls, Iowa'],
+  'caribbean-sushi-chatgpt-marketing-emails-tropirollz': ['united-states', 'Miami, Florida'],
 };
 
 export function placeOf(u){ const p = PLACES[u.slug]; return p ? { key: p[0], country: COUNTRIES[p[0]].name, place: p[1] } : null; }

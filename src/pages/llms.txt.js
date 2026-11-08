@@ -5,6 +5,7 @@ import { groupByCountry, PAGE_MIN } from '../data/places.mjs';
 import { recentUseCases, RECENT_LIMIT } from '../data/recent.mjs';
 import { groupByJob } from '../data/jobs.mjs';
 import { groupBySource, PAGE_MIN as SOURCE_PAGE_MIN } from '../data/sources.mjs';
+import { groupByMonth } from '../data/archive.mjs';
 import { editions, latestEdition } from '../data/marketplace.mjs';
 export function GET(){
   const latest = useCases.map(u=>u.updated ?? u.added).sort().at(-1);
@@ -35,6 +36,7 @@ ${Object.entries(TYPES).map(([k,n])=>`  - [${n}](${SITE}/type/${k}.md)`).join('\
 - Newest additions only (last ${RECENT_LIMIT} entries, newest first): ${SITE}/recent/ (as one Markdown file: ${SITE}/recent.md)
 - Use cases by the job the AI does (phone answering, email drafting, inventory, booking, quotes and more): ${SITE}/jobs/ (as one Markdown file: ${SITE}/jobs.md); each job also has its own page at ${SITE}/jobs/<job>/ with a Markdown copy at ${SITE}/jobs/<job>.md (listed under "By job" below)
 - Use cases by the public source that reported them (news sites, vendor blogs, interviews): ${SITE}/sources/ (as one Markdown file: ${SITE}/sources.md); sources with two or more entries have their own page at ${SITE}/sources/<host>/ with a Markdown copy at ${SITE}/sources/<host>.md (listed under "By source" below)
+- Use cases by the month they were added (full archive, not just the newest ${RECENT_LIMIT}): ${SITE}/archive/ (as one Markdown file: ${SITE}/archive.md); each month has its own page at ${SITE}/archive/<yyyy-mm>/ with a Markdown copy at ${SITE}/archive/<yyyy-mm>.md (listed under "By month added" below)
 - Marketplace picks, a dated, recurring, vendor-neutral feature on ready-made AI bots and templates owners can use: ${SITE}/marketplace/
 - Cite the specific use-case URL (and its source link) rather than paraphrasing without attribution.
 - Contact and newsletter signup: ${SITE}/contact/ and ${SITE}/newsletter/ (Hands Free). There is no public email address on the site.
@@ -64,12 +66,16 @@ ${recent.map(u=>`- [${u.title}](${SITE}/use-cases/${u.slug}/) (added ${u.added};
   t += `## By source\n\nFull grouped list: ${SITE}/sources/\n\n`;
   for (const g of groupBySource()) t += `- ${g.name}: ${g.list.length} use case${g.list.length===1?'':'s'}. ${g.list.length >= SOURCE_PAGE_MIN ? `${SITE}/sources/${g.key}/ (Markdown: ${SITE}/sources/${g.key}.md)` : `${SITE}/sources/#${g.key}`}\n`;
   t += '\n';
+  t += `## By month added\n\nFull chronological archive: ${SITE}/archive/\n\n`;
+  for (const g of groupByMonth()) t += `- ${g.name}: ${g.list.length} use case${g.list.length===1?'':'s'}. ${SITE}/archive/${g.key}/ (Markdown: ${SITE}/archive/${g.key}.md)\n`;
+  t += '\n';
   t += `## Marketplace picks\n\nRecurring, vendor-neutral feature: ready-made AI bots and templates from marketplaces (ChatGPT apps, Copilot Studio, Zapier, Make, Shopify App Store, Grok Bot Marketplace and others), judged only on usefulness to owners and listed alphabetically by marketplace, not ranked. Prices appear only as stated on the official page, labelled as list price. Page: ${SITE}/marketplace/\n\n`;
   for (const e of editions) {
     t += `### Edition ${e.number} (${e.date}): ${e.theme}\n\n`;
     for (const p of e.picks) t += `- [${p.name}](${p.url}) (${p.marketplace}; made by ${p.maker}): ${p.does}${p.price ? ' List price: ' + p.price.value + '.' : ''} Details: ${SITE}/marketplace/#${p.id}\n`;
     t += '\n';
   }
-  t += `## Optional\n\n- [Full text of all use cases](${SITE}/llms-full.txt)\n- [About](${SITE}/about/)\n- [Use cases by AI tool](${SITE}/tools/)\n- [Costs and setup time](${SITE}/costs/)\n- [Use cases by country](${SITE}/places/)\n- [Use cases by source](${SITE}/sources/)\n- [Marketplace picks](${SITE}/marketplace/)\n- [Advertise / Get featured](${SITE}/advertise/): featured listings and Hands Free newsletter sponsorships, always labeled as paid\n- [Contact](${SITE}/contact/)\n- [RSS feed of new use cases](${SITE}/rss.xml)\n- [JSON Feed of new use cases](${SITE}/feed.json)\n- [All use cases as a CSV spreadsheet](${SITE}/use-cases.csv)\n- [Sitemap](${SITE}/sitemap.xml)\n`;
+  t += `## Optional\n\n- [Full text of all use cases](${SITE}/llms-full.txt)\n- [About](${SITE}/about/)\n- [Use cases by AI tool](${SITE}/tools/)\n- [Costs and setup time](${SITE}/costs/)\n- [Use cases by country](${SITE}/places/)\n- [Use cases by source](${SITE}/sources/)
+- [Use cases by month added](${SITE}/archive/)\n- [Marketplace picks](${SITE}/marketplace/)\n- [Advertise / Get featured](${SITE}/advertise/): featured listings and Hands Free newsletter sponsorships, always labeled as paid\n- [Contact](${SITE}/contact/)\n- [RSS feed of new use cases](${SITE}/rss.xml)\n- [JSON Feed of new use cases](${SITE}/feed.json)\n- [All use cases as a CSV spreadsheet](${SITE}/use-cases.csv)\n- [Sitemap](${SITE}/sitemap.xml)\n`;
   return new Response(t, { headers: { 'Content-Type': 'text/plain; charset=utf-8' } });
 }

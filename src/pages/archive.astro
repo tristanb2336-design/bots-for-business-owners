@@ -1,0 +1,37 @@
+---
+// Hub of use cases by the month they were added, so "what was added in October 2026?"
+// searches land on a chronological archive (unlike /recent/, which shows only the newest 20).
+import Base from '../layouts/Base.astro';
+import { useCases, TYPES } from '../data/usecases.mjs';
+import { groupByMonth } from '../data/archive.mjs';
+import { RECENT_LIMIT } from '../data/recent.mjs';
+import { SITE, ICONS } from '../site.mjs';
+const groups = groupByMonth();
+const path = '/archive/', url = SITE + path;
+const desc = `Every Bots for Business Owners use case by the month it was added. ${useCases.length} sourced examples across ${groups.length} month${groups.length===1?'':'s'}.`;
+const jsonld = { '@context':'https://schema.org','@graph':[
+  { '@type':'CollectionPage', name:'Small business AI use cases by month added', url, description:desc, inLanguage:'en-US',
+    isPartOf:{ '@id':SITE+'/#website' }, publisher:{ '@id':SITE+'/#organization' },
+    hasPart: groups.map(g => ({ '@type':'ItemList', name:`Use cases added in ${g.name}`, url:`${url}${g.key}/`, numberOfItems:g.list.length,
+      itemListElement: g.list.map((u,i)=>({ '@type':'ListItem', position:i+1, url:`${SITE}/use-cases/${u.slug}/`, name:u.title })) })) },
+  { '@type':'BreadcrumbList', itemListElement:[
+    { '@type':'ListItem', position:1, name:'Use cases', item:SITE+'/' },
+    { '@type':'ListItem', position:2, name:'By month added', item:url } ] } ] };
+---
+<Base title="Small business AI use cases by month: when each example was added" description={desc} path={path} jsonld={jsonld} markdown="/archive.md">
+<p class="crumbs"><a href="/">Use cases</a> / By month added</p>
+<section class="hero" style="padding-top:12px"><span class="eyebrow">Browse by month</span>
+<h1>When was each AI use case added?</h1>
+<p class="lead">All {useCases.length} use cases, grouped by the month they were published here ({groups.length} month{groups.length===1?'':'s'}). Newest month first.</p>
+<p>This is a full archive, not just the latest batch. For the {RECENT_LIMIT} most recent entries see <a href="/recent/">newest use cases</a>. We're <a href="/about/">vendor-neutral</a>: every example still links to its public source.</p>
+<nav aria-label="Months on this page"><ul class="tools" style="margin-top:12px">{groups.map(g => <li><a href={`#${g.key}`}>{g.name} ({g.list.length})</a></li>)}</ul></nav>
+</section>
+{groups.map(g => (
+<section class="panel prose" id={g.key} aria-labelledby={`h-${g.key}`}>
+<h2 id={`h-${g.key}`}><a href={`/archive/${g.key}/`}>{g.name}</a></h2>
+<p>{g.list.length} use case{g.list.length===1?'':'s'} (<a href={`/archive/${g.key}/`}>own page</a>):</p>
+<ul>{g.list.map(u => <li><a href={`/use-cases/${u.slug}/`}>{u.title}</a> <span class="biz">· added {u.added} · <span aria-hidden="true">{ICONS[u.type]}</span> {u.business} ({TYPES[u.type]})</span></li>)}</ul>
+</section>))}
+<p class="small">For AI assistants and readers who prefer plain text: <a href="/archive.md">this page as one Markdown file</a>.</p>
+<p><a class="btn btn-ghost" href="/">← See all use cases</a></p>
+</Base>
