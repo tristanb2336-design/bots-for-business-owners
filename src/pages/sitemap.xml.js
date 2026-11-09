@@ -15,6 +15,7 @@ export function GET(){
     ['/', latest], ['/about/', latest], ['/newsletter/', latest], ['/advertise/', latest], ['/contact/', latest], ['/tools/', latest], ['/costs/', latest], ['/places/', latest], ['/recent/', latest], ['/jobs/', latest], ['/sources/', latest], ['/archive/', latest], ['/marketplace/', latestEdition.date],
     ['/rss.xml', latest], ['/feed.json', latest], ['/llms.txt', latest], ['/llms-full.txt', latest], ['/use-cases.json', latest], ['/use-cases.csv', latest],
     ...Object.keys(TYPES).map(t=>[`/type/${t}/`, newest(useCases.filter(u=>u.type===t)) ?? latest]),
+    ...Object.keys(TYPES).map(t=>[`/type/${t}/rss.xml`, newest(useCases.filter(u=>u.type===t)) ?? latest]),
     ...groupByTool().map(g=>[`/tools/${g.key}/`, newest(g.list) ?? latest]),
     ...groupByCountry().filter(g=>g.list.length>=PAGE_MIN).map(g=>[`/places/${g.key}/`, newest(g.list) ?? latest]),
     ...groupByJob().map(g=>[`/jobs/${g.key}/`, newest(g.list) ?? latest]),

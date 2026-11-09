@@ -27,6 +27,8 @@ Editorial policy: this site is vendor-neutral. It covers useful AI agents from a
 - All entries for one business type as a single Markdown file:
 ${Object.entries(TYPES).map(([k,n])=>`  - [${n}](${SITE}/type/${k}.md)`).join('\n')}
 - RSS feed of new use cases, newest first: ${SITE}/rss.xml
+- One RSS feed per business type, so you can follow a single category (newest first):
+${Object.entries(TYPES).map(([k,n])=>`  - [${n}](${SITE}/type/${k}/rss.xml)`).join('\n')}
 - JSON Feed 1.1 of the same entries (full text per item, no XML parsing needed): ${SITE}/feed.json
 - Structured JSON of every use case (business, category, tools, results, cost, source URL), newest first: ${SITE}/use-cases.json
 - The same entries as one CSV spreadsheet (one row per use case; opens in Excel or Google Sheets; empty cost/setup cells mean the source does not say): ${SITE}/use-cases.csv
@@ -50,7 +52,7 @@ ${recent.map(u=>`- [${u.title}](${SITE}/use-cases/${u.slug}/) (added ${u.added};
 
 `;
   for (const [k,v] of Object.entries(TYPES)) {
-    t += `## ${v}\n\nHub page: ${SITE}/type/${k}/ (all ${v.toLowerCase()} entries as one Markdown file: ${SITE}/type/${k}.md)\n\n`;
+    t += `## ${v}\n\nHub page: ${SITE}/type/${k}/ (all ${v.toLowerCase()} entries as one Markdown file: ${SITE}/type/${k}.md; RSS feed of this category: ${SITE}/type/${k}/rss.xml)\n\n`;
     for (const u of useCases.filter(x=>x.type===k)) t += `- [${u.title}](${SITE}/use-cases/${u.slug}/): ${u.business}. ${u.job} Source: ${u.sourceUrl} (added ${u.added})\n`;
     t += '\n';
   }
