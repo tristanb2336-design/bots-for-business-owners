@@ -16,6 +16,7 @@ export const COUNTRIES = {
   'mexico': { name: 'Mexico', short: 'Mexico' },
   'japan': { name: 'Japan', short: 'Japan' },
   'indonesia': { name: 'Indonesia', short: 'Indonesia' },
+  'france': { name: 'France', short: 'France' },
 };
 
 // slug -> [country key, place as stated in the entry]
@@ -93,6 +94,9 @@ export const PLACES = {
   'creperie-toast-ai-online-menu-stock-la-maracucha': ['united-states', 'Gainesville, Florida'],
   'salon-canva-glossgenius-captions-booking-marisol': ['united-states', 'Cedar Falls, Iowa'],
   'caribbean-sushi-chatgpt-marketing-emails-tropirollz': ['united-states', 'Miami, Florida'],
+  'engraving-shop-microsoft-copilot-grants-listings-let-it-be-company': ['united-states', 'Farmersville, Texas'],
+  'ceramics-studio-gemini-product-descriptions-newsletters-bleu-clementine': ['france', 'Bordeaux, France'],
+  'owner-operator-hvac-ai-receptionist-riley-ridgeline': ['united-states', 'Idaho'],
 };
 
 export function placeOf(u){ const p = PLACES[u.slug]; return p ? { key: p[0], country: COUNTRIES[p[0]].name, place: p[1] } : null; }
