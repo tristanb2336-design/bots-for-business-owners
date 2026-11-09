@@ -10,7 +10,7 @@ export function GET({ params }){
   const type = params.type, label = TYPES[type];
   const list = useCases.filter(u => u.type === type).sort((a, b) => b.added.localeCompare(a.added));
   let t = `# AI agents for ${label.toLowerCase()}: ${list.length} real, sourced examples\n\n`;
-  t += `- Web page: ${SITE}/type/${type}/\n- Newest first. Every entry links its original public source; results are repeated only as stated there, and vendor case studies are written by the vendor.\n\n`;
+  t += `- Web page: ${SITE}/type/${type}/\n- RSS feed of this category: ${SITE}/type/${type}/rss.xml\n- Newest first. Every entry links its original public source; results are repeated only as stated there, and vendor case studies are written by the vendor.\n\n`;
   for (const u of list) {
     const cost = fact(u.cost), setup = fact(u.setupTime ?? u.setup);
     t += `## ${u.title}\n\n- Business: ${u.business}\n- What the AI does: ${u.job}\n- Tools: ${u.tools.join('; ')}\n`;
