@@ -17,6 +17,7 @@ export function GET(){
     ...Object.keys(TYPES).map(t=>[`/type/${t}/`, newest(useCases.filter(u=>u.type===t)) ?? latest]),
     ...Object.keys(TYPES).map(t=>[`/type/${t}/rss.xml`, newest(useCases.filter(u=>u.type===t)) ?? latest]),
     ...groupByTool().map(g=>[`/tools/${g.key}/`, newest(g.list) ?? latest]),
+    ...groupByTool().map(g=>[`/tools/${g.key}/rss.xml`, newest(g.list) ?? latest]),
     ...groupByCountry().filter(g=>g.list.length>=PAGE_MIN).map(g=>[`/places/${g.key}/`, newest(g.list) ?? latest]),
     ...groupByJob().map(g=>[`/jobs/${g.key}/`, newest(g.list) ?? latest]),
     ...groupBySource().filter(g=>g.list.length>=SOURCE_PAGE_MIN).map(g=>[`/sources/${g.key}/`, newest(g.list) ?? latest]),

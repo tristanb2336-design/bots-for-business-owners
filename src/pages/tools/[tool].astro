@@ -6,7 +6,7 @@ import Base from '../../layouts/Base.astro';
 import Card from '../../components/Card.astro';
 import { useCases, TYPES } from '../../data/usecases.mjs';
 import { groupByTool } from '../../data/tools.mjs';
-import { SITE } from '../../site.mjs';
+import { SITE, NAME } from '../../site.mjs';
 export function getStaticPaths(){ return groupByTool().map(g => ({ params: { tool: g.key }, props: { g } })); }
 const { g } = Astro.props;
 const list = g.list;
@@ -24,7 +24,7 @@ const jsonld = { '@context':'https://schema.org','@graph':[
     { '@type':'ListItem', position:2, name:'By AI tool', item:SITE+'/tools/' },
     { '@type':'ListItem', position:3, name:g.name, item:url } ] } ] };
 ---
-<Base title={`${g.name} for small business: ${list.length} real example${list.length===1?'':'s'}`} description={desc} path={path} jsonld={jsonld} markdown={`/tools/${g.key}.md`}>
+<Base title={`${g.name} for small business: ${list.length} real example${list.length===1?'':'s'}`} description={desc} path={path} jsonld={jsonld} markdown={`/tools/${g.key}.md`} feed={{ href: `/tools/${g.key}/rss.xml`, title: `${NAME}: use cases for ${g.name} (RSS)` }}>
 <p class="crumbs"><a href="/">Use cases</a> / <a href="/tools/">By AI tool</a> / {g.name}</p>
 <section class="hero" style="padding-top:12px"><span class="eyebrow">{g.maker}</span>
 <h1>{g.key === 'other' ? 'Other AI agents and custom setups small businesses use' : `How small businesses use ${g.name}`}</h1>
@@ -34,6 +34,6 @@ const jsonld = { '@context':'https://schema.org','@graph':[
 <div class="grid">{list.map(u => <Card u={u} />)}</div>
 <section class="panel prose" aria-labelledby="h-other-tools"><h2 id="h-other-tools">Other AI tools</h2>
 <ul class="tools">{others.map(x => <li class="tool-li"><a class="tool-link" href={`/tools/${x.key}/`}>{x.name} ({x.list.length})</a></li>)}</ul></section>
-<p class="biz" style="font-size:.9rem">For AI assistants: <a href={`/tools/${g.key}.md`}>this list as plain Markdown</a>.</p>
+<p class="biz" style="font-size:.9rem">Follow only this tool: <a href={`/tools/${g.key}/rss.xml`}>{g.name} RSS feed</a> (new entries, newest first). For AI assistants: <a href={`/tools/${g.key}.md`}>this list as plain Markdown</a>.</p>
 <p><a class="btn btn-ghost" href="/tools/">← All use cases by AI tool</a></p>
 </Base>

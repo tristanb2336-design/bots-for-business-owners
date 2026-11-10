@@ -7,7 +7,7 @@ export function getStaticPaths(){ return groupByTool().map(g => ({ params: { too
 export function GET({ props }){
   const { g } = props;
   let t = `# ${g.name} (${g.maker}): ${g.list.length} real small business use case${g.list.length === 1 ? '' : 's'}\n\n`;
-  t += `- Web page: ${SITE}/tools/${g.key}/\n- ${g.blurb}\n- Vendor-neutral: examples are grouped by the tool named in each source, not ranked or recommended. Results are repeated only as stated in the linked source.\n\n`;
+  t += `- Web page: ${SITE}/tools/${g.key}/\n- RSS feed for this tool: ${SITE}/tools/${g.key}/rss.xml\n- ${g.blurb}\n- Vendor-neutral: examples are grouped by the tool named in each source, not ranked or recommended. Results are repeated only as stated in the linked source.\n\n`;
   for (const u of g.list) {
     const cost = fact(u.cost), setup = fact(u.setupTime ?? u.setup);
     t += `## ${u.title}\n\n- Business: ${u.business} (${TYPES[u.type]})\n- What the AI does: ${u.job}\n- Tools: ${u.tools.join('; ')}\n`;

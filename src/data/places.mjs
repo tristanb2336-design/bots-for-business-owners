@@ -21,6 +21,8 @@ export const COUNTRIES = {
 
 // slug -> [country key, place as stated in the entry]
 export const PLACES = {
+  'landscaper-claude-estimates-labor-underpricing-qa-landscaping': ['united-states', 'Pittsburgh, Pennsylvania'],
+  'bakery-chatgpt-invoicing-forecasting-allergens-bakery-de-stefano': ['spain', 'Las Palmas de Gran Canaria'],
   'quick-service-restaurants-chatgpt-paperwork-pricing': ['united-states', 'New Mexico'],
   'texas-food-business-team-of-ai-agents-blended-salsa': ['united-states', 'Texas'],
   'plumbing-company-ai-virtual-agent-superior-plumbing': ['united-states', 'Atlanta area, Georgia'],
