@@ -21,6 +21,9 @@ export const COUNTRIES = {
 
 // slug -> [country key, place as stated in the entry]
 export const PLACES = {
+  'boba-shop-chatgpt-canva-posters-menus-fruitea-boba-haus': ['canada', 'London, Ontario'],
+  'bookstore-ai-built-staff-dashboard-special-orders-naughty-dog-books': ['united-states', 'Brown County, Indiana'],
+  'hair-salon-ai-photo-stock-take-call-answering-fergal-doyle-hair': ['united-kingdom', 'Bristol, England'],
   'landscaper-claude-estimates-labor-underpricing-qa-landscaping': ['united-states', 'Pittsburgh, Pennsylvania'],
   'bakery-chatgpt-invoicing-forecasting-allergens-bakery-de-stefano': ['spain', 'Las Palmas de Gran Canaria'],
   'quick-service-restaurants-chatgpt-paperwork-pricing': ['united-states', 'New Mexico'],

@@ -7,7 +7,7 @@ export function getStaticPaths(){ return groupByCountry().filter(g => g.list.len
 export function GET({ props }){
   const { g } = props;
   let t = `# AI for small businesses in ${g.short}: ${g.list.length} real use case${g.list.length === 1 ? '' : 's'}\n\n`;
-  t += `- Web page: ${SITE}/places/${g.key}/\n- Locations are taken only from each entry and its source. Results are repeated only as stated in the linked source.\n\n`;
+  t += `- Web page: ${SITE}/places/${g.key}/\n- RSS feed for this country: ${SITE}/places/${g.key}/rss.xml\n- Locations are taken only from each entry and its source. Results are repeated only as stated in the linked source.\n\n`;
   for (const u of g.list) {
     const cost = fact(u.cost), setup = fact(u.setupTime ?? u.setup);
     t += `## ${u.title}\n\n- Business: ${u.business} (${TYPES[u.type]})\n- Where: ${placeOf(u).place}, ${g.name}\n- What the AI does: ${u.job}\n- Tools: ${u.tools.join('; ')}\n`;
