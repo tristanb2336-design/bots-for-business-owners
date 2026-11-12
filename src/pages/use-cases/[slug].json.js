@@ -5,6 +5,7 @@
 import { useCases, TYPES } from '../../data/usecases.mjs';
 import { SITE, NAME } from '../../site.mjs';
 import { groupByTool } from '../../data/tools.mjs';
+import { placeOf, countryUrlOf } from '../../data/places.mjs';
 export function getStaticPaths(){ return useCases.map(u => ({ params: { slug: u.slug }, props: { u } })); }
 const fact = f => !f ? null : (typeof f === 'string' ? { value: f, basis: 'source', note: 'Stated in the source.', url: null } : f);
 export function GET({ props }){
@@ -13,13 +14,14 @@ export function GET({ props }){
   const data = {
     url, markdown: `${SITE}/use-cases/${u.slug}.md`, json: `${SITE}/use-cases/${u.slug}.json`,
     slug: u.slug, title: u.title, business: u.business,
+    location: placeOf(u) ? { place: placeOf(u).place, country: placeOf(u).country, countryUrl: countryUrlOf(u, SITE) } : null,
     category: u.type, categoryName: TYPES[u.type], categoryUrl: `${SITE}/type/${u.type}/`,
     added: u.added, ...(u.updated ? { updated: u.updated } : {}),
     job: u.job, story: u.story, results: u.results, tools: u.tools, toolPages,
     cost: fact(u.cost), setupTime: fact(u.setupTime ?? u.setup), howToStart: u.start,
     source: { name: u.sourceName, url: u.sourceUrl },
     publisher: { name: NAME, url: SITE + '/' },
-    policy: 'Vendor-neutral. Results are repeated only as stated in the linked source; vendor case studies are written by the vendor. cost/setupTime are null when the source does not state them; basis "list-price" means a vendor list price, not what the business paid. When citing, link the url above and the original source.',
+    policy: 'Vendor-neutral. Results are repeated only as stated in the linked source; vendor case studies are written by the vendor. location is null when the entry does not state where the business is; cost/setupTime are null when the source does not state them; basis "list-price" means a vendor list price, not what the business paid. When citing, link the url above and the original source.',
     jsonld: { '@context': 'https://schema.org', '@type': 'Article', headline: u.title, url, datePublished: u.added, ...(u.updated ? { dateModified: u.updated } : {}),
       articleSection: TYPES[u.type], isBasedOn: u.sourceUrl, citation: { '@type': 'CreativeWork', name: u.sourceName, url: u.sourceUrl },
       publisher: { '@type': 'Organization', name: NAME, url: SITE + '/' } },

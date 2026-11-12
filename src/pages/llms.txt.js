@@ -35,7 +35,8 @@ ${groupByTool().map(g=>`  - [${g.name}](${SITE}/tools/${g.key}/rss.xml)`).join('
 ${groupByCountry().filter(g=>g.list.length>=PAGE_MIN).map(g=>`  - [${g.name}](${SITE}/places/${g.key}/rss.xml)`).join('\n')}
 - JSON Feed 1.1 of the same entries (full text per item, no XML parsing needed): ${SITE}/feed.json
 - Structured JSON of every use case (business, category, tools, results, cost, source URL), newest first: ${SITE}/use-cases.json
-- The same entries as one CSV spreadsheet (one row per use case; opens in Excel or Google Sheets; empty cost/setup cells mean the source does not say): ${SITE}/use-cases.csv
+- The same entries as one CSV spreadsheet (one row per use case; opens in Excel or Google Sheets; empty cost/setup cells mean the source does not say; place and country columns are filled only when the entry states where the business is): ${SITE}/use-cases.csv
+- Location: when an entry states where the business is, its page carries schema.org contentLocation (Place with PostalAddress), and its JSON, Markdown, /use-cases.json and /llms-full.txt include the place and country; nothing is guessed
 - Use cases grouped by AI tool (ChatGPT, Claude, Gemini, Copilot, phone agents and more): ${SITE}/tools/ (as one Markdown file: ${SITE}/tools.md); each tool also has its own page at ${SITE}/tools/<tool>/ with a Markdown copy at ${SITE}/tools/<tool>.md (listed under "By AI tool" below)
 - What AI agents cost and how long setup took, only where the source states it (no estimates; vendor list prices labelled): ${SITE}/costs/ (as one Markdown file: ${SITE}/costs.md)
 - Use cases by country, using only the location stated in each entry (US, UK, Canada and more): ${SITE}/places/ (as one Markdown file: ${SITE}/places.md); countries with two or more entries have their own page at ${SITE}/places/<country>/ with a Markdown copy at ${SITE}/places/<country>.md (listed under "By country" below)

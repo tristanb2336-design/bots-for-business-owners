@@ -17,10 +17,14 @@ export const COUNTRIES = {
   'japan': { name: 'Japan', short: 'Japan' },
   'indonesia': { name: 'Indonesia', short: 'Indonesia' },
   'france': { name: 'France', short: 'France' },
+  'australia': { name: 'Australia', short: 'Australia' },
 };
 
 // slug -> [country key, place as stated in the entry]
 export const PLACES = {
+  'outdoor-gear-shop-claude-code-fourteen-systems-fieldtrip-supply': ['united-kingdom', 'Tynemouth, England'],
+  'donut-shop-chatgpt-emails-social-graphics-dear-donut': ['united-states', 'Lugoff, South Carolina'],
+  'wine-bar-coworking-microsoft-copilot-events-wine-notes-meeting-summaries-gracies': ['australia', 'Melbourne, Victoria'],
   'boba-shop-chatgpt-canva-posters-menus-fruitea-boba-haus': ['canada', 'London, Ontario'],
   'bookstore-ai-built-staff-dashboard-special-orders-naughty-dog-books': ['united-states', 'Brown County, Indiana'],
   'hair-salon-ai-photo-stock-take-call-answering-fergal-doyle-hair': ['united-kingdom', 'Bristol, England'],
@@ -115,3 +119,10 @@ export function groupByCountry(){
 
 // Countries with at least this many entries get their own /places/<country>/ page; the rest are listed on /places/.
 export const PAGE_MIN = 2;
+
+/** URL listing other entries from this entry's country: its own page if the country has PAGE_MIN+ entries, else the /places/ hub anchor. */
+export function countryUrlOf(u, site = ''){
+  const p = placeOf(u); if (!p) return null;
+  const n = useCases.filter(x => PLACES[x.slug]?.[0] === p.key).length;
+  return n >= PAGE_MIN ? `${site}/places/${p.key}/` : `${site}/places/#${p.key}`;
+}

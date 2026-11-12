@@ -1,5 +1,6 @@
 import { useCases, TYPES } from '../data/usecases.mjs';
 import { SITE, NAME, TAGLINE } from '../site.mjs';
+import { placeOf } from '../data/places.mjs';
 // Machine-readable copy of every use case, for AI assistants, agents and developers.
 // Same facts as the pages: nothing here is added or estimated. Newest first.
 export function GET(){
@@ -10,7 +11,7 @@ export function GET(){
     description: TAGLINE,
     url: SITE + '/',
     license: 'Summaries may be quoted with a link to the use-case page and its original source.',
-    policy: 'Vendor-neutral. Every entry cites a public source; numbers appear only when the source states them. cost/setupTime are null when the source does not state them; basis "list-price" means a vendor list price, not what the business paid.',
+    policy: 'Vendor-neutral. Every entry cites a public source; numbers appear only when the source states them. location is null when the entry does not state where the business is; cost/setupTime are null when the source does not state them; basis "list-price" means a vendor list price, not what the business paid.',
     lastUpdated: latest,
     count: useCases.length,
     categories: TYPES,
@@ -21,6 +22,7 @@ export function GET(){
       json: `${SITE}/use-cases/${u.slug}.json`,
       title: u.title,
       business: u.business,
+      location: placeOf(u) ? { place: placeOf(u).place, country: placeOf(u).country } : null,
       category: u.type,
       categoryName: TYPES[u.type],
       added: u.added,
