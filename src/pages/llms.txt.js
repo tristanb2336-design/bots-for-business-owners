@@ -33,6 +33,8 @@ ${Object.entries(TYPES).map(([k,n])=>`  - [${n}](${SITE}/type/${k}/rss.xml)`).jo
 ${groupByTool().map(g=>`  - [${g.name}](${SITE}/tools/${g.key}/rss.xml)`).join('\n')}
 - RSS feed for each country with its own page, newest first:
 ${groupByCountry().filter(g=>g.list.length>=PAGE_MIN).map(g=>`  - [${g.name}](${SITE}/places/${g.key}/rss.xml)`).join('\n')}
+- RSS feed for each job the AI does (phone answering, quotes, email and more), newest first:
+${groupByJob().map(g=>`  - [${g.name}](${SITE}/jobs/${g.key}/rss.xml)`).join('\n')}
 - JSON Feed 1.1 of the same entries (full text per item, no XML parsing needed): ${SITE}/feed.json
 - Structured JSON of every use case (business, category, tools, results, cost, source URL), newest first: ${SITE}/use-cases.json
 - The same entries as one CSV spreadsheet (one row per use case; opens in Excel or Google Sheets; empty cost/setup cells mean the source does not say; place and country columns are filled only when the entry states where the business is): ${SITE}/use-cases.csv

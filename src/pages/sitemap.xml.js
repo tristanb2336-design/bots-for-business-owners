@@ -21,6 +21,7 @@ export function GET(){
     ...groupByCountry().filter(g=>g.list.length>=PAGE_MIN).map(g=>[`/places/${g.key}/`, newest(g.list) ?? latest]),
     ...groupByCountry().filter(g=>g.list.length>=PAGE_MIN).map(g=>[`/places/${g.key}/rss.xml`, newest(g.list) ?? latest]),
     ...groupByJob().map(g=>[`/jobs/${g.key}/`, newest(g.list) ?? latest]),
+    ...groupByJob().map(g=>[`/jobs/${g.key}/rss.xml`, newest(g.list) ?? latest]),
     ...groupBySource().filter(g=>g.list.length>=SOURCE_PAGE_MIN).map(g=>[`/sources/${g.key}/`, newest(g.list) ?? latest]),
     ...groupByMonth().map(g=>[`/archive/${g.key}/`, newest(g.list) ?? latest]),
     ...useCases.map(u=>[`/use-cases/${u.slug}/`, mod(u)]),

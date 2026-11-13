@@ -18,10 +18,14 @@ export const COUNTRIES = {
   'indonesia': { name: 'Indonesia', short: 'Indonesia' },
   'france': { name: 'France', short: 'France' },
   'australia': { name: 'Australia', short: 'Australia' },
+  'singapore': { name: 'Singapore', short: 'Singapore' },
 };
 
 // slug -> [country key, place as stated in the entry]
 export const PLACES = {
+  'landscape-company-chatgpt-virtual-cfo-budget-landscape-endeavors': ['united-states', 'Colorado Springs, Colorado'],
+  'landscape-company-ai-estimate-spreadsheet-to-client-proposal-geared-for-growing': ['united-states', 'Healdsburg, California'],
+  'pop-up-bakery-gemini-order-form-recipes-social-scripts-salt-bread': ['singapore', 'Singapore'],
   'outdoor-gear-shop-claude-code-fourteen-systems-fieldtrip-supply': ['united-kingdom', 'Tynemouth, England'],
   'donut-shop-chatgpt-emails-social-graphics-dear-donut': ['united-states', 'Lugoff, South Carolina'],
   'wine-bar-coworking-microsoft-copilot-events-wine-notes-meeting-summaries-gracies': ['australia', 'Melbourne, Victoria'],
