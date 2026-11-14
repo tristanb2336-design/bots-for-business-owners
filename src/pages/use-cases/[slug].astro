@@ -8,9 +8,13 @@ import Signup from '../../components/Signup.astro';
 import { ICONS } from '../../site.mjs';
 import { TOOL_GROUPS } from '../../data/tools.mjs';
 import { placeOf, groupByCountry, PAGE_MIN } from '../../data/places.mjs';
+import { jobsOf } from '../../data/jobs.mjs';
 export function getStaticPaths(){ return useCases.map(u => ({ params: { slug: u.slug }, props: { u } })); }
 const { u } = Astro.props;
 const loc = placeOf(u);
+// Which /jobs/ hubs (kind of work the AI does) list this entry, so readers, crawlers and AI assistants can move from one story
+// to every other business using AI for the same job (e.g. answering the phone, quotes and invoices).
+const jobs = jobsOf(u);
 const locHref = loc ? ((groupByCountry().find(g => g.key === loc.key)?.list.length ?? 0) >= PAGE_MIN ? `/places/${loc.key}/` : `/places/#${loc.key}`) : null;
 const path = `/use-cases/${u.slug}/`, url = SITE + path;
 const related = useCases.filter(x => x.type === u.type && x.slug !== u.slug).slice(0, 3);
@@ -43,7 +47,8 @@ const jsonld = { '@context':'https://schema.org','@graph':[
  { '@type':'Article', headline:u.title, description:short(u.job), url, mainEntityOfPage:url, image:SITE+'/og.png',
    about:{ '@type':'Organization', name:u.business, ...(placeLd ? { location:placeLd } : {}) }, ...(placeLd ? { contentLocation:placeLd } : {}), publisher:{ '@id':SITE+'/#organization' }, author:{ '@id':SITE+'/#organization' }, isPartOf:{ '@id':SITE+'/#website' }, publishingPrinciples:SITE+'/about/',
    datePublished:u.added, dateModified:u.updated ?? u.added, inLanguage:'en-US',
-   citation:{ '@type':'CreativeWork', name:u.sourceName, url:u.sourceUrl }, isBasedOn:u.sourceUrl, ...(softwareMentions.length ? { mentions:softwareMentions } : {}), keywords:[TYPES[u.type], 'AI agent', 'small business', ...u.tools].join(', ') },
+   citation:{ '@type':'CreativeWork', name:u.sourceName, url:u.sourceUrl }, isBasedOn:u.sourceUrl, ...(softwareMentions.length ? { mentions:softwareMentions } : {}), keywords:[TYPES[u.type], 'AI agent', 'small business', ...u.tools, ...jobs.map(j => j.name)].join(', '),
+   ...(jobs.length ? { about:[{ '@type':'Organization', name:u.business, ...(placeLd ? { location:placeLd } : {}) }, ...jobs.map(j => ({ '@type':'Thing', name:j.name, url:SITE+j.url }))] } : {}) },
  { '@type':'HowTo', name:`How to start: ${u.title}`, step:u.start.map((s,i)=>({ '@type':'HowToStep', position:i+1, text:s })) },
  { '@type':'BreadcrumbList', itemListElement:[
    { '@type':'ListItem', position:1, name:'Use cases', item:SITE+'/' },
@@ -81,6 +86,7 @@ const addedLabel = new Date(u.added + 'T12:00:00Z').toLocaleDateString('en-US', 
 <dt>Type</dt><dd>{TYPES[u.type]}</dd>
 {loc && (<><dt>Where</dt><dd>{loc.place}, <a href={locHref}>{loc.country}</a></dd></>)}
 <dt>Tools used</dt><dd><ul class="tools">{u.tools.map(t => <li>{t}</li>)}</ul></dd>
+{jobs.length > 0 && (<><dt>Jobs the AI does</dt><dd><ul class="tools">{jobs.map(j => <li class="tool-li"><a class="tool-link" href={j.url}>{j.name}</a></li>)}</ul></dd></>)}
 <dt>Browse by tool</dt><dd><ul class="tools">{toolLinks.map(g => <li class="tool-li"><a class="tool-link" href={`/tools/${g.key}/`}>{g.name}</a></li>)}</ul></dd>
 {cost && (<><dt>Cost</dt><dd>{label(cost)}{cost.value}<small class="fact-note">{cost.note}{cost.url && <> <a href={cost.url} rel="noopener" target="_blank">{cost.basis === 'list-price' ? 'Vendor pricing page' : 'Source'} ↗<span class="sr-only"> (external site, opens in a new tab)</span></a></>}</small></dd></>)}
 {setupTime && (<><dt>Setup time</dt><dd>{setupTime.value}<small class="fact-note">{setupTime.note}</small></dd></>)}

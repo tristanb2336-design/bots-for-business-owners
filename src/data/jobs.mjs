@@ -40,3 +40,8 @@ export function groupByJob() {
 }
 
 export const JOB_PAGE_MIN = 1;
+
+/** The /jobs/<key>/ hubs a single use case is listed on (same matching as groupByJob, including the 'other' fallback). */
+export function jobsOf(u, site = '') {
+  return groupByJob().filter(g => g.list.some(x => x.slug === u.slug)).map(g => ({ key: g.key, name: g.name, url: `${site}/jobs/${g.key}/` }));
+}

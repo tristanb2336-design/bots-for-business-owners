@@ -6,6 +6,7 @@ import { useCases, TYPES } from '../../data/usecases.mjs';
 import { SITE, NAME } from '../../site.mjs';
 import { groupByTool } from '../../data/tools.mjs';
 import { placeOf, countryUrlOf } from '../../data/places.mjs';
+import { jobsOf } from '../../data/jobs.mjs';
 export function getStaticPaths(){ return useCases.map(u => ({ params: { slug: u.slug }, props: { u } })); }
 const fact = f => !f ? null : (typeof f === 'string' ? { value: f, basis: 'source', note: 'Stated in the source.', url: null } : f);
 export function GET({ props }){
@@ -17,7 +18,7 @@ export function GET({ props }){
     location: placeOf(u) ? { place: placeOf(u).place, country: placeOf(u).country, countryUrl: countryUrlOf(u, SITE) } : null,
     category: u.type, categoryName: TYPES[u.type], categoryUrl: `${SITE}/type/${u.type}/`,
     added: u.added, ...(u.updated ? { updated: u.updated } : {}),
-    job: u.job, story: u.story, results: u.results, tools: u.tools, toolPages,
+    job: u.job, story: u.story, results: u.results, tools: u.tools, toolPages, jobPages: jobsOf(u, SITE).map(j => ({ name: j.name, url: j.url })),
     cost: fact(u.cost), setupTime: fact(u.setupTime ?? u.setup), howToStart: u.start,
     source: { name: u.sourceName, url: u.sourceUrl },
     publisher: { name: NAME, url: SITE + '/' },
