@@ -1,0 +1,51 @@
+---
+// Keyword search over every use case. The page filters /use-cases.json in the browser; the same search is available
+// without JavaScript at /api/search/?q=... (JSON, or Markdown with &format=md) and is advertised via OpenSearch and the
+// WebSite SearchAction, so browsers, AI assistants and agents can query the directory directly.
+import Base from '../layouts/Base.astro';
+import { TYPES, useCases } from '../data/usecases.mjs';
+import { SITE } from '../site.mjs';
+const path = '/search/', url = SITE + path;
+const desc = `Search ${useCases.length} real, sourced examples of small businesses using AI agents by business, AI tool, job, town or country.`;
+const jsonld = { '@context':'https://schema.org','@graph':[
+  { '@type':'SearchResultsPage', name:'Search small business AI use cases', url, description:desc, inLanguage:'en-US',
+    isPartOf:{ '@id':SITE+'/#website' }, publisher:{ '@id':SITE+'/#organization' } },
+  { '@type':'BreadcrumbList', itemListElement:[
+    { '@type':'ListItem', position:1, name:'Use cases', item:SITE+'/' },
+    { '@type':'ListItem', position:2, name:'Search', item:url } ] } ] };
+---
+<Base title="Search AI use cases for small businesses" description={desc} path={path} jsonld={jsonld} noindex>
+<p class="crumbs"><a href="/">Use cases</a> / Search</p>
+<section class="hero" style="padding-top:12px"><span class="eyebrow">Search</span>
+<h1>Search small business AI use cases</h1>
+<p class="lead">Try a kind of business, a tool or a job: <a href="/search/?q=bakery">bakery</a>, <a href="/search/?q=landlord">landlord</a>, <a href="/search/?q=phone">phone</a>, <a href="/search/?q=Claude">Claude</a>, <a href="/search/?q=Texas">Texas</a>.</p>
+<form class="signup-form" action="/search/" method="get" role="search" style="max-width:640px">
+<label for="q" class="sr-only">Search words</label>
+<div class="row"><input id="q" name="q" type="search" placeholder="e.g. plumber phone, salon Claude, bakery Gemini" autocomplete="off" style="flex:1" />
+<select name="type" aria-label="Business type" style="min-height:44px;border-radius:10px;padding:0 10px;font:inherit"><option value="">All types</option>{Object.entries(TYPES).map(([k, v]) => <option value={k}>{v}</option>)}</select>
+<button type="submit">Search</button></div>
+</form>
+</section>
+<p id="status" class="biz" aria-live="polite"></p>
+<ol id="results" class="steps" style="max-width:820px"></ol>
+<noscript><p>Search needs JavaScript in the browser. Without it, use <a href="/api/search/?q=bakery&amp;format=md">/api/search/?q=your+words&amp;format=md</a> (Markdown) or <a href="/api/search/?q=bakery">/api/search/?q=your+words</a> (JSON), or browse <a href="/">all use cases</a>.</p></noscript>
+<p class="biz" style="font-size:.9rem;margin-top:24px">For AI assistants and agents: the same search returns JSON at <code>/api/search/?q=…</code> (add <code>&amp;format=md</code> for Markdown, <code>&amp;type=food</code> to filter by business type). Browsers can add this site as a search engine via <a href="/opensearch.xml">OpenSearch</a>.</p>
+<script is:inline>
+(async()=>{
+const p=new URLSearchParams(location.search),q=(p.get('q')||'').slice(0,200),type=p.get('type')||'';
+const qi=document.getElementById('q'),ts=document.querySelector('select[name=type]');qi.value=q;ts.value=type;
+const st=document.getElementById('status'),ol=document.getElementById('results');
+if(!q&&!type){st.textContent='Type a word or two above.';return;}
+const norm=s=>String(s||'').toLowerCase().normalize('NFKD').replace(/[\u0300-\u036f]/g,'');
+const STOP=new Set(['a','an','the','and','or','of','for','to','in','on','with','by','how','do','does','is','are','my','use','uses','using','ai','small','business','businesses','owner','owners']);
+const terms=norm(q).split(/[^a-z0-9£$€]+/).filter(t=>t.length>1&&!STOP.has(t));
+st.textContent='Searching…';
+let d;try{d=await (await fetch('/use-cases.json')).json();}catch(e){st.textContent='Search is unavailable right now. Browse all use cases instead.';return;}
+const score=u=>{const loc=u.location?`${u.location.place||''} ${u.location.country||''}`:'';const f=[[norm(u.title),4],[norm(u.business),4],[norm(u.tools.join(' ')),4],[norm(u.categoryName),3],[norm(loc),3],[norm(u.job),2],[norm(u.results.join(' ')),1],[norm(u.source&&u.source.name),1]];let t=0;for(const w of terms){let b=0;for(const [x,s] of f)if(x.includes(w))b=Math.max(b,s);if(!b)return 0;t+=b;}return t;};
+let list=d.useCases.filter(u=>!type||u.category===type);
+if(terms.length)list=list.map(u=>[score(u),u]).filter(([s])=>s>0).sort((a,b)=>b[0]-a[0]||(b[1].added||'').localeCompare(a[1].added||'')).map(([,u])=>u);
+st.textContent=`${list.length} matching use case${list.length===1?'':'s'}${q?` for “${q}”`:''}.`+(list.length?'':' Try fewer or broader words.');
+for(const u of list){const li=document.createElement('li');const a=document.createElement('a');a.href=new URL(u.url).pathname;a.textContent=u.title;const s=document.createElement('div');s.className='biz';s.style.fontSize='.9rem';s.textContent=`${u.business} · ${u.categoryName} · ${u.tools.join(', ')}`;li.append(a,s);ol.append(li);}
+})();
+</script>
+</Base>

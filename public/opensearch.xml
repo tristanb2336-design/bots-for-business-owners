@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<OpenSearchDescription xmlns="http://a9.com/-/spec/opensearch/1.1/">
+  <ShortName>Bots for Business Owners</ShortName>
+  <Description>Search real, sourced examples of small businesses using AI agents (shops, restaurants, landlords, trades, salons).</Description>
+  <InputEncoding>UTF-8</InputEncoding>
+  <Image height="16" width="16" type="image/svg+xml">https://bots-for-business-owners.vercel.app/favicon.svg</Image>
+  <Url type="text/html" method="get" template="https://bots-for-business-owners.vercel.app/search/?q={searchTerms}"/>
+  <Url type="application/json" method="get" template="https://bots-for-business-owners.vercel.app/api/search/?q={searchTerms}"/>
+  <Url type="text/markdown" method="get" template="https://bots-for-business-owners.vercel.app/api/search/?q={searchTerms}&amp;format=md"/>
+  <Url type="application/opensearchdescription+xml" rel="self" template="https://bots-for-business-owners.vercel.app/opensearch.xml"/>
+  <Language>en-us</Language>
+</OpenSearchDescription>

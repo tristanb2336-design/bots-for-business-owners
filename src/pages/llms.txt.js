@@ -36,6 +36,7 @@ ${groupByCountry().filter(g=>g.list.length>=PAGE_MIN).map(g=>`  - [${g.name}](${
 - RSS feed for each job the AI does (phone answering, quotes, email and more), newest first:
 ${groupByJob().map(g=>`  - [${g.name}](${SITE}/jobs/${g.key}/rss.xml)`).join('\n')}
 - JSON Feed 1.1 of the same entries (full text per item, no XML parsing needed): ${SITE}/feed.json
+- Search (keyword, read-only, no key needed): ${SITE}/api/search/?q=<words> returns JSON (best matches first: title, business, place, tools, cost, setup time, source); add &format=md for Markdown, &type=<food|shops|rentals|trades|services|makers> to filter, &limit=<1-50>. Human search page: ${SITE}/search/?q=<words>; OpenSearch description: ${SITE}/opensearch.xml
 - Structured JSON of every use case (business, category, tools, results, cost, source URL), newest first: ${SITE}/use-cases.json
 - The same entries as one CSV spreadsheet (one row per use case; opens in Excel or Google Sheets; empty cost/setup cells mean the source does not say; place and country columns are filled only when the entry states where the business is): ${SITE}/use-cases.csv
 - Location: when an entry states where the business is, its page carries schema.org contentLocation (Place with PostalAddress), and its JSON, Markdown, /use-cases.json and /llms-full.txt include the place and country; nothing is guessed
