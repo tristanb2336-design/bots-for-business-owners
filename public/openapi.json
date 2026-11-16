@@ -1,0 +1,407 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Bots for Business Owners search API",
+    "version": "1.0.0",
+    "description": "Read-only keyword search over real, sourced examples of small businesses (shops, restaurants, landlords, trades, salons, makers) using AI agents and assistants. Every result cites a public source; vendor-published sources are flagged in the entry text. No key, no cookies, no writes. Vendor-neutral: results are ranked by keyword match, never by vendor.",
+    "contact": {
+      "name": "Bots for Business Owners",
+      "url": "https://bots-for-business-owners.vercel.app/contact/"
+    }
+  },
+  "servers": [
+    {
+      "url": "https://bots-for-business-owners.vercel.app"
+    }
+  ],
+  "externalDocs": {
+    "description": "LLM index of every use case",
+    "url": "https://bots-for-business-owners.vercel.app/llms.txt"
+  },
+  "paths": {
+    "/api/search/": {
+      "get": {
+        "operationId": "searchUseCases",
+        "summary": "Search small-business AI use cases",
+        "description": "Every search word must match somewhere in the entry (title, business, tools, category, place, job, results or source). Best matches first, newest first on ties.",
+        "parameters": [
+          {
+            "name": "q",
+            "in": "query",
+            "required": false,
+            "description": "Search words, e.g. 'bakery', 'phone answering', 'landlord Claude', 'Texas'. Empty returns all entries.",
+            "schema": {
+              "type": "string",
+              "maxLength": 200
+            }
+          },
+          {
+            "name": "type",
+            "in": "query",
+            "required": false,
+            "description": "Business type filter.",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "food",
+                "shops",
+                "rentals",
+                "trades",
+                "services",
+                "makers"
+              ]
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 50,
+              "default": 10
+            }
+          },
+          {
+            "name": "format",
+            "in": "query",
+            "required": false,
+            "description": "json (default) or md for a Markdown list.",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "json",
+                "md"
+              ],
+              "default": "json"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Matching use cases.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "query": {
+                      "type": "string"
+                    },
+                    "type": {
+                      "type": [
+                        "string",
+                        "null"
+                      ]
+                    },
+                    "total": {
+                      "type": "integer"
+                    },
+                    "count": {
+                      "type": "integer"
+                    },
+                    "site": {
+                      "type": "string"
+                    },
+                    "results": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "title": {
+                            "type": "string"
+                          },
+                          "url": {
+                            "type": "string"
+                          },
+                          "markdown": {
+                            "type": "string"
+                          },
+                          "json": {
+                            "type": "string"
+                          },
+                          "business": {
+                            "type": "string"
+                          },
+                          "category": {
+                            "type": "string"
+                          },
+                          "job": {
+                            "type": "string"
+                          },
+                          "added": {
+                            "type": "string"
+                          },
+                          "tools": {
+                            "type": "array",
+                            "items": {
+                              "type": "string"
+                            }
+                          },
+                          "location": {
+                            "type": [
+                              "object",
+                              "null"
+                            ],
+                            "description": "Town/region and country, only when the source states them.",
+                            "properties": {
+                              "place": {
+                                "type": "string"
+                              },
+                              "country": {
+                                "type": "string"
+                              }
+                            }
+                          },
+                          "cost": {
+                            "type": [
+                              "object",
+                              "null"
+                            ],
+                            "description": "Only when the source or the product's linked public pricing page states it."
+                          },
+                          "setupTime": {
+                            "type": [
+                              "object",
+                              "null"
+                            ],
+                            "description": "Only when the source states it."
+                          },
+                          "source": {
+                            "type": "object",
+                            "properties": {
+                              "name": {
+                                "type": "string"
+                              },
+                              "url": {
+                                "type": "string",
+                                "format": "uri"
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "text/markdown": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Search data temporarily unavailable; use /use-cases.json or /llms-full.txt."
+          }
+        }
+      }
+    },
+    "/use-cases.json": {
+      "get": {
+        "operationId": "listAllUseCases",
+        "summary": "Every published use case as one JSON file",
+        "responses": {
+          "200": {
+            "description": "All use cases.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "useCases": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "title": {
+                            "type": "string"
+                          },
+                          "url": {
+                            "type": "string"
+                          },
+                          "markdown": {
+                            "type": "string"
+                          },
+                          "json": {
+                            "type": "string"
+                          },
+                          "business": {
+                            "type": "string"
+                          },
+                          "category": {
+                            "type": "string"
+                          },
+                          "job": {
+                            "type": "string"
+                          },
+                          "added": {
+                            "type": "string"
+                          },
+                          "tools": {
+                            "type": "array",
+                            "items": {
+                              "type": "string"
+                            }
+                          },
+                          "location": {
+                            "type": [
+                              "object",
+                              "null"
+                            ],
+                            "description": "Town/region and country, only when the source states them.",
+                            "properties": {
+                              "place": {
+                                "type": "string"
+                              },
+                              "country": {
+                                "type": "string"
+                              }
+                            }
+                          },
+                          "cost": {
+                            "type": [
+                              "object",
+                              "null"
+                            ],
+                            "description": "Only when the source or the product's linked public pricing page states it."
+                          },
+                          "setupTime": {
+                            "type": [
+                              "object",
+                              "null"
+                            ],
+                            "description": "Only when the source states it."
+                          },
+                          "source": {
+                            "type": "object",
+                            "properties": {
+                              "name": {
+                                "type": "string"
+                              },
+                              "url": {
+                                "type": "string",
+                                "format": "uri"
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/use-cases/{slug}.json": {
+      "get": {
+        "operationId": "getUseCase",
+        "summary": "One use case as JSON",
+        "parameters": [
+          {
+            "name": "slug",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Slug from a search result URL (/use-cases/<slug>/)."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The use case.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "title": {
+                      "type": "string"
+                    },
+                    "url": {
+                      "type": "string"
+                    },
+                    "markdown": {
+                      "type": "string"
+                    },
+                    "json": {
+                      "type": "string"
+                    },
+                    "business": {
+                      "type": "string"
+                    },
+                    "category": {
+                      "type": "string"
+                    },
+                    "job": {
+                      "type": "string"
+                    },
+                    "added": {
+                      "type": "string"
+                    },
+                    "tools": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "location": {
+                      "type": [
+                        "object",
+                        "null"
+                      ],
+                      "description": "Town/region and country, only when the source states them.",
+                      "properties": {
+                        "place": {
+                          "type": "string"
+                        },
+                        "country": {
+                          "type": "string"
+                        }
+                      }
+                    },
+                    "cost": {
+                      "type": [
+                        "object",
+                        "null"
+                      ],
+                      "description": "Only when the source or the product's linked public pricing page states it."
+                    },
+                    "setupTime": {
+                      "type": [
+                        "object",
+                        "null"
+                      ],
+                      "description": "Only when the source states it."
+                    },
+                    "source": {
+                      "type": "object",
+                      "properties": {
+                        "name": {
+                          "type": "string"
+                        },
+                        "url": {
+                          "type": "string",
+                          "format": "uri"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "No such use case."
+          }
+        }
+      }
+    }
+  }
+}

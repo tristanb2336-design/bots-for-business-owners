@@ -1,0 +1,29 @@
+{
+  "linkset": [
+    {
+      "anchor": "https://bots-for-business-owners.vercel.app/api/search/",
+      "service-desc": [
+        {
+          "href": "https://bots-for-business-owners.vercel.app/openapi.json",
+          "type": "application/vnd.oai.openapi+json"
+        }
+      ],
+      "service-doc": [
+        {
+          "href": "https://bots-for-business-owners.vercel.app/about/",
+          "type": "text/html"
+        },
+        {
+          "href": "https://bots-for-business-owners.vercel.app/llms.txt",
+          "type": "text/plain"
+        }
+      ],
+      "alternate": [
+        {
+          "href": "https://bots-for-business-owners.vercel.app/opensearch.xml",
+          "type": "application/opensearchdescription+xml"
+        }
+      ]
+    }
+  ]
+}

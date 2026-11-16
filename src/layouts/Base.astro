@@ -54,6 +54,7 @@ const full = (path === '/' || title.includes(NAME)) ? title : `${title} | ${NAME
 {feed && <link rel="alternate" type="application/rss+xml" title={feed.title} href={feed.href} />}
 <link rel="sitemap" href="/sitemap.xml" />
 <link rel="search" type="application/opensearchdescription+xml" title="Bots for Business Owners" href="/opensearch.xml" />
+<link rel="service-desc" type="application/vnd.oai.openapi+json" title="Search API (OpenAPI 3.1)" href="/openapi.json" />
 <link rel="icon" href="/favicon.svg" type="image/svg+xml" sizes="any" />
 <script type="application/ld+json" set:html={JSON.stringify(siteGraph)} />
 {jsonld && <script type="application/ld+json" set:html={JSON.stringify(jsonld)} />}
