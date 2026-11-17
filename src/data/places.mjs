@@ -23,6 +23,9 @@ export const COUNTRIES = {
 
 // slug -> [country key, place as stated in the entry]
 export const PLACES = {
+  'restaurant-butcher-shop-gemini-google-business-profile-local-search-burger-and-butcher': ['united-states', 'Sparta, New Jersey'],
+  'plumbing-hvac-ai-website-chat-assistant-alexa-diy-safety-aaron-services': ['united-states', 'Georgia'],
+  'handweaver-microsoft-copilot-product-descriptions-instagram-website-inishbofin': ['ireland', 'Inishbofin, County Galway'],
   'microbakery-gemini-license-labels-baking-schedule-plum-perfect': ['united-states', 'San Francisco, California'],
   'salon-claude-code-training-portal-recruiting-time-off-maximum-fx': ['united-states', 'Austin, Texas'],
   'lettings-agency-ai-chatbot-qr-viewings-tenant-faq-notts-relocate': ['united-kingdom', 'Nottingham, England'],
