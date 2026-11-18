@@ -1,0 +1,22 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/mcp-server-card/v1.json",
+  "version": "1.0",
+  "protocolVersion": "2025-06-18",
+  "serverInfo": {
+    "name": "bots-for-business-owners",
+    "title": "Bots for Business Owners",
+    "version": "1.0.0"
+  },
+  "description": "Read-only search over real, sourced examples of small business owners using AI agents and assistants (ChatGPT, Claude, Gemini, Copilot, Meta agents, AI phone receptionists and more). Vendor-neutral; cost and setup time only when the source states them.",
+  "websiteUrl": "https://bots-for-business-owners.vercel.app/",
+  "documentationUrl": "https://bots-for-business-owners.vercel.app/about/",
+  "transport": { "type": "streamable-http", "endpoint": "https://bots-for-business-owners.vercel.app/mcp/" },
+  "remotes": [{ "type": "streamable-http", "url": "https://bots-for-business-owners.vercel.app/mcp/" }],
+  "authentication": { "required": false, "schemes": [] },
+  "capabilities": { "tools": { "listChanged": false } },
+  "tools": [
+    { "name": "search_use_cases", "title": "Search small-business AI use cases", "annotations": { "readOnlyHint": true } },
+    { "name": "get_use_case", "title": "Get one use case in full", "annotations": { "readOnlyHint": true } },
+    { "name": "list_categories", "title": "List business categories and counts", "annotations": { "readOnlyHint": true } }
+  ]
+}

@@ -1,10 +1,14 @@
-// RFC 9727 API catalog (served at /.well-known/api-catalog via a rewrite in vercel.json) so agents can discover the search API's OpenAPI description.
+// RFC 9727 API catalog (served at /.well-known/api-catalog via a rewrite in vercel.json) so agents can discover the search API's OpenAPI description and the read-only MCP server.
 const SITE = 'https://bots-for-business-owners.vercel.app';
 const body = JSON.stringify({ linkset: [{
   anchor: `${SITE}/api/search/`,
   'service-desc': [{ href: `${SITE}/openapi.json`, type: 'application/vnd.oai.openapi+json' }],
   'service-doc': [{ href: `${SITE}/about/`, type: 'text/html' }, { href: `${SITE}/llms.txt`, type: 'text/plain' }],
   alternate: [{ href: `${SITE}/opensearch.xml`, type: 'application/opensearchdescription+xml' }],
+}, {
+  anchor: `${SITE}/mcp/`,
+  'service-desc': [{ href: `${SITE}/.well-known/mcp/server-card.json`, type: 'application/json' }],
+  'service-doc': [{ href: `${SITE}/about/`, type: 'text/html' }, { href: `${SITE}/llms.txt`, type: 'text/plain' }],
 }] }, null, 2) + '\n';
 
 export default function handler(req, res) {
