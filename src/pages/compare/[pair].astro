@@ -1,0 +1,54 @@
+---
+// One page per pair of general AI assistants (e.g. /compare/chatgpt-vs-claude/), built only from sourced entries.
+import Base from '../../layouts/Base.astro';
+import { TYPES } from '../../data/usecases.mjs';
+import { comparePairs } from '../../data/compare.mjs';
+import { SITE, ICONS } from '../../site.mjs';
+export function getStaticPaths(){ return comparePairs().map(p => ({ params: { pair: p.key }, props: { p } })); }
+const { p } = Astro.props;
+const { a, b, both, jobRows, typeRows } = p;
+const path = `/compare/${p.key}/`, url = SITE + path;
+const title = `${a.name} vs ${b.name} for small business: what owners use each for`;
+const desc = `${a.list.length} sourced examples of small businesses using ${a.name} and ${b.list.length} using ${b.name}, side by side by job and business type${both.length ? `, plus ${both.length} using both` : ''}. No ranking.`;
+const sw = t => ({ '@type':'SoftwareApplication', name:t.name, applicationCategory:'BusinessApplication', creator:{ '@type':'Organization', name:t.maker }, url:`${SITE}/tools/${t.key}/` });
+const faq = [
+  { q:`What do small businesses use ${a.name} for?`, a:`On this site, ${a.list.length} sourced examples. The most common jobs: ${jobRows.filter(r=>r.a).sort((x,y)=>y.a-x.a).slice(0,3).map(r=>`${r.name.toLowerCase()} (${r.a})`).join('; ')}. Full list: ${SITE}/tools/${a.key}/` },
+  { q:`What do small businesses use ${b.name} for?`, a:`On this site, ${b.list.length} sourced examples. The most common jobs: ${jobRows.filter(r=>r.b).sort((x,y)=>y.b-x.b).slice(0,3).map(r=>`${r.name.toLowerCase()} (${r.b})`).join('; ')}. Full list: ${SITE}/tools/${b.key}/` },
+  { q:`Is ${a.name} or ${b.name} better for a small business?`, a:`This site doesn't rank tools. It shows what real owners did with each, with sources. Many owners use more than one assistant${both.length ? ` (${both.length} example${both.length===1?'':'s'} here use both ${a.name} and ${b.name})` : ''}. Try both on one real task from your week and keep the one whose answers you have to fix least.` },
+];
+const jsonld = { '@context':'https://schema.org','@graph':[
+  { '@type':'WebPage', name:title, url, description:desc, inLanguage:'en-US', isPartOf:{ '@id':SITE+'/#website' }, publisher:{ '@id':SITE+'/#organization' },
+    about:[sw(a), sw(b)],
+    hasPart:[a,b].map(t => ({ '@type':'ItemList', name:`Small businesses using ${t.name}`, numberOfItems:t.list.length,
+      itemListElement:t.list.map((u,i)=>({ '@type':'ListItem', position:i+1, url:`${SITE}/use-cases/${u.slug}/`, name:u.title })) })) },
+  { '@type':'FAQPage', mainEntity: faq.map(f => ({ '@type':'Question', name:f.q, acceptedAnswer:{ '@type':'Answer', text:f.a } })) },
+  { '@type':'BreadcrumbList', itemListElement:[
+    { '@type':'ListItem', position:1, name:'Use cases', item:SITE+'/' },
+    { '@type':'ListItem', position:2, name:'Compare AI assistants', item:SITE+'/compare/' },
+    { '@type':'ListItem', position:3, name:`${a.name} vs ${b.name}`, item:url } ] } ] };
+---
+<Base title={title} description={desc} path={path} jsonld={jsonld} markdown={`/compare/${p.key}.md`}>
+<p class="crumbs"><a href="/">Use cases</a> / <a href="/compare/">Compare AI assistants</a> / {a.name} vs {b.name}</p>
+<section class="hero" style="padding-top:12px"><span class="eyebrow">{a.maker} · {b.maker}</span>
+<h1>{a.name} vs {b.name}: what small business owners actually use each for</h1>
+<p class="lead">{a.list.length} real example{a.list.length===1?'':'s'} with {a.name} and {b.list.length} with {b.name}, each linked to its public source{both.length ? `; ${both.length} use both` : ''}.</p>
+<p>We're <a href="/about/">vendor-neutral</a>: this is not a ranking or a review. Counts only show how many sourced examples we've found, not which tool is better.</p>
+</section>
+<section class="panel prose" aria-labelledby="h-jobs"><h2 id="h-jobs">By the job the AI does</h2>
+<div style="overflow-x:auto"><table class="cmp-table"><thead><tr><th scope="col">Job</th><th scope="col">{a.name}</th><th scope="col">{b.name}</th></tr></thead>
+<tbody>{jobRows.map(r => <tr><td><a href={`/jobs/${r.key}/`}>{r.name}</a></td><td>{r.a}</td><td>{r.b}</td></tr>)}</tbody></table></div>
+<p class="small">An example can count under more than one job.</p></section>
+<section class="panel prose" aria-labelledby="h-types"><h2 id="h-types">By business type</h2>
+<div style="overflow-x:auto"><table class="cmp-table"><thead><tr><th scope="col">Business type</th><th scope="col">{a.name}</th><th scope="col">{b.name}</th></tr></thead>
+<tbody>{typeRows.map(r => <tr><td><a href={`/type/${r.key}/`}>{r.name}</a></td><td>{r.a}</td><td>{r.b}</td></tr>)}</tbody></table></div></section>
+{both.length > 0 && <section class="panel prose" aria-labelledby="h-both"><h2 id="h-both">Owners using both</h2><ul>{both.map(u => <li><a href={`/use-cases/${u.slug}/`}>{u.title}</a> <span class="biz">· <span aria-hidden="true">{ICONS[u.type]}</span> {u.business} ({TYPES[u.type]})</span></li>)}</ul></section>}
+<section class="panel prose" aria-labelledby="h-a"><h2 id="h-a">Small businesses using {a.name}</h2><ul>{a.list.map(u => <li><a href={`/use-cases/${u.slug}/`}>{u.title}</a> <span class="biz">· <span aria-hidden="true">{ICONS[u.type]}</span> {u.business} ({TYPES[u.type]})</span></li>)}</ul><p><a href={`/tools/${a.key}/`}>{a.name} page with full cards</a></p></section>
+<section class="panel prose" aria-labelledby="h-b"><h2 id="h-b">Small businesses using {b.name}</h2><ul>{b.list.map(u => <li><a href={`/use-cases/${u.slug}/`}>{u.title}</a> <span class="biz">· <span aria-hidden="true">{ICONS[u.type]}</span> {u.business} ({TYPES[u.type]})</span></li>)}</ul><p><a href={`/tools/${b.key}/`}>{b.name} page with full cards</a></p></section>
+<section class="panel prose" aria-labelledby="h-faq"><h2 id="h-faq">Questions</h2>{faq.map(f => <><h3>{f.q}</h3><p>{f.a}</p></>)}</section>
+<p class="small">For AI assistants: <a href={`/compare/${p.key}.md`}>this comparison as Markdown</a>. Other comparisons: <a href="/compare/">all side-by-side pages</a>.</p>
+</Base>
+<style>
+.cmp-table{width:100%;border-collapse:collapse;font-size:.95rem}
+.cmp-table th,.cmp-table td{text-align:left;vertical-align:top;padding:8px;border-bottom:1px solid var(--line)}
+.cmp-table thead th{font-size:.85rem;text-transform:uppercase;letter-spacing:.04em;color:var(--mut)}
+</style>

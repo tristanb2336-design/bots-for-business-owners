@@ -6,6 +6,7 @@ import { groupByCountry, PAGE_MIN } from '../data/places.mjs';
 import { groupByJob } from '../data/jobs.mjs';
 import { groupBySource, PAGE_MIN as SOURCE_PAGE_MIN } from '../data/sources.mjs';
 import { groupByMonth } from '../data/archive.mjs';
+import { comparePairs } from '../data/compare.mjs';
 export function GET(){
   // lastmod reflects real content changes: each use case's own date, list pages = newest entry they show.
   const mod = u => u.updated ?? u.added;
@@ -24,6 +25,8 @@ export function GET(){
     ...groupByJob().map(g=>[`/jobs/${g.key}/rss.xml`, newest(g.list) ?? latest]),
     ...groupBySource().filter(g=>g.list.length>=SOURCE_PAGE_MIN).map(g=>[`/sources/${g.key}/`, newest(g.list) ?? latest]),
     ...groupByMonth().map(g=>[`/archive/${g.key}/`, newest(g.list) ?? latest]),
+    ['/compare/', latest],
+    ...comparePairs().map(p=>[`/compare/${p.key}/`, newest([...p.a.list, ...p.b.list]) ?? latest]),
     ...useCases.map(u=>[`/use-cases/${u.slug}/`, mod(u)]),
   ];
   const body = `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls.map(([u,d])=>`  <url><loc>${SITE}${u}</loc><lastmod>${d}</lastmod></url>`).join('\n')}\n</urlset>\n`;

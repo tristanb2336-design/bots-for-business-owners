@@ -20,7 +20,7 @@ const jsonld = { '@context':'https://schema.org','@graph':[
 <section class="hero" style="padding-top:12px"><span class="eyebrow">Browse by AI tool</span>
 <h1>Which AI tools are small businesses actually using?</h1>
 <p class="lead">All {useCases.length} use cases, grouped by the AI tool each owner used. Some use more than one tool, so they appear in more than one group.</p>
-<p>We're <a href="/about/">vendor-neutral</a>: groups are listed alphabetically and no tool is favored. Every example links to its public source, so you can check exactly what the owner did.</p>
+<p>We're <a href="/about/">vendor-neutral</a>: groups are listed alphabetically and no tool is favored. To see two general assistants side by side (for example ChatGPT and Claude), use the <a href="/compare/">comparison pages</a>. Every example links to its public source, so you can check exactly what the owner did.</p>
 <nav aria-label="Tools on this page"><ul class="tools" style="margin-top:12px">{groups.map(g => <li><a href={`#${g.key}`}>{g.name} ({g.list.length})</a></li>)}</ul></nav>
 </section>
 {groups.map(g => (

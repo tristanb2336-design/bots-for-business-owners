@@ -7,6 +7,7 @@ import { groupByJob } from '../data/jobs.mjs';
 import { groupBySource, PAGE_MIN as SOURCE_PAGE_MIN } from '../data/sources.mjs';
 import { groupByMonth } from '../data/archive.mjs';
 import { editions, latestEdition } from '../data/marketplace.mjs';
+import { comparePairs } from '../data/compare.mjs';
 export function GET(){
   const latest = useCases.map(u=>u.updated ?? u.added).sort().at(-1);
   const recent = [...useCases].sort((a,b)=>(b.added).localeCompare(a.added)).slice(0,5);
@@ -45,6 +46,7 @@ ${groupByJob().map(g=>`  - [${g.name}](${SITE}/jobs/${g.key}/rss.xml)`).join('\n
 - Location: when an entry states where the business is, its page carries schema.org contentLocation (Place with PostalAddress), and its JSON, Markdown, /use-cases.json and /llms-full.txt include the place and country; nothing is guessed
 - Jobs: each entry page links to the /jobs/ hubs it is listed on (the kind of work the AI does, e.g. answering the phone or quotes and invoices) and names them in its schema.org about/keywords; its JSON has jobPages and its Markdown copy a \"Jobs the AI does\" list
 - Use cases grouped by AI tool (ChatGPT, Claude, Gemini, Copilot, phone agents and more): ${SITE}/tools/ (as one Markdown file: ${SITE}/tools.md); each tool also has its own page at ${SITE}/tools/<tool>/ with a Markdown copy at ${SITE}/tools/<tool>.md (listed under "By AI tool" below)
+- Side-by-side comparisons of the general AI assistants owners use (ChatGPT, Claude, Gemini, Microsoft Copilot), built only from sourced examples, by job and business type, with no ranking or winner: ${SITE}/compare/ (Markdown: ${SITE}/compare.md); one page per pair, e.g. ${SITE}/compare/chatgpt-vs-claude/ (listed under "Comparisons" below)
 - What AI agents cost and how long setup took, only where the source states it (no estimates; vendor list prices labelled): ${SITE}/costs/ (as one Markdown file: ${SITE}/costs.md)
 - Use cases by country, using only the location stated in each entry (US, UK, Canada and more): ${SITE}/places/ (as one Markdown file: ${SITE}/places.md); countries with two or more entries have their own page at ${SITE}/places/<country>/ with a Markdown copy at ${SITE}/places/<country>.md (listed under "By country" below)
 - Newest additions only (last ${RECENT_LIMIT} entries, newest first): ${SITE}/recent/ (as one Markdown file: ${SITE}/recent.md)
@@ -70,6 +72,9 @@ ${recent.map(u=>`- [${u.title}](${SITE}/use-cases/${u.slug}/) (added ${u.added};
   }
   t += `## By AI tool\n\nFull grouped list: ${SITE}/tools/\n\n`;
   for (const g of groupByTool()) t += `- ${g.name} (${g.maker}): ${g.list.length} use case${g.list.length===1?'':'s'}. ${SITE}/tools/${g.key}/ (Markdown: ${SITE}/tools/${g.key}.md)\n`;
+  t += '\n';
+  t += `## Comparisons\n\nAll side-by-side pages: ${SITE}/compare/ (vendor-neutral; counts are sourced examples on this site, not quality scores)\n\n`;
+  for (const p of comparePairs()) t += `- ${p.a.name} vs ${p.b.name}: ${p.a.list.length} and ${p.b.list.length} examples${p.both.length ? `, ${p.both.length} using both` : ''}. ${SITE}/compare/${p.key}/ (Markdown: ${SITE}/compare/${p.key}.md)\n`;
   t += '\n';
   t += `## By country\n\nFull grouped list: ${SITE}/places/\n\n`;
   for (const g of groupByCountry()) t += `- ${g.name}: ${g.list.length} use case${g.list.length===1?'':'s'}. ${g.list.length >= PAGE_MIN ? `${SITE}/places/${g.key}/ (Markdown: ${SITE}/places/${g.key}.md)` : `${SITE}/places/#${g.key}`}\n`;

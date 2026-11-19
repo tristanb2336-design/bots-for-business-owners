@@ -5,13 +5,13 @@
 export const config = {
   matcher: [
     '/',
-    '/(use-cases|type|tools|jobs|places|sources|archive)/:key/',
-    '/(archive|costs|jobs|places|recent|sources|tools)/',
+    '/(use-cases|type|tools|jobs|places|sources|archive|compare)/:key/',
+    '/(archive|compare|costs|jobs|places|recent|sources|tools)/',
   ],
 };
 
-const HUB = /^\/(archive|costs|jobs|places|recent|sources|tools)\/$/;
-const DETAIL = /^\/(use-cases|type|tools|jobs|places|sources|archive)\/[a-z0-9-]+\/$/;
+const HUB = /^\/(archive|compare|costs|jobs|places|recent|sources|tools)\/$/;
+const DETAIL = /^\/(use-cases|type|tools|jobs|places|sources|archive|compare)\/[a-z0-9-]+\/$/;
 
 export default function middleware(request) {
   const accept = request.headers.get('accept') || '';

@@ -1,0 +1,29 @@
+---
+import Base from '../layouts/Base.astro';
+import { compareTools, comparePairs } from '../data/compare.mjs';
+import { SITE } from '../site.mjs';
+const tools = compareTools(), pairs = comparePairs();
+const path = '/compare/', url = SITE + path;
+const desc = `Side-by-side, sourced examples of what small business owners use ${tools.map(t=>t.name).join(', ')} for. No winner or ranking: just what each owner did, by job and business type.`;
+const jsonld = { '@context':'https://schema.org','@graph':[
+  { '@type':'CollectionPage', name:'Compare AI assistants small businesses use', url, description:desc, inLanguage:'en-US',
+    isPartOf:{ '@id':SITE+'/#website' }, publisher:{ '@id':SITE+'/#organization' },
+    hasPart: pairs.map(p => ({ '@type':'WebPage', name:`${p.a.name} vs ${p.b.name} for small business`, url:`${url}${p.key}/` })) },
+  { '@type':'BreadcrumbList', itemListElement:[
+    { '@type':'ListItem', position:1, name:'Use cases', item:SITE+'/' },
+    { '@type':'ListItem', position:2, name:'Compare AI assistants', item:url } ] } ] };
+---
+<Base title="ChatGPT vs Claude vs Gemini vs Copilot for small business: real examples side by side" description={desc} path={path} jsonld={jsonld} markdown="/compare.md">
+<p class="crumbs"><a href="/">Use cases</a> / Compare AI assistants</p>
+<section class="hero" style="padding-top:12px"><span class="eyebrow">Compare, don't rank</span>
+<h1>What do small businesses actually use each AI assistant for?</h1>
+<p class="lead">Pick two general-purpose assistants to see the real, sourced examples on this site side by side: the jobs owners gave each one, the kinds of businesses, and the owners who use both.</p>
+<p>We're <a href="/about/">vendor-neutral</a>. These pages don't pick a winner or score anything. A tool with more examples here isn't better; it may just be more widely reported. Read the linked sources and choose what fits your business.</p>
+</section>
+<section class="panel prose" aria-labelledby="h-pairs"><h2 id="h-pairs">Side-by-side pages</h2>
+<ul>{pairs.map(p => <li><a href={`/compare/${p.key}/`}>{p.a.name} vs {p.b.name}</a> <span class="biz">· {p.a.list.length} and {p.b.list.length} examples{p.both.length ? `, ${p.both.length} using both` : ''}</span></li>)}</ul></section>
+<section class="panel prose" aria-labelledby="h-each"><h2 id="h-each">Each assistant on its own</h2>
+<ul>{tools.map(t => <li><a href={`/tools/${t.key}/`}>{t.name}</a> ({t.maker}): {t.list.length} examples. {t.blurb}</li>)}</ul>
+<p>Phone agents, chat agents and other tools are on the <a href="/tools/">by-tool page</a>.</p></section>
+<p class="small">For AI assistants: <a href="/compare.md">this page as Markdown</a>.</p>
+</Base>
