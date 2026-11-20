@@ -19,10 +19,14 @@ export const COUNTRIES = {
   'france': { name: 'France', short: 'France' },
   'australia': { name: 'Australia', short: 'Australia' },
   'singapore': { name: 'Singapore', short: 'Singapore' },
+  'belgium': { name: 'Belgium', short: 'Belgium' },
 };
 
 // slug -> [country key, place as stated in the entry]
 export const PLACES = {
+  'garage-door-claude-voice-agent-leads-job-stories-seaside-garage-door': ['united-states', 'Virginia Beach, Virginia'],
+  'caviar-house-copilot-studio-claude-agents-business-central-orders-imperial-heritage': ['belgium', 'Belgium'],
+  'property-manager-magicdoor-ai-tenant-chat-troubleshooting-gk-properties': ['united-states', 'Las Vegas, Nevada'],
   'grocery-store-meta-muse-weekly-ad-schedules-payroll-mulholland-grocery': ['united-states', 'Malvern, Iowa'],
   'bike-shop-claude-lightspeed-pos-bridge-reports-reorder-points-cadence-cyclery': ['united-states', 'Encinitas, California'],
   'training-business-meta-business-agent-routine-enquiries-speakeasy-lab': ['singapore', 'Singapore'],

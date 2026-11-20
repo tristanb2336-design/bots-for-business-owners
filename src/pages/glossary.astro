@@ -1,0 +1,35 @@
+---
+import Base from '../layouts/Base.astro';
+import { glossary, GLOSSARY_EXAMPLES } from '../data/glossary.mjs';
+import { SITE } from '../site.mjs';
+const terms = glossary();
+const path = '/glossary/', url = SITE + path;
+const desc = 'Plain-English definitions of the AI terms small business owners run into (AI agent, AI receptionist, custom GPT, MCP, hallucination and more), each linked to real, sourced examples. Vendor-neutral.';
+const jsonld = { '@context':'https://schema.org','@graph':[
+  { '@type':'DefinedTermSet', '@id':url+'#terms', name:'AI glossary for small business owners', url, description:desc, inLanguage:'en-US',
+    isPartOf:{ '@id':SITE+'/#website' }, publisher:{ '@id':SITE+'/#organization' },
+    hasDefinedTerm: terms.map(t => ({ '@type':'DefinedTerm', '@id':`${url}#${t.key}`, name:t.term, termCode:t.key, alternateName:t.also, description:t.def, url:`${url}#${t.key}`, inDefinedTermSet:url+'#terms' })) },
+  { '@type':'FAQPage', mainEntity: terms.map(t => ({ '@type':'Question', name:`What does "${t.term}" mean for a small business?`, acceptedAnswer:{ '@type':'Answer', text:t.def } })) },
+  { '@type':'BreadcrumbList', itemListElement:[
+    { '@type':'ListItem', position:1, name:'Use cases', item:SITE+'/' },
+    { '@type':'ListItem', position:2, name:'AI glossary', item:url } ] } ] };
+---
+<Base title="AI glossary for small business owners: plain-English terms with real examples" description={desc} path={path} jsonld={jsonld} markdown="/glossary.md">
+<p class="crumbs"><a href="/">Use cases</a> / AI glossary</p>
+<section class="hero" style="padding-top:12px"><span class="eyebrow">Plain English</span>
+<h1>AI terms, explained for small business owners</h1>
+<p class="lead">Short, plain definitions of the words you'll see when you look at AI tools, each with real examples from this site.</p>
+<p>We're <a href="/about/">vendor-neutral</a>: product names appear only as examples. Example counts show how many entries here mention the term, not how good or popular a tool is.</p>
+<p class="small">Jump to: {terms.map((t, i) => <>{i ? ' · ' : ''}<a href={`#${t.key}`}>{t.term}</a></>)}</p>
+</section>
+{terms.map(t => (
+<section class="panel prose" id={t.key} aria-labelledby={`h-${t.key}`}>
+<h2 id={`h-${t.key}`}>{t.term}</h2>
+{t.also.length > 0 && <p class="biz">Also called: {t.also.join(', ')}</p>}
+<p>{t.def}</p>
+{t.list.length > 0 && <><p><strong>Examples on this site</strong> ({t.list.length} {t.list.length === 1 ? 'entry mentions' : 'entries mention'} it; newest first):</p>
+<ul>{t.list.slice(0, GLOSSARY_EXAMPLES).map(u => <li><a href={`/use-cases/${u.slug}/`}>{u.title}</a> <span class="biz">· {u.business}</span></li>)}</ul></>}
+<p class="small">See also: {t.links.map(([h, n], i) => <>{i ? ' · ' : ''}<a href={h}>{n}</a></>)}</p>
+</section>))}
+<p class="small">For AI assistants: <a href="/glossary.md">this glossary as Markdown</a>. Each term has a stable anchor, e.g. <a href="/glossary/#mcp">/glossary/#mcp</a>.</p>
+</Base>
