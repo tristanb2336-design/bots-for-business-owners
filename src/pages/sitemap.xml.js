@@ -25,7 +25,7 @@ export function GET(){
     ...groupByJob().map(g=>[`/jobs/${g.key}/rss.xml`, newest(g.list) ?? latest]),
     ...groupBySource().filter(g=>g.list.length>=SOURCE_PAGE_MIN).map(g=>[`/sources/${g.key}/`, newest(g.list) ?? latest]),
     ...groupByMonth().map(g=>[`/archive/${g.key}/`, newest(g.list) ?? latest]),
-    ['/compare/', latest], ['/glossary/', latest],
+    ['/compare/', latest], ['/glossary/', latest], ['/questions/', latest],
     ...comparePairs().map(p=>[`/compare/${p.key}/`, newest([...p.a.list, ...p.b.list]) ?? latest]),
     ...useCases.map(u=>[`/use-cases/${u.slug}/`, mod(u)]),
   ];

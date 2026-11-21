@@ -24,6 +24,9 @@ export const COUNTRIES = {
 
 // slug -> [country key, place as stated in the entry]
 export const PLACES = {
+  'vacation-rental-ai-guest-guide-booking-tracker-cottonwood-schoolhouse': ['united-states', 'Brown County, Indiana'],
+  'party-rental-gemini-gmail-daily-brief-lead-replies-bay-area-kids-rentals': ['united-states', 'Oakland, California'],
+  'restaurant-ai-photo-fryer-troubleshooting-flyers-aura-kitchen-and-bar': ['united-states', 'Columbia, South Carolina'],
   'garage-door-claude-voice-agent-leads-job-stories-seaside-garage-door': ['united-states', 'Virginia Beach, Virginia'],
   'caviar-house-copilot-studio-claude-agents-business-central-orders-imperial-heritage': ['belgium', 'Belgium'],
   'property-manager-magicdoor-ai-tenant-chat-troubleshooting-gk-properties': ['united-states', 'Las Vegas, Nevada'],

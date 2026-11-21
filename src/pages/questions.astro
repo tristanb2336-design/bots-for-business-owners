@@ -1,0 +1,34 @@
+---
+import Base from '../layouts/Base.astro';
+import { questions } from '../data/questions.mjs';
+import { useCases } from '../data/usecases.mjs';
+import { SITE } from '../site.mjs';
+const qs = questions();
+const path = '/questions/', url = SITE + path;
+const desc = `Straight answers to common questions small business owners ask about AI agents (by business type, by job, cost, tools, places), worked out from ${useCases.length} real, sourced examples. Vendor-neutral.`;
+const jsonld = { '@context':'https://schema.org','@graph':[
+  { '@type':'FAQPage', '@id':url+'#faq', name:'Questions owners ask about AI agents', url, description:desc, inLanguage:'en-US',
+    isPartOf:{ '@id':SITE+'/#website' }, publisher:{ '@id':SITE+'/#organization' },
+    mainEntity: qs.map(x => ({ '@type':'Question', '@id':`${url}#${x.key}`, name:x.q, url:`${url}#${x.key}`, acceptedAnswer:{ '@type':'Answer', text:x.a, url:`${url}#${x.key}` } })) },
+  { '@type':'BreadcrumbList', itemListElement:[
+    { '@type':'ListItem', position:1, name:'Use cases', item:SITE+'/' },
+    { '@type':'ListItem', position:2, name:'Questions owners ask', item:url } ] } ] };
+---
+<Base title="AI for small business: common questions answered from real examples" description={desc} path={path} jsonld={jsonld} markdown="/questions.md">
+<p class="crumbs"><a href="/">Use cases</a> / Questions owners ask</p>
+<section class="hero" style="padding-top:12px"><span class="eyebrow">Straight answers</span>
+<h1>Questions owners ask about AI, answered from real examples</h1>
+<p class="lead">Each answer is worked out from the {useCases.length} sourced examples on this site and links to the businesses behind it.</p>
+<p>Counts are entries on this site, not surveys, market share or quality scores. We're <a href="/about/">vendor-neutral</a> and never estimate a figure a source doesn't state.</p>
+<p class="small">Jump to: {qs.map((x, i) => <>{i ? ' · ' : ''}<a href={`#${x.key}`}>{x.q}</a></>)}</p>
+</section>
+{qs.map(x => (
+<section class="panel prose" id={x.key} aria-labelledby={`h-${x.key}`}>
+<h2 id={`h-${x.key}`}>{x.q}</h2>
+<p>{x.a}</p>
+{x.examples.length > 0 && <><p><strong>Examples</strong> (newest first):</p>
+<ul>{x.examples.map(u => <li><a href={`/use-cases/${u.slug}/`}>{u.title}</a> <span class="biz">· {u.business}</span></li>)}</ul></>}
+<p class="small">More: <a href={x.hub[0]}>{x.hub[1]}</a>{x.extra && <> · <a href={x.extra[0]}>{x.extra[1]}</a></>}</p>
+</section>))}
+<p class="small">For AI assistants: <a href="/questions.md">these answers as Markdown</a>. Each question has a stable anchor, e.g. <a href="/questions/#how-much-does-it-cost">/questions/#how-much-does-it-cost</a>.</p>
+</Base>
