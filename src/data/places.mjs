@@ -24,6 +24,9 @@ export const COUNTRIES = {
 
 // slug -> [country key, place as stated in the entry]
 export const PLACES = {
+  'plumber-meta-muse-invoice-tagging-supplier-prices-aune-plumbing': ['united-states', 'Minnesota'],
+  'pizzeria-loman-ai-phone-orders-crush-pizza': ['united-states', 'Massachusetts'],
+  'takeaway-mangia-mangia-ai-phone-orders-pay-first-bluebells': ['australia', 'West Wallsend, New South Wales'],
   'vacation-rental-ai-guest-guide-booking-tracker-cottonwood-schoolhouse': ['united-states', 'Brown County, Indiana'],
   'party-rental-gemini-gmail-daily-brief-lead-replies-bay-area-kids-rentals': ['united-states', 'Oakland, California'],
   'restaurant-ai-photo-fryer-troubleshooting-flyers-aura-kitchen-and-bar': ['united-states', 'Columbia, South Carolina'],

@@ -17,7 +17,16 @@ const loc = placeOf(u);
 const jobs = jobsOf(u);
 const locHref = loc ? ((groupByCountry().find(g => g.key === loc.key)?.list.length ?? 0) >= PAGE_MIN ? `/places/${loc.key}/` : `/places/#${loc.key}`) : null;
 const path = `/use-cases/${u.slug}/`, url = SITE + path;
-const related = useCases.filter(x => x.type === u.type && x.slug !== u.slug).slice(0, 3);
+// "More for <type>": the 3 entries of the same business type most like this one (same kinds of job, same AI tool group,
+// same country), newest first on ties, instead of simply the first 3 in the file. Better internal links for readers and crawlers.
+const jobKeysOf = x => new Set(jobsOf(x).map(j => j.key));
+const myJobKeys = new Set(jobs.map(j => j.key));
+const toolKeysOf = x => new Set(TOOL_GROUPS.filter(g => x.tools.some(t => g.match.test(t))).map(g => g.key));
+const myToolKeys = toolKeysOf(u);
+const score = x => { let n = 0; for (const k of jobKeysOf(x)) if (myJobKeys.has(k)) n += 3; for (const k of toolKeysOf(x)) if (myToolKeys.has(k)) n += 2;
+  if (loc && placeOf(x)?.key === loc.key) n += 1; return n; };
+const related = useCases.filter(x => x.type === u.type && x.slug !== u.slug).map(x => ({ x, n: score(x) }))
+  .sort((a, b) => b.n - a.n || b.x.added.localeCompare(a.x.added) || a.x.slug.localeCompare(b.x.slug)).slice(0, 3).map(({ x }) => x);
 // Cross-links by AI tool: which /tools/ groups this entry belongs to, plus up to 3 other entries using the same tool.
 const myGroups = TOOL_GROUPS.filter(g => u.tools.some(t => g.match.test(t)));
 const toolLinks = myGroups.length ? myGroups.map(g => ({ key: g.key, name: g.name })) : [{ key: 'other', name: 'Other AI agents and custom setups' }];
