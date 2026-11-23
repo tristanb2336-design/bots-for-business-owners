@@ -1,0 +1,49 @@
+---
+// Business type x job landing page, e.g. /type/food/phone-answering/. Lists only entries that are both in the
+// business type and on the matching /jobs/ hub. No ranking; vendor-neutral; counts come from the data.
+import Base from '../../../layouts/Base.astro';
+import Card from '../../../components/Card.astro';
+import { TYPES } from '../../../data/usecases.mjs';
+import { typeJobCombos } from '../../../data/jobs.mjs';
+import { SITE, NAME } from '../../../site.mjs';
+export function getStaticPaths(){ return typeJobCombos().map(c => ({ params: { type: c.type, job: c.job }, props: { c } })); }
+const { c } = Astro.props;
+const { list, g, noun, path } = c;
+const label = TYPES[c.type];
+const url = SITE + path;
+const jobLower = g.name.charAt(0).toLowerCase() + g.name.slice(1);
+const toolCounts = {};
+for (const u of list) for (const t of u.tools) toolCounts[t] = (toolCounts[t] || 0) + 1;
+const tools = Object.keys(toolCounts).sort((a, b) => a.localeCompare(b));
+const costed = list.filter(u => u.cost).length;
+const sameType = typeJobCombos().filter(x => x.type === c.type && x.job !== c.job);
+const sameJob = typeJobCombos().filter(x => x.job === c.job && x.type !== c.type);
+const desc = `${list.length} real, sourced examples of ${noun} using AI for ${jobLower}: the tools they used, stated results and how to start.`;
+const q = `How do ${noun} use AI for ${jobLower}?`;
+const a = `This site has ${list.length} sourced examples of ${noun} using AI for ${jobLower}. Tools named in them include ${tools.slice(0, 8).join('; ')}${tools.length > 8 ? ' and others' : ''}. ${costed} of the ${list.length} state a cost. Each example links to its public source; vendor case studies are labelled as not independent.`;
+const jsonld = { '@context':'https://schema.org','@graph':[
+  { '@type':'CollectionPage', name:`AI for ${noun}: ${g.name.toLowerCase()}`, url, description:desc, inLanguage:'en-US',
+    isPartOf:{ '@id':SITE+'/#website' }, publisher:{ '@id':SITE+'/#organization' },
+    about:[ { '@type':'Thing', name:label, url:`${SITE}/type/${c.type}/` }, { '@type':'Thing', name:g.name, url:`${SITE}/jobs/${c.job}/` } ],
+    mainEntity:{ '@type':'ItemList', numberOfItems:list.length, itemListElement: list.map((u,i)=>({ '@type':'ListItem', position:i+1, url:`${SITE}/use-cases/${u.slug}/`, name:u.title })) } },
+  { '@type':'FAQPage', mainEntity:[ { '@type':'Question', name:q, acceptedAnswer:{ '@type':'Answer', text:a } } ] },
+  { '@type':'BreadcrumbList', itemListElement:[
+    { '@type':'ListItem', position:1, name:'Use cases', item:SITE+'/' },
+    { '@type':'ListItem', position:2, name:label, item:`${SITE}/type/${c.type}/` },
+    { '@type':'ListItem', position:3, name:g.name, item:url } ] } ] };
+---
+<Base title={`AI for ${noun}: ${g.name.toLowerCase()} (${list.length} real examples)`} description={desc} path={path} jsonld={jsonld} markdown={`/type/${c.type}/${c.job}.md`}>
+<p class="crumbs"><a href="/">Use cases</a> / <a href={`/type/${c.type}/`}>{label}</a> / {g.name}</p>
+<section class="hero" style="padding-top:12px"><span class="eyebrow">{label} · By job</span>
+<h1>How {noun} use AI for {jobLower}</h1>
+<p class="lead">{list.length} real examples, each linked to its public source. {g.blurb}</p>
+<p class="biz" style="font-size:.95rem"><b>Tools in these examples:</b> {tools.join(', ')}. We're <a href="/about/">vendor-neutral</a>: this page lists every matching example in the directory and doesn't rank tools. {costed > 0 ? `${costed} of ${list.length} state a cost; see ` : 'None of these state a cost; see '}<a href="/costs/">costs and setup time</a>.</p>
+</section>
+<div class="grid">{list.map(u => <Card u={u} />)}</div>
+{sameType.length > 0 && <section class="panel prose" aria-labelledby="h-same-type"><h2 id="h-same-type">Other jobs {noun} use AI for</h2>
+<ul class="tools">{sameType.map(x => <li class="tool-li"><a class="tool-link" href={x.path}>{x.g.name} ({x.list.length})</a></li>)}</ul></section>}
+{sameJob.length > 0 && <section class="panel prose" aria-labelledby="h-same-job"><h2 id="h-same-job">{g.name} in other businesses</h2>
+<ul class="tools">{sameJob.map(x => <li class="tool-li"><a class="tool-link" href={x.path}>{TYPES[x.type]} ({x.list.length})</a></li>)}</ul></section>}
+<p class="biz" style="font-size:.9rem">See all <a href={`/type/${c.type}/`}>{label.toLowerCase()} examples</a> or every business on the <a href={`/jobs/${c.job}/`}>{g.name.toLowerCase()}</a> page. For AI assistants: <a href={`/type/${c.type}/${c.job}.md`}>this list as plain Markdown</a>.</p>
+<p><a class="btn btn-ghost" href={`/type/${c.type}/`}>← All {label.toLowerCase()} use cases</a></p>
+</Base>

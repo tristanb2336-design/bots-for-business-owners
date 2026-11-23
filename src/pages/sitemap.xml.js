@@ -3,7 +3,7 @@ import { SITE } from '../site.mjs';
 import { latestEdition } from '../data/marketplace.mjs';
 import { groupByTool } from '../data/tools.mjs';
 import { groupByCountry, PAGE_MIN } from '../data/places.mjs';
-import { groupByJob } from '../data/jobs.mjs';
+import { groupByJob, typeJobCombos } from '../data/jobs.mjs';
 import { groupBySource, PAGE_MIN as SOURCE_PAGE_MIN } from '../data/sources.mjs';
 import { groupByMonth } from '../data/archive.mjs';
 import { comparePairs } from '../data/compare.mjs';
@@ -23,6 +23,7 @@ export function GET(){
     ...groupByCountry().filter(g=>g.list.length>=PAGE_MIN).map(g=>[`/places/${g.key}/rss.xml`, newest(g.list) ?? latest]),
     ...groupByJob().map(g=>[`/jobs/${g.key}/`, newest(g.list) ?? latest]),
     ...groupByJob().map(g=>[`/jobs/${g.key}/rss.xml`, newest(g.list) ?? latest]),
+    ...typeJobCombos().map(c=>[c.path, newest(c.list) ?? latest]),
     ...groupBySource().filter(g=>g.list.length>=SOURCE_PAGE_MIN).map(g=>[`/sources/${g.key}/`, newest(g.list) ?? latest]),
     ...groupByMonth().map(g=>[`/archive/${g.key}/`, newest(g.list) ?? latest]),
     ['/compare/', latest], ['/glossary/', latest], ['/questions/', latest],

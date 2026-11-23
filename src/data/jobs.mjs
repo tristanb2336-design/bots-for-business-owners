@@ -46,3 +46,23 @@ let _groups = null; // data is static during a build, so group once and reuse fo
 export function jobsOf(u, site = '') {
   return (_groups ??= groupByJob()).filter(g => g.list.some(x => x.slug === u.slug)).map(g => ({ key: g.key, name: g.name, url: `${site}/jobs/${g.key}/` }));
 }
+
+// Business type x job landing pages at /type/<type>/<job>/ (e.g. /type/food/phone-answering/), so an owner or
+// AI assistant asking "how do restaurants use AI to answer the phone?" lands on exactly those examples.
+// Built only from the same matching as the /jobs/ hubs; a combination gets a page only with COMBO_MIN+ entries.
+export const COMBO_MIN = 3;
+export const TYPE_NOUNS = {
+  food: 'restaurants and food businesses', shops: 'shops and online stores', rentals: 'landlords and property managers',
+  trades: 'trades and home service businesses', services: 'salons, studios and service businesses', makers: 'farms, makers and producers',
+};
+let _combos = null;
+export function typeJobCombos() {
+  if (_combos) return _combos;
+  const groups = (_groups ??= groupByJob()).filter(g => g.key !== 'other');
+  _combos = [];
+  for (const type of Object.keys(TYPE_NOUNS)) for (const g of groups) {
+    const list = g.list.filter(u => u.type === type);
+    if (list.length >= COMBO_MIN) _combos.push({ type, job: g.key, g, list, noun: TYPE_NOUNS[type], path: `/type/${type}/${g.key}/` });
+  }
+  return _combos;
+}

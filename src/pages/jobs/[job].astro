@@ -2,7 +2,7 @@
 import Base from '../../layouts/Base.astro';
 import Card from '../../components/Card.astro';
 import { TYPES } from '../../data/usecases.mjs';
-import { groupByJob } from '../../data/jobs.mjs';
+import { groupByJob, typeJobCombos } from '../../data/jobs.mjs';
 import { SITE, NAME } from '../../site.mjs';
 export function getStaticPaths(){ return groupByJob().map(g => ({ params: { job: g.key }, props: { g } })); }
 const { g } = Astro.props;
@@ -11,6 +11,7 @@ const path = `/jobs/${g.key}/`, url = SITE + path;
 const types = [...new Set(list.map(u => u.type))].map(t => TYPES[t]);
 const desc = `${list.length} real, sourced examples of small businesses using AI for ${g.name.toLowerCase()}: what it does for them, stated results and how to start.`;
 const others = groupByJob().filter(x => x.key !== g.key);
+const combos = typeJobCombos().filter(c => c.job === g.key);
 const jsonld = { '@context':'https://schema.org','@graph':[
   { '@type':'CollectionPage', name:`${g.name}: small business AI use cases`, url, description:desc, inLanguage:'en-US',
     isPartOf:{ '@id':SITE+'/#website' }, publisher:{ '@id':SITE+'/#organization' },
@@ -28,6 +29,8 @@ const jsonld = { '@context':'https://schema.org','@graph':[
 <p class="biz" style="font-size:.95rem"><b>Business types:</b> {types.join(', ')}. We're <a href="/about/">vendor-neutral</a>: this page groups examples by the job described in the source and doesn't rank tools.</p>
 </section>
 <div class="grid">{list.map(u => <Card u={u} />)}</div>
+{combos.length > 0 && <section class="panel prose" aria-labelledby="h-by-type"><h2 id="h-by-type">By business type</h2>
+<ul class="tools">{combos.map(c => <li class="tool-li"><a class="tool-link" href={c.path}>{TYPES[c.type]} ({c.list.length})</a></li>)}</ul></section>}
 <section class="panel prose" aria-labelledby="h-other-jobs"><h2 id="h-other-jobs">Other jobs</h2>
 <ul class="tools">{others.map(x => <li class="tool-li"><a class="tool-link" href={`/jobs/${x.key}/`}>{x.name} ({x.list.length})</a></li>)}</ul></section>
 <p class="biz" style="font-size:.9rem">Follow only this job: <a href={`/jobs/${g.key}/rss.xml`}>RSS feed</a> (new entries, newest first). For AI assistants: <a href={`/jobs/${g.key}.md`}>this list as plain Markdown</a>.</p>

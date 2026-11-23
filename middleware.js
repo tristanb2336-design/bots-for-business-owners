@@ -7,11 +7,13 @@ export const config = {
     '/',
     '/(use-cases|type|tools|jobs|places|sources|archive|compare)/:key/',
     '/(archive|compare|costs|glossary|jobs|places|questions|recent|sources|tools)/',
+    '/type/:key/:job/',
   ],
 };
 
 const HUB = /^\/(archive|compare|costs|glossary|jobs|places|questions|recent|sources|tools)\/$/;
 const DETAIL = /^\/(use-cases|type|tools|jobs|places|sources|archive|compare)\/[a-z0-9-]+\/$/;
+const COMBO = /^\/type\/[a-z0-9-]+\/[a-z0-9-]+\/$/;
 
 export default function middleware(request) {
   const accept = request.headers.get('accept') || '';
@@ -20,7 +22,7 @@ export default function middleware(request) {
   const p = url.pathname;
   let dest = null;
   if (p === '/') dest = '/llms.txt';
-  else if (HUB.test(p) || DETAIL.test(p)) dest = p.slice(0, -1) + '.md';
+  else if (HUB.test(p) || DETAIL.test(p) || COMBO.test(p)) dest = p.slice(0, -1) + '.md';
   if (!dest) return;
   return new Response(null, {
     headers: { 'x-middleware-rewrite': new URL(dest, url).toString(), Vary: 'Accept' },
