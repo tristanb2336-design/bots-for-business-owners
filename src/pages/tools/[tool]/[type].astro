@@ -12,10 +12,12 @@ const { c } = Astro.props;
 const { list, g, noun, path } = c;
 const label = TYPES[c.type];
 const url = SITE + path;
-const named = g.key === 'phone-agents' || g.key === 'chat-messaging-agents' ? g.name.charAt(0).toLowerCase() + g.name.slice(1) : g.name;
+// Lower-case only a plain leading word ("AI phone agents" stays as is); product names keep their capitals.
+const lc = s => /^[A-Z][a-z]/.test(s) ? s.charAt(0).toLowerCase() + s.slice(1) : s;
+const named = g.key === 'phone-agents' || g.key === 'chat-messaging-agents' ? lc(g.name) : g.name;
 const jobCounts = {};
 for (const u of list) for (const j of jobsOf(u)) if (j.key !== 'other') jobCounts[j.name] = (jobCounts[j.name] || 0) + 1;
-const jobs = Object.entries(jobCounts).sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0])).map(([j, n]) => `${j.charAt(0).toLowerCase() + j.slice(1)} (${n})`);
+const jobs = Object.entries(jobCounts).sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0])).map(([j, n]) => `${lc(j)} (${n})`);
 const costed = list.filter(u => u.cost).length;
 const sameTool = toolTypeCombos().filter(x => x.tool === c.tool && x.type !== c.type);
 const sameType = toolTypeCombos().filter(x => x.type === c.type && x.tool !== c.tool);
