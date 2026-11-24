@@ -1,0 +1,51 @@
+---
+// AI tool x business type landing page, e.g. /tools/chatgpt/food/. Lists only entries that are both on the
+// tool's /tools/ hub and in the business type. No ranking; vendor-neutral; counts come from the data.
+import Base from '../../../layouts/Base.astro';
+import Card from '../../../components/Card.astro';
+import { TYPES } from '../../../data/usecases.mjs';
+import { toolTypeCombos } from '../../../data/tools.mjs';
+import { jobsOf } from '../../../data/jobs.mjs';
+import { SITE } from '../../../site.mjs';
+export function getStaticPaths(){ return toolTypeCombos().map(c => ({ params: { tool: c.tool, type: c.type }, props: { c } })); }
+const { c } = Astro.props;
+const { list, g, noun, path } = c;
+const label = TYPES[c.type];
+const url = SITE + path;
+const named = g.key === 'phone-agents' || g.key === 'chat-messaging-agents' ? g.name.charAt(0).toLowerCase() + g.name.slice(1) : g.name;
+const jobCounts = {};
+for (const u of list) for (const j of jobsOf(u)) if (j.key !== 'other') jobCounts[j.name] = (jobCounts[j.name] || 0) + 1;
+const jobs = Object.entries(jobCounts).sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0])).map(([j, n]) => `${j.charAt(0).toLowerCase() + j.slice(1)} (${n})`);
+const costed = list.filter(u => u.cost).length;
+const sameTool = toolTypeCombos().filter(x => x.tool === c.tool && x.type !== c.type);
+const sameType = toolTypeCombos().filter(x => x.type === c.type && x.tool !== c.tool);
+const desc = `${list.length} real, sourced examples of ${noun} using ${named}: what it does for them, stated results and how to start.`;
+const q = `How do ${noun} use ${named}?`;
+const a = `This site has ${list.length} sourced examples of ${noun} using ${named}${g.maker && !/Various/.test(g.maker) ? ` (${g.maker})` : ''}. ${jobs.length ? `The jobs it does in them: ${jobs.slice(0, 6).join('; ')}. ` : ''}${costed} of the ${list.length} state a cost. Each example links to its public source; vendor case studies are labelled as not independent.`;
+const jsonld = { '@context':'https://schema.org','@graph':[
+  { '@type':'CollectionPage', name:`${g.name} for ${noun}`, url, description:desc, inLanguage:'en-US',
+    isPartOf:{ '@id':SITE+'/#website' }, publisher:{ '@id':SITE+'/#organization' },
+    about:[ { '@type':'Thing', name:g.name, url:`${SITE}/tools/${c.tool}/` }, { '@type':'Thing', name:label, url:`${SITE}/type/${c.type}/` } ],
+    mainEntity:{ '@type':'ItemList', numberOfItems:list.length, itemListElement: list.map((u,i)=>({ '@type':'ListItem', position:i+1, url:`${SITE}/use-cases/${u.slug}/`, name:u.title })) } },
+  { '@type':'FAQPage', mainEntity:[ { '@type':'Question', name:q, acceptedAnswer:{ '@type':'Answer', text:a } } ] },
+  { '@type':'BreadcrumbList', itemListElement:[
+    { '@type':'ListItem', position:1, name:'Use cases', item:SITE+'/' },
+    { '@type':'ListItem', position:2, name:'By AI tool', item:SITE+'/tools/' },
+    { '@type':'ListItem', position:3, name:g.name, item:`${SITE}/tools/${c.tool}/` },
+    { '@type':'ListItem', position:4, name:label, item:url } ] } ] };
+---
+<Base title={`${g.name} for ${noun} (${list.length} real examples)`} description={desc} path={path} jsonld={jsonld} markdown={`/tools/${c.tool}/${c.type}.md`}>
+<p class="crumbs"><a href="/">Use cases</a> / <a href="/tools/">By AI tool</a> / <a href={`/tools/${c.tool}/`}>{g.name}</a> / {label}</p>
+<section class="hero" style="padding-top:12px"><span class="eyebrow">{g.maker} · {label}</span>
+<h1>How {noun} use {named}</h1>
+<p class="lead">{list.length} real examples, each linked to its public source. {g.blurb}</p>
+<p class="biz" style="font-size:.95rem">{jobs.length > 0 && <><b>Jobs in these examples:</b> {jobs.join(', ')}. </>}We're <a href="/about/">vendor-neutral</a>: this page groups examples by the tool named in the source and doesn't rank or recommend it over others. {costed > 0 ? `${costed} of ${list.length} state a cost; see ` : 'None of these state a cost; see '}<a href="/costs/">costs and setup time</a>.</p>
+</section>
+<div class="grid">{list.map(u => <Card u={u} />)}</div>
+{sameType.length > 0 && <section class="panel prose" aria-labelledby="h-same-type"><h2 id="h-same-type">Other AI tools {noun} use</h2>
+<ul class="tools">{sameType.map(x => <li class="tool-li"><a class="tool-link" href={x.path}>{x.g.name} ({x.list.length})</a></li>)}</ul></section>}
+{sameTool.length > 0 && <section class="panel prose" aria-labelledby="h-same-tool"><h2 id="h-same-tool">{g.name} in other businesses</h2>
+<ul class="tools">{sameTool.map(x => <li class="tool-li"><a class="tool-link" href={x.path}>{TYPES[x.type]} ({x.list.length})</a></li>)}</ul></section>}
+<p class="biz" style="font-size:.9rem">See every business on the <a href={`/tools/${c.tool}/`}>{g.name}</a> page or all <a href={`/type/${c.type}/`}>{label.toLowerCase()} examples</a>. For AI assistants: <a href={`/tools/${c.tool}/${c.type}.md`}>this list as plain Markdown</a>.</p>
+<p><a class="btn btn-ghost" href={`/tools/${c.tool}/`}>← All {g.name} use cases</a></p>
+</Base>

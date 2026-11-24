@@ -5,7 +5,7 @@
 import Base from '../../layouts/Base.astro';
 import Card from '../../components/Card.astro';
 import { useCases, TYPES } from '../../data/usecases.mjs';
-import { groupByTool } from '../../data/tools.mjs';
+import { groupByTool, toolTypeCombos } from '../../data/tools.mjs';
 import { SITE, NAME } from '../../site.mjs';
 export function getStaticPaths(){ return groupByTool().map(g => ({ params: { tool: g.key }, props: { g } })); }
 const { g } = Astro.props;
@@ -14,6 +14,7 @@ const path = `/tools/${g.key}/`, url = SITE + path;
 const types = [...new Set(list.map(u => u.type))].map(t => TYPES[t]);
 const desc = `${list.length} real, sourced examples of small businesses using ${g.name}${g.key === 'other' ? '' : ` (${g.maker})`}: what it does for them, stated results and how to start.`;
 const others = groupByTool().filter(x => x.key !== g.key);
+const byType = toolTypeCombos().filter(x => x.tool === g.key);
 const jsonld = { '@context':'https://schema.org','@graph':[
   { '@type':'CollectionPage', name:`${g.name}: small business use cases`, url, description:desc, inLanguage:'en-US',
     isPartOf:{ '@id':SITE+'/#website' }, publisher:{ '@id':SITE+'/#organization' },
@@ -32,6 +33,8 @@ const jsonld = { '@context':'https://schema.org','@graph':[
 <p class="biz" style="font-size:.95rem"><b>Business types:</b> {types.join(', ')}. We're <a href="/about/">vendor-neutral</a>: this page groups examples by the tool named in the source and doesn't rank or recommend it over others.</p>
 </section>
 <div class="grid">{list.map(u => <Card u={u} />)}</div>
+{byType.length > 0 && <section class="panel prose" aria-labelledby="h-by-type"><h2 id="h-by-type">{g.name} by business type</h2>
+<ul class="tools">{byType.map(x => <li class="tool-li"><a class="tool-link" href={x.path}>{TYPES[x.type]} ({x.list.length})</a></li>)}</ul></section>}
 <section class="panel prose" aria-labelledby="h-other-tools"><h2 id="h-other-tools">Other AI tools</h2>
 <ul class="tools">{others.map(x => <li class="tool-li"><a class="tool-link" href={`/tools/${x.key}/`}>{x.name} ({x.list.length})</a></li>)}</ul></section>
 <p class="biz" style="font-size:.9rem">Follow only this tool: <a href={`/tools/${g.key}/rss.xml`}>{g.name} RSS feed</a> (new entries, newest first). For AI assistants: <a href={`/tools/${g.key}.md`}>this list as plain Markdown</a>.</p>

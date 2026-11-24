@@ -1,6 +1,6 @@
 import { useCases, TYPES } from '../data/usecases.mjs';
 import { SITE, NAME, TAGLINE } from '../site.mjs';
-import { groupByTool } from '../data/tools.mjs';
+import { groupByTool, toolTypeCombos, TOOL_TYPE_MIN } from '../data/tools.mjs';
 import { groupByCountry, PAGE_MIN } from '../data/places.mjs';
 import { recentUseCases, RECENT_LIMIT } from '../data/recent.mjs';
 import { groupByJob, typeJobCombos, COMBO_MIN } from '../data/jobs.mjs';
@@ -86,6 +86,9 @@ ${recent.map(u=>`- [${u.title}](${SITE}/use-cases/${u.slug}/) (added ${u.added};
   t += '\n';
   t += `## By business type and job\n\nFocused pages for one business type doing one job (e.g. restaurants answering the phone), for every combination with ${COMBO_MIN} or more entries. Each has a Markdown copy at the same address ending in .md.\n\n`;
   for (const c of typeJobCombos()) t += `- ${TYPES[c.type]}: ${c.g.name}: ${c.list.length} use cases. ${SITE}${c.path} (Markdown: ${SITE}${c.path.slice(0,-1)}.md)\n`;
+  t += '\n';
+  t += `## By AI tool and business type\n\nFocused pages for one AI tool in one business type (e.g. restaurants using ChatGPT), for every combination with ${TOOL_TYPE_MIN} or more entries. Each has a Markdown copy at the same address ending in .md. Grouped by the tool named in each source; not a ranking.\n\n`;
+  for (const c of toolTypeCombos()) t += `- ${c.g.name}: ${TYPES[c.type]}: ${c.list.length} use cases. ${SITE}${c.path} (Markdown: ${SITE}${c.path.slice(0,-1)}.md)\n`;
   t += '\n';
   t += `## By source\n\nFull grouped list: ${SITE}/sources/\n\n`;
   for (const g of groupBySource()) t += `- ${g.name}: ${g.list.length} use case${g.list.length===1?'':'s'}. ${g.list.length >= SOURCE_PAGE_MIN ? `${SITE}/sources/${g.key}/ (Markdown: ${SITE}/sources/${g.key}.md)` : `${SITE}/sources/#${g.key}`}\n`;

@@ -28,3 +28,23 @@ export function groupByTool() {
   if (other.length) groups.push({ key: 'other', name: 'Other AI agents and custom setups', maker: 'Various', blurb: 'Setups that combine several tools or don\'t fit one product.', list: other });
   return groups;
 }
+
+// AI tool x business type landing pages at /tools/<tool>/<type>/ (e.g. /tools/chatgpt/food/), so an owner or
+// AI assistant asking "how do restaurants use ChatGPT?" lands on exactly those examples. Built only from the
+// same matching as the /tools/ hubs (the catch-all "other" group is left out); a combination gets a page only
+// with TOOL_TYPE_MIN+ entries. No ranking between tools.
+export const TOOL_TYPE_MIN = 3;
+export const TOOL_TYPE_NOUNS = {
+  food: 'restaurants and food businesses', shops: 'shops and online stores', rentals: 'landlords and property managers',
+  trades: 'trades and home service businesses', services: 'salons, studios and service businesses', makers: 'farms, makers and producers',
+};
+let _toolTypes = null;
+export function toolTypeCombos() {
+  if (_toolTypes) return _toolTypes;
+  _toolTypes = [];
+  for (const g of groupByTool().filter(g => g.key !== 'other')) for (const type of Object.keys(TOOL_TYPE_NOUNS)) {
+    const list = g.list.filter(u => u.type === type);
+    if (list.length >= TOOL_TYPE_MIN) _toolTypes.push({ tool: g.key, type, g, list, noun: TOOL_TYPE_NOUNS[type], path: `/tools/${g.key}/${type}/` });
+  }
+  return _toolTypes;
+}

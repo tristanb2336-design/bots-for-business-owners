@@ -6,6 +6,7 @@ import Featured from '../../components/Featured.astro';
 import Card from '../../components/Card.astro';
 import { ICONS } from '../../site.mjs';
 import { typeJobCombos } from '../../data/jobs.mjs';
+import { toolTypeCombos } from '../../data/tools.mjs';
 export function getStaticPaths(){ return Object.keys(TYPES).map(type => ({ params: { type } })); }
 const { type } = Astro.params; const label = TYPES[type];
 const list = useCases.filter(u => u.type === type);
@@ -20,6 +21,7 @@ const INTROS = {
 };
 const intro = INTROS[type];
 const combos = typeJobCombos().filter(c => c.type === type);
+const toolCombos = toolTypeCombos().filter(c => c.type === type);
 const toolCounts = {};
 for (const u of list) { const t = u.tools[0]; toolCounts[t] = (toolCounts[t] || 0) + 1; }
 const tools = Object.entries(toolCounts).sort((a,b)=>b[1]-a[1] || a[0].localeCompare(b[0])).map(([t])=>t);
@@ -45,6 +47,8 @@ const jsonld = { '@context':'https://schema.org','@graph':[
 <div class="grid">{list.map(u => <Card u={u} />)}</div>
 {combos.length > 0 && <section class="panel prose" aria-labelledby="h-by-job"><h2 id="h-by-job">{label} by the job AI does</h2>
 <ul class="tools">{combos.map(c => <li class="tool-li"><a class="tool-link" href={c.path}>{c.g.name} ({c.list.length})</a></li>)}</ul></section>}
+{toolCombos.length > 0 && <section class="panel prose" aria-labelledby="h-by-tool"><h2 id="h-by-tool">{label} by AI tool</h2>
+<ul class="tools">{toolCombos.map(c => <li class="tool-li"><a class="tool-link" href={c.path}>{c.g.name} ({c.list.length})</a></li>)}</ul></section>}
 <p class="biz" style="font-size:.9rem">Follow only this category: <a href={`/type/${type}/rss.xml`}>{label} RSS feed</a> (new entries, newest first). For AI assistants: <a href={`/type/${type}.md`}>this list as plain Markdown</a>.</p>
 <p><a class="btn btn-ghost" href="/">← See all use cases</a></p>
 </Base>

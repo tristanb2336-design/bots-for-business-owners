@@ -1,7 +1,7 @@
 import { useCases, TYPES } from '../data/usecases.mjs';
 import { SITE } from '../site.mjs';
 import { latestEdition } from '../data/marketplace.mjs';
-import { groupByTool } from '../data/tools.mjs';
+import { groupByTool, toolTypeCombos } from '../data/tools.mjs';
 import { groupByCountry, PAGE_MIN } from '../data/places.mjs';
 import { groupByJob, typeJobCombos } from '../data/jobs.mjs';
 import { groupBySource, PAGE_MIN as SOURCE_PAGE_MIN } from '../data/sources.mjs';
@@ -24,6 +24,7 @@ export function GET(){
     ...groupByJob().map(g=>[`/jobs/${g.key}/`, newest(g.list) ?? latest]),
     ...groupByJob().map(g=>[`/jobs/${g.key}/rss.xml`, newest(g.list) ?? latest]),
     ...typeJobCombos().map(c=>[c.path, newest(c.list) ?? latest]),
+    ...toolTypeCombos().map(c=>[c.path, newest(c.list) ?? latest]),
     ...groupBySource().filter(g=>g.list.length>=SOURCE_PAGE_MIN).map(g=>[`/sources/${g.key}/`, newest(g.list) ?? latest]),
     ...groupByMonth().map(g=>[`/archive/${g.key}/`, newest(g.list) ?? latest]),
     ['/compare/', latest], ['/glossary/', latest], ['/questions/', latest],

@@ -8,12 +8,13 @@ export const config = {
     '/(use-cases|type|tools|jobs|places|sources|archive|compare)/:key/',
     '/(archive|compare|costs|glossary|jobs|places|questions|recent|sources|tools)/',
     '/type/:key/:job/',
+    '/tools/:key/:type/',
   ],
 };
 
 const HUB = /^\/(archive|compare|costs|glossary|jobs|places|questions|recent|sources|tools)\/$/;
 const DETAIL = /^\/(use-cases|type|tools|jobs|places|sources|archive|compare)\/[a-z0-9-]+\/$/;
-const COMBO = /^\/type\/[a-z0-9-]+\/[a-z0-9-]+\/$/;
+const COMBO = /^\/(type|tools)\/[a-z0-9-]+\/[a-z0-9-]+\/$/;
 
 export default function middleware(request) {
   const accept = request.headers.get('accept') || '';
