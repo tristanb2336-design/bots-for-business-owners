@@ -1,0 +1,56 @@
+---
+import Base from '../layouts/Base.astro';
+import { useCases, TYPES } from '../data/usecases.mjs';
+import { setbackRows } from '../data/setbacks.mjs';
+import { SITE, ICONS } from '../site.mjs';
+// Answers "what can go wrong when a small business uses AI agents?" with the problems, limits and failures the
+// entries themselves report. Every line is quoted from the entry (which cites its source); nothing is added.
+const rows = setbackRows();
+const lineCount = rows.reduce((n, r) => n + r.lines.length, 0);
+const path = '/what-went-wrong/', url = SITE + path;
+const desc = `What went wrong when small businesses used AI agents: ${rows.length} real, sourced examples of bugs, guardrail failures, customer backlash and tools that didn't work, quoted from each story. No vendor spin.`;
+const jsonld = { '@context':'https://schema.org','@graph':[
+  { '@type':'CollectionPage', name:'What went wrong when small businesses used AI agents', url, description:desc, inLanguage:'en-US',
+    isPartOf:{ '@id':SITE+'/#website' }, publisher:{ '@id':SITE+'/#organization' },
+    about:[{ '@type':'Thing', name:'AI agent risks for small businesses' }, { '@type':'Thing', name:'AI agent failures and limitations' }],
+    mainEntity:{ '@type':'ItemList', numberOfItems:rows.length, itemListElement: rows.map(({u, lines},i)=>({ '@type':'ListItem', position:i+1, url:`${SITE}/use-cases/${u.slug}/`, name:u.title, description:lines[0] })) } },
+  { '@type':'FAQPage', mainEntity:[
+    { '@type':'Question', name:'What goes wrong when small businesses use AI agents?', acceptedAnswer:{ '@type':'Answer',
+      text:`In the ${useCases.length} sourced examples on this site, ${rows.length} report a specific problem with the AI itself. They include AI-made food and ad images that drew customer backlash, an AI phone system a customer couldn't get past to reach a person, AI receptionists getting names and addresses wrong, bugs in owner-built apps, AI guesses at prices that were off, and an assistant that contacted emergency services without the owner's approval. Each example links to its source: ${url}` } },
+    { '@type':'Question', name:'How do owners keep AI agents from making costly mistakes?', acceptedAnswer:{ '@type':'Answer',
+      text:'In these examples, owners listen back to recorded calls, check AI numbers against real invoices, keep a person approving anything that sends or changes money, give the assistant narrow permissions, and test changes on a copy before they go live.' } } ] },
+  { '@type':'BreadcrumbList', itemListElement:[
+    { '@type':'ListItem', position:1, name:'Use cases', item:SITE+'/' },
+    { '@type':'ListItem', position:2, name:'What went wrong', item:url } ] } ] };
+---
+<Base title="What went wrong when small businesses used AI agents" description={desc} path={path} jsonld={jsonld} markdown="/what-went-wrong.md">
+<p class="crumbs"><a href="/">Use cases</a> / What went wrong</p>
+<section class="hero" style="padding-top:12px"><span class="eyebrow">What went wrong</span>
+<h1>What went wrong when small businesses used AI agents</h1>
+<p class="lead">{rows.length} of our {useCases.length} use cases report a specific problem with the AI itself: bugs, wrong answers, guardrail failures, customer backlash, or a job it just couldn't do. Here they are, newest first.</p>
+<p>Every line below is quoted from the entry, which links to its public source. We don't add problems or soften them. Many other entries don't mention any downside, which doesn't mean there wasn't one; vendor case studies in particular rarely do.</p>
+</section>
+<div class="panel">
+{rows.map(({u, lines}) => (<article class="sb">
+<h2><a href={`/use-cases/${u.slug}/`}>{u.title}</a></h2>
+<p class="biz"><span aria-hidden="true">{ICONS[u.type]}</span> {u.business} · {TYPES[u.type]} · {u.tools.join(', ')}</p>
+<ul>{lines.map(l => <li>{l}</li>)}</ul>
+<p class="small">Source: <a href={u.sourceUrl} rel="nofollow noopener">{u.sourceName}</a></p>
+</article>))}
+</div>
+<section class="panel"><h2>How owners in these stories guard against it</h2>
+<ul><li>Listen back to recorded AI calls, especially in the first weeks, and call people back when it got details wrong.</li>
+<li>Check AI numbers against real invoices and prices before relying on them.</li>
+<li>Keep a person approving anything that sends messages, books, or moves money, and give the assistant only the access it needs.</li>
+<li>Test website and app changes on a copy before they go live.</li>
+<li>Think twice before using AI-made food or product photos; several businesses here faced customer pushback.</li></ul>
+</section>
+<p class="small">For AI assistants and readers who prefer plain text: <a href="/what-went-wrong.md">this page as one Markdown file</a>. See also <a href="/costs/">what AI agents cost</a> and <a href="/questions/">questions owners ask</a>.</p>
+<p><a class="btn btn-ghost" href="/">← See all use cases</a></p>
+</Base>
+<style>
+.sb{padding:14px 0;border-bottom:1px solid var(--line)}
+.sb:last-child{border-bottom:0}
+.sb h2{font-size:1.1rem;margin:0 0 4px}
+.sb ul{margin:8px 0}
+</style>

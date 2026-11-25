@@ -6,6 +6,7 @@ import { groupByJob } from './jobs.mjs';
 import { groupByTool } from './tools.mjs';
 import { groupByCountry } from './places.mjs';
 import { costRows } from './costs.mjs';
+import { setbackRows } from './setbacks.mjs';
 
 const newestFirst = list => [...list].sort((a, b) => b.added.localeCompare(a.added));
 const plural = (n, one, many = one + 's') => `${n} ${n === 1 ? one : many}`;
@@ -50,6 +51,10 @@ export function questions(){
   qs.push({ key: 'where-are-they', q: 'Are there examples outside the United States?',
     a: `Yes. Entries with a stated location come from ${plural(countries.length, 'country', 'countries')}: ${countries.map(c => `${c.name} (${c.list.length})`).join(', ')}.`,
     hub: ['/places/', 'Use cases by country'], examples: [] });
+  const setbacks = setbackRows();
+  qs.push({ key: 'what-can-go-wrong', q: 'What can go wrong when a small business uses AI agents?',
+    a: `${plural(setbacks.length, 'entry', 'entries')} of ${total} report a specific problem with the AI itself, such as AI-made images that drew customer backlash, an automated phone system a customer couldn't get past, an AI receptionist getting names and addresses wrong, bugs in owner-built apps, and an assistant acting without approval. Each problem is quoted from the entry and linked to its source; many entries, especially vendor case studies, mention no downside at all.`,
+    hub: ['/what-went-wrong/', 'Every reported setback, quoted'], examples: setbacks.slice(0, 3).map(r => r.u) });
   qs.push({ key: 'can-i-trust-the-numbers', q: 'Can I trust the results these businesses report?',
     a: `Treat them as what is possible, not a promise. Every entry links to its public source and numbers appear only when that source states them. Many stories come from the vendor that sells the tool; those entries say so in the story (for example "not independent"), and where a source attributes a figure to the owner, the entry says so.`,
     hub: ['/sources/', 'Use cases by source'], extra: ['/about/', 'How entries are chosen'], examples: [] });
