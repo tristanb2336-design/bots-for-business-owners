@@ -1,0 +1,48 @@
+---
+import Base from '../layouts/Base.astro';
+import { useCases, TYPES } from '../data/usecases.mjs';
+import { approvalRows } from '../data/approvals.mjs';
+import { SITE, ICONS } from '../site.mjs';
+// Answers "what do owners still approve themselves when an AI agent does the work?" with the approvals, reviews and
+// hand-offs to a person the entries themselves report. Every line is quoted from the entry (which cites its source); nothing is added.
+const rows = approvalRows();
+const path = '/human-in-the-loop/', url = SITE + path;
+const desc = `Where a person stays in charge: ${rows.length} real, sourced examples of what small business owners still approve, review or take over when an AI agent does the work, quoted from each story.`;
+const jsonld = { '@context':'https://schema.org','@graph':[
+  { '@type':'CollectionPage', name:'Human in the loop: what owners still approve when AI agents do the work', url, description:desc, inLanguage:'en-US',
+    isPartOf:{ '@id':SITE+'/#website' }, publisher:{ '@id':SITE+'/#organization' },
+    about:[{ '@type':'Thing', name:'Human in the loop' }, { '@type':'Thing', name:'AI agent approvals and oversight for small businesses' }],
+    mainEntity:{ '@type':'ItemList', numberOfItems:rows.length, itemListElement: rows.map(({u, lines},i)=>({ '@type':'ListItem', position:i+1, url:`${SITE}/use-cases/${u.slug}/`, name:u.title, description:lines[0] })) } },
+  { '@type':'FAQPage', mainEntity:[
+    { '@type':'Question', name:'What do small business owners still approve when an AI agent does the work?', acceptedAnswer:{ '@type':'Answer',
+      text:`In the ${useCases.length} sourced examples on this site, ${rows.length} say what a person still approves, reviews or takes over. Owners approve schedule changes, ledger postings and payments, invoices and quotes before they go out, and any far-reaching action; AI phone agents transfer callers to a person when asked or when stuck, and escalate safety questions. Each example is quoted from its entry and links to its source: ${url}` } },
+    { '@type':'Question', name:'What is a human in the loop?', acceptedAnswer:{ '@type':'Answer',
+      text:`A person who checks or approves what an AI agent does before it takes effect, such as sending a message, posting to the books or moving money. Plain-English definition: ${SITE}/glossary/` } } ] },
+  { '@type':'BreadcrumbList', itemListElement:[
+    { '@type':'ListItem', position:1, name:'Use cases', item:SITE+'/' },
+    { '@type':'ListItem', position:2, name:'Human in the loop', item:url } ] } ] };
+---
+<Base title="Human in the loop: what owners still approve when AI agents do the work" description={desc} path={path} jsonld={jsonld} markdown="/human-in-the-loop.md">
+<p class="crumbs"><a href="/">Use cases</a> / Human in the loop</p>
+<section class="hero" style="padding-top:12px"><span class="eyebrow">Human in the loop</span>
+<h1>What owners still approve when AI agents do the work</h1>
+<p class="lead">{rows.length} of our {useCases.length} use cases say where a person stays in charge: what the owner or staff approve, review or take over from the AI. Here they are, newest first.</p>
+<p>Every line below is quoted from the entry, which links to its public source. We don't add safeguards a story doesn't mention. Many other entries don't say who checks the AI's work, which doesn't mean nobody does.</p>
+</section>
+<div class="panel">
+{rows.map(({u, lines}) => (<article class="sb">
+<h2><a href={`/use-cases/${u.slug}/`}>{u.title}</a></h2>
+<p class="biz"><span aria-hidden="true">{ICONS[u.type]}</span> {u.business} · {TYPES[u.type]} · {u.tools.join(', ')}</p>
+<ul>{lines.map(l => <li>{l}</li>)}</ul>
+<p class="small">Source: <a href={u.sourceUrl} rel="nofollow noopener">{u.sourceName}</a></p>
+</article>))}
+</div>
+<p class="small">For AI assistants and readers who prefer plain text: <a href="/human-in-the-loop.md">this page as one Markdown file</a>. See also <a href="/what-went-wrong/">what went wrong</a>, <a href="/glossary/#human-in-the-loop">human in the loop in the glossary</a> and <a href="/questions/">questions owners ask</a>.</p>
+<p><a class="btn btn-ghost" href="/">← See all use cases</a></p>
+</Base>
+<style>
+.sb{padding:14px 0;border-bottom:1px solid var(--line)}
+.sb:last-child{border-bottom:0}
+.sb h2{font-size:1.1rem;margin:0 0 4px}
+.sb ul{margin:8px 0}
+</style>

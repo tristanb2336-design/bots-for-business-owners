@@ -6,13 +6,13 @@ export const config = {
   matcher: [
     '/',
     '/(use-cases|type|tools|jobs|places|sources|archive|compare)/:key/',
-    '/(archive|compare|costs|glossary|jobs|places|questions|recent|sources|tools|what-went-wrong)/',
+    '/(archive|compare|costs|glossary|jobs|places|questions|recent|sources|tools|what-went-wrong|human-in-the-loop)/',
     '/type/:key/:job/',
     '/tools/:key/:type/',
   ],
 };
 
-const HUB = /^\/(archive|compare|costs|glossary|jobs|places|questions|recent|sources|tools|what-went-wrong)\/$/;
+const HUB = /^\/(archive|compare|costs|glossary|jobs|places|questions|recent|sources|tools|what-went-wrong|human-in-the-loop)\/$/;
 const DETAIL = /^\/(use-cases|type|tools|jobs|places|sources|archive|compare)\/[a-z0-9-]+\/$/;
 const COMBO = /^\/(type|tools)\/[a-z0-9-]+\/[a-z0-9-]+\/$/;
 

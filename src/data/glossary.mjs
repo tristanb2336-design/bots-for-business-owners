@@ -36,7 +36,7 @@ export const TERMS = [
     links: [['/about/', 'How this site checks sources']], match: /hallucinat|got (it|things|something) wrong|gets? (basic )?(facts|things) wrong|never invent|confidently wrong/i },
   { key: 'human-in-the-loop', term: 'Human in the loop', also: ['approval step', 'review before sending'],
     def: 'A setup where the AI drafts or proposes and a person approves before anything is sent, posted, booked, paid or changed. Owners often start this way and only let the AI act on its own for simple, low-risk tasks once they trust it.',
-    links: [['/jobs/', 'Use cases by job']], match: /approv|confirm|review(s|ed)? (it|the|each|every)|before (it|anything) (posts|sends|goes)/i },
+    links: [['/human-in-the-loop/', 'What owners still approve, quoted from entries'], ['/jobs/', 'Use cases by job']], match: /approv|confirm|review(s|ed)? (it|the|each|every)|before (it|anything) (posts|sends|goes)/i },
   { key: 'llm', term: 'Large language model (LLM)', also: ['AI model', 'foundation model'],
     def: 'The underlying AI system trained on large amounts of text that powers chat assistants and agents. Products such as ChatGPT, Claude, Gemini and Copilot are built on these models; many phone, chat and business-software agents license one from a model maker.',
     links: [['/compare/', 'Compare AI assistants']], match: /language model|\bLLM\b|Gemini \d|GPT-\d/i },
