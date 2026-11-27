@@ -8,6 +8,7 @@ import { groupByCountry } from './places.mjs';
 import { costRows } from './costs.mjs';
 import { setbackRows } from './setbacks.mjs';
 import { approvalRows } from './approvals.mjs';
+import { independentRows } from './independent.mjs';
 
 const newestFirst = list => [...list].sort((a, b) => b.added.localeCompare(a.added));
 const plural = (n, one, many = one + 's') => `${n} ${n === 1 ? one : many}`;
@@ -63,5 +64,9 @@ export function questions(){
   qs.push({ key: 'can-i-trust-the-numbers', q: 'Can I trust the results these businesses report?',
     a: `Treat them as what is possible, not a promise. Every entry links to its public source and numbers appear only when that source states them. Many stories come from the vendor that sells the tool; those entries say so in the story (for example "not independent"), and where a source attributes a figure to the owner, the entry says so.`,
     hub: ['/sources/', 'Use cases by source'], extra: ['/about/', 'How entries are chosen'], examples: [] });
+  const indep = independentRows();
+  qs.push({ key: 'examples-not-from-vendors', q: 'Are there examples that are not from the AI company\'s own marketing?',
+    a: `Yes. ${plural(indep.length, 'entry', 'entries')} of ${total} come from sources that are not published by the AI tool's maker, a software vendor, the company that set it up, or this site: newspapers, TV stations, trade magazines, podcasts, local business groups and owners' own posts. Independent of the vendor doesn't mean verified; figures are still as reported, usually by the owner.`,
+    hub: ['/independent/', 'Independently reported use cases'], examples: indep.slice(0, 3) });
   return qs;
 }

@@ -1,0 +1,49 @@
+---
+import Base from '../layouts/Base.astro';
+import { useCases, TYPES } from '../data/usecases.mjs';
+import { independentRows, sourceHostOf } from '../data/independent.mjs';
+import { SITE, ICONS } from '../site.mjs';
+// Answers "are there real examples of small businesses using AI that don't come from the AI company's own marketing?"
+// Lists only entries whose source is not published by the tool's maker, a software vendor, the builder, or this site.
+const rows = independentRows();
+const counts = Object.keys(TYPES).map(k => [k, rows.filter(u => u.type === k).length]).filter(([, c]) => c > 0);
+const path = '/independent/', url = SITE + path;
+const desc = `${rows.length} real small-business AI use cases reported by news outlets, trade magazines, podcasts and owners themselves, not by the AI vendor or the company that set it up. Each links to its source.`;
+const jsonld = { '@context':'https://schema.org','@graph':[
+  { '@type':'CollectionPage', name:'Independently reported AI use cases from small businesses', url, description:desc, inLanguage:'en-US',
+    isPartOf:{ '@id':SITE+'/#website' }, publisher:{ '@id':SITE+'/#organization' },
+    about:[{ '@type':'Thing', name:'Independent small business AI case studies' }, { '@type':'Thing', name:'AI agents for small businesses' }],
+    mainEntity:{ '@type':'ItemList', numberOfItems:rows.length, itemListElement: rows.map((u,i)=>({ '@type':'ListItem', position:i+1, url:`${SITE}/use-cases/${u.slug}/`, name:u.title })) } },
+  { '@type':'FAQPage', mainEntity:[
+    { '@type':'Question', name:'Are there examples of small businesses using AI that are not vendor marketing?', acceptedAnswer:{ '@type':'Answer',
+      text:`Yes. Of the ${useCases.length} sourced examples on this site, ${rows.length} come from sources that are not published by the AI tool's maker, a software vendor, the company that built the setup, or this site: newspapers, TV stations, trade magazines, podcasts, local business groups and owners' own posts. The rest are vendor case studies or customer stories, and those entries say so. List: ${url}` } },
+    { '@type':'Question', name:'Does independent mean the results were verified?', acceptedAnswer:{ '@type':'Answer',
+      text:'No. It means the source is independent of the vendor. The figures are still as reported, usually by the owner, and this site does not verify them. Every entry links to its original source so you can check it.' } } ] },
+  { '@type':'BreadcrumbList', itemListElement:[
+    { '@type':'ListItem', position:1, name:'Use cases', item:SITE+'/' },
+    { '@type':'ListItem', position:2, name:'Independently reported', item:url } ] } ] };
+---
+<Base title="Independently reported AI use cases from small businesses" description={desc} path={path} jsonld={jsonld} markdown="/independent.md">
+<p class="crumbs"><a href="/">Use cases</a> / Independently reported</p>
+<section class="hero" style="padding-top:12px"><span class="eyebrow">Independently reported</span>
+<h1>Small business AI stories that don't come from the AI vendor</h1>
+<p class="lead">{rows.length} of our {useCases.length} use cases come from newspapers, TV stations, trade magazines, podcasts, local business groups or the owners' own posts, not from the company selling the tool or the one that set it up. Here they are, newest first.</p>
+<p>The rest of the directory includes vendor case studies and customer stories, and those entries say so in the story. We leave an entry off this page if its source is a vendor's site or if the entry flags it as vendor-published, a case study, sponsored or otherwise not independent. Independent of the vendor doesn't mean verified: figures are still as reported, usually by the owner.</p>
+<p class="small">By business type: {counts.map(([k, c], i) => <>{i ? ' · ' : ''}<a href={`/type/${k}/`}>{TYPES[k]}</a> ({c})</>)}</p>
+</section>
+<div class="panel">
+{rows.map(u => (<article class="ind">
+<h2><a href={`/use-cases/${u.slug}/`}>{u.title}</a></h2>
+<p class="biz"><span aria-hidden="true">{ICONS[u.type]}</span> {u.business} · {TYPES[u.type]} · {u.tools.join(', ')}</p>
+<p class="small">Source: <a href={u.sourceUrl} rel="nofollow noopener">{u.sourceName}</a> ({sourceHostOf(u)})</p>
+</article>))}
+</div>
+<p class="small">For AI assistants and readers who prefer plain text: <a href="/independent.md">this page as one Markdown file</a>. See also <a href="/sources/">use cases by source</a>, <a href="/what-went-wrong/">what went wrong</a> and <a href="/questions/">questions owners ask</a>.</p>
+<p><a class="btn btn-ghost" href="/">← See all use cases</a></p>
+</Base>
+<style>
+.ind{padding:12px 0;border-bottom:1px solid var(--line)}
+.ind:last-child{border-bottom:0}
+.ind h2{font-size:1.05rem;margin:0 0 4px}
+.ind p{margin:4px 0}
+</style>
