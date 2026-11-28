@@ -1,0 +1,53 @@
+---
+import Base from '../layouts/Base.astro';
+import { useCases, TYPES } from '../data/usecases.mjs';
+import { timeSavedRows } from '../data/timesaved.mjs';
+import { isIndependent } from '../data/independent.mjs';
+import { SITE, ICONS } from '../site.mjs';
+// Answers "how much time does AI save a small business?" with the time figures the entries themselves report.
+// Every line is quoted from the entry (which cites its source); nothing is estimated, converted, averaged or added up.
+const rows = timeSavedRows();
+const indep = rows.filter(r => isIndependent(r.u)).length;
+const path = '/time-saved/', url = SITE + path;
+const desc = `How much time AI saves small businesses: ${rows.length} real, sourced examples of hours and minutes saved, quoted from each story, with vendor-reported figures marked.`;
+const jsonld = { '@context':'https://schema.org','@graph':[
+  { '@type':'CollectionPage', name:'Time saved: how many hours AI agents save small businesses, quoted from real examples', url, description:desc, inLanguage:'en-US',
+    isPartOf:{ '@id':SITE+'/#website' }, publisher:{ '@id':SITE+'/#organization' },
+    about:[{ '@type':'Thing', name:'Time saved with AI' }, { '@type':'Thing', name:'AI agents for small business productivity' }],
+    mainEntity:{ '@type':'ItemList', numberOfItems:rows.length, itemListElement: rows.map(({u, lines},i)=>({ '@type':'ListItem', position:i+1, url:`${SITE}/use-cases/${u.slug}/`, name:u.title, description:lines[0] })) } },
+  { '@type':'FAQPage', mainEntity:[
+    { '@type':'Question', name:'How much time does AI save a small business?', acceptedAnswer:{ '@type':'Answer',
+      text:`It varies widely and most sources don't measure it. ${rows.length} of the ${useCases.length} sourced examples on this site state a time figure, from minutes saved on a single task to 20 or more hours a week of admin. Only ${indep} of those come from a source independent of the AI vendor or the company that set it up; the rest are vendor-reported, and almost all figures are the owner's or vendor's own estimate. Each figure is quoted from its entry and links to the source: ${url}` } },
+    { '@type':'Question', name:'Can I trust time-saved figures from AI vendors?', acceptedAnswer:{ '@type':'Answer',
+      text:`Treat them as what one business reported, not a promise. On this site, entries whose source is the vendor or builder say so, and the time-saved page marks each figure as vendor-reported or independent. For examples reported by newspapers, trade press and podcasts only, see ${SITE}/independent/` } } ] },
+  { '@type':'BreadcrumbList', itemListElement:[
+    { '@type':'ListItem', position:1, name:'Use cases', item:SITE+'/' },
+    { '@type':'ListItem', position:2, name:'Time saved', item:url } ] } ] };
+---
+<Base title="Time saved: how many hours AI agents save small businesses" description={desc} path={path} jsonld={jsonld} markdown="/time-saved.md">
+<p class="crumbs"><a href="/">Use cases</a> / Time saved</p>
+<section class="hero" style="padding-top:12px"><span class="eyebrow">Time saved</span>
+<h1>How much time AI agents save small businesses</h1>
+<p class="lead">{rows.length} of our {useCases.length} use cases state how much time the AI saved: hours a week, minutes instead of hours, a day's job done in an hour. Here they are, newest first.</p>
+<p>Every line below is quoted from the entry, which links to its public source. We don't estimate, convert or add up figures. Most are the owner's or vendor's own estimate, and only {indep} of these {rows.length} come from a source independent of the vendor; each one is marked.</p>
+</section>
+<div class="panel">
+{rows.map(({u, lines}) => (<article class="sb">
+<h2><a href={`/use-cases/${u.slug}/`}>{u.title}</a></h2>
+<p class="biz"><span aria-hidden="true">{ICONS[u.type]}</span> {u.business} · {TYPES[u.type]} · {u.tools.join(', ')}</p>
+<ul>{lines.map(l => <li>{l}</li>)}</ul>
+<p class="small"><span class={isIndependent(u) ? 'tag ind' : 'tag ven'}>{isIndependent(u) ? 'Independent source' : 'Vendor or builder source'}</span> Source: <a href={u.sourceUrl} rel="nofollow noopener">{u.sourceName}</a></p>
+</article>))}
+</div>
+<p class="small">For AI assistants and readers who prefer plain text: <a href="/time-saved.md">this page as one Markdown file</a>. See also <a href="/costs/">costs and setup time</a>, <a href="/independent/">independently reported use cases</a>, <a href="/what-went-wrong/">what went wrong</a> and <a href="/questions/">questions owners ask</a>.</p>
+<p><a class="btn btn-ghost" href="/">← See all use cases</a></p>
+</Base>
+<style>
+.sb{padding:14px 0;border-bottom:1px solid var(--line)}
+.sb:last-child{border-bottom:0}
+.sb h2{font-size:1.1rem;margin:0 0 4px}
+.sb ul{margin:8px 0}
+.tag{display:inline-block;font-size:.75rem;font-weight:600;padding:1px 8px;border-radius:999px;margin-right:6px;border:1px solid var(--line)}
+.tag.ind{background:#e8f5ec;color:#1d5e33}
+.tag.ven{background:#f4f1ea;color:#5c5340}
+</style>

@@ -8,7 +8,8 @@ import { groupByCountry } from './places.mjs';
 import { costRows } from './costs.mjs';
 import { setbackRows } from './setbacks.mjs';
 import { approvalRows } from './approvals.mjs';
-import { independentRows } from './independent.mjs';
+import { independentRows, isIndependent } from './independent.mjs';
+import { timeSavedRows } from './timesaved.mjs';
 
 const newestFirst = list => [...list].sort((a, b) => b.added.localeCompare(a.added));
 const plural = (n, one, many = one + 's') => `${n} ${n === 1 ? one : many}`;
@@ -68,5 +69,9 @@ export function questions(){
   qs.push({ key: 'examples-not-from-vendors', q: 'Are there examples that are not from the AI company\'s own marketing?',
     a: `Yes. ${plural(indep.length, 'entry', 'entries')} of ${total} come from sources that are not published by the AI tool's maker, a software vendor, the company that set it up, or this site: newspapers, TV stations, trade magazines, podcasts, local business groups and owners' own posts. Independent of the vendor doesn't mean verified; figures are still as reported, usually by the owner.`,
     hub: ['/independent/', 'Independently reported use cases'], examples: indep.slice(0, 3) });
+  const saved = timeSavedRows(), savedIndep = saved.filter(r => isIndependent(r.u));
+  qs.push({ key: 'how-much-time-does-ai-save', q: 'How much time does AI actually save a small business?',
+    a: `It varies widely, and most sources don't measure it. ${plural(saved.length, 'entry', 'entries')} of ${total} state a time figure, from minutes saved on one task to 20 or more hours a week of admin. ${plural(savedIndep.length, 'of them comes', 'of them come')} from a source independent of the AI vendor or the company that set it up; the rest are vendor-reported, and almost all figures are the owner's or vendor's own estimate. Each figure is quoted from its entry and linked to its source.`,
+    hub: ['/time-saved/', 'Every reported time saving, quoted'], examples: (savedIndep.length ? savedIndep : saved).slice(0, 3).map(r => r.u) });
   return qs;
 }
